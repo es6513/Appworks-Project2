@@ -1,0 +1,162 @@
+/* -------------------css reset------------- */
+* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+body{
+    padding: 50px;
+    background-color: rgb(201, 129, 129);
+}
+
+
+#root{
+    display: flex;
+    justify-content: center;
+}
+
+.tick{
+    border: 0;
+    border-radius: 10px;
+    background-color: #f85050;
+    color: hsl(0, 0%, 0%);
+    width: 10%;
+}
+
+.tick:hover{
+    background-color: #ee3333;
+}
+
+form{
+    text-align: center;
+    width: 80%;
+}
+
+.catagory{
+    min-height: 24px;
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    padding: 0;
+}
+
+.catagory li{
+    margin-right: 48px;
+    letter-spacing: 2px;
+    cursor: pointer;        
+}
+
+.catagory li:hover{
+    border-bottom:3px solid #e615db;
+}
+
+.Form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.Form button{
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    margin: 20px;
+    width: 80px;
+    margin-right: 0px;
+    background-color: #ec2d6d;
+    color:#fff;
+    border: 2px solid #b90a62;
+}
+
+.Form button:hover{
+    background-color: #f67bf0;
+    border: 2px solid #de5fe2;
+    cursor: pointer;
+}
+
+.List{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.App{
+    width: 100%;
+}
+
+input{
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #fff;
+    width: 500px;
+}
+
+.Task{
+    width: 80%;
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.taskText{
+    width: 30%;
+    text-align: center;
+}
+
+.taskText:hover{
+    cursor: pointer;
+}
+
+
+.tick:hover{
+    cursor: pointer;
+}
