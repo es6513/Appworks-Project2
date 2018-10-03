@@ -17,7 +17,7 @@ class Mario{
 		this.controlSpeedFactor; 
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 		this.frameIndex = 0;
-		this.framesRunRightArray = ["runRight-1","runRight-1","runRight-1",
+		this.framesRunArray = ["runRight-1","runRight-1","runRight-1",
 			"runRight-2","runRight-2","runRight-2",
 			"runRight-3","runRight-3","runRight-3",
 			"mario"
@@ -33,8 +33,8 @@ class Mario{
 	update(screen,tubeSprite,marioSpriteSet,groundSprite){
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
-		console.log(this.direction);
-		console.log(this.pos.x);
+		// console.log(this.direction);
+		// console.log(this.pos.x);
 
 		// -------控制馬力歐移動-----
 		if(this.pos.x + this.speed.x <= window.screen.width && this.pos.x > 0){
@@ -126,10 +126,10 @@ class Mario{
 					&& this.pos.x + marioSpriteSet.width > x1 * tubeSprite.width 
 					&& this.pos.x < x1 * tubeSprite.width  + tubeSprite.width ){
 					
-					if(this.pos.y > y1 * tubeSprite.height - marioSpriteSet.height - 1){
+					if(this.pos.y > y1 * tubeSprite.height - marioSpriteSet.height - 0.5){
 						this.isJump = false;
 						this.onTube = true;
-						this.pos.y = y1 * tubeSprite.height - marioSpriteSet.height - 1;
+						this.pos.y = y1 * tubeSprite.height - marioSpriteSet.height - 0.5;
 						this.speed.y = 0;
 					}	
 					// if(keys.top && 	this.onTube && !this.isJump){
@@ -175,10 +175,10 @@ class Mario{
 	running(){
 		if(this.direction == 1){
 			this.frameIndex = ++this.frameIndex % 10;
-			return this.framesRunRightArray[this.frameIndex];
+			return this.framesRunArray[this.frameIndex];
 		}else if(this.direction == -1){
 			this.frameIndex = ++this.frameIndex % 10;
-			return this.framesRunRightArray[this.frameIndex];
+			return this.framesRunArray[this.frameIndex];
 		}
 		return"mario";
 	}
