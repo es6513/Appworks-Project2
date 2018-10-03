@@ -110,6 +110,8 @@ function promise() {
 			}else if(mario.pos.x >= 1600){
 				context.drawImage(backgroundSprite, 1150,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
+			
+			
 			//原本是用這一個控制捲動，目前是超過200才開始捲
 			// context.drawImage(backgroundSprite,mario.pos.x - 200,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			for(let j = 0;j < coinArray.length;j += 1){
@@ -139,102 +141,4 @@ function promise() {
 promise();
 
 export {promise,mario};
-// Promise.all([
-// 	loadSky(),  //產出 skySprite, 目前沒用，已整合至 loadBackground
-// 	loadGround(), //產出 groundSprite, 目前沒用，已整合至 loadBackground
-// 	// loadMario(),  // 一開始只畫一個馬力歐的時候用的
-// 	loadMarioImage("mario"),
-// 	loadBackground("background",0)
-// ]).then(([skySprite,groundSprite,marioSpriteSet,backgroundSprite])=>{
-// 	// let backgroundSprite = document.createElement("canvas");
-// 	// backgroundSprite.width = 640;
-// 	// backgroundSprite.height = 640;
-// 	// drawScreen(screen.backgrounds[0],backgroundSprite.getContext("2d"),skySprite);
-// 	// drawScreen(screen.backgrounds[1],backgroundSprite.getContext("2d"),groundSprite);
-	
-// 	let mario = new Mario();
-// 	mario.pos.set(16 * 12,16 * 13);   //馬力歐起始位置
-// 	mario.speed.set(2,1.5);   //馬力歐起始移動速度
-	
-// 	function update() {
-// 		context.drawImage(backgroundSprite,0,0);
-		
-// 		// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);
-// 		requestAnimationFrame(update);
-// 		mario.update();
-
-// 		mario.draw(context,marioSpriteSet); //傳進去 marioObject
-
-// 	}
-
-// 	update();
-	
-// });
-
-
-// Promise.all([
-// 	loadSky(),
-// 	loadGround(),
-// 	loadBackground("background")
-// ]).then(([skySprite,groundSprite,screen])=>{
-// 	console.log(screen);
-// 	drawScreen(screen.backgrounds[0],context,skySprite);
-// });
-
-// let skyImage = loadImage("../imgs/images/sky.png");
-// skyImage.addEventListener("load",function () {
-// 	let skySprite = new Sprites(skyImage,16,16);
-// 	skySprite.getImage("sky"); 
-// 	drawAbles[0].push(skySprite);
-// 	// loadBackground("background")
-// 	// 	.then(sky =>{
-// 	// 		console.log(sky);
-// 	// 		drawScreen(sky.backgrounds[0],context,skySprite);
-// 	// 	});
-// });
-
-// let groundImage = loadImage("../imgs/images/underground.png");
-// groundImage.addEventListener("load",function () {
-// 	let groundSprite = new Sprites(groundImage,16,16);
-// 	groundSprite.getImage("ground");
-// 	drawAbles[0].push(groundSprite);
-
-// 	// loadBackground("background")
-// 	// 	.then(ground =>{
-// 	// 		drawScreen(ground.backgrounds[1],context,groundSprite);
-// 	// 	});
-// });
-
-// let marioImage = loadImage("../imgs/images/R_mario_stand.png");
-// marioImage.addEventListener("load",function () {
-// 	let marioSprite = new Sprites(marioImage,16,16);
-// 	marioSprite.getImage("mario");
-// 	// marioSprite.draw("mario",context,0,0);	
-// 	drawAbles.push(marioSprite);
-// 	// drawAbles[0].draw("sky",context,0,0);
-// 	for(let i = 0 ;i < drawAbles.length ;i += 1){
-// 		for(let j = 0;j < drawAbles[0].length;j += 1){
-// 			loadBackground("background")
-// 				.then(level =>{
-// 					drawScreen(level.backgrounds[i],context, drawAbles[0][i]);
-// 				});
-// 		}
-// 	}	
-
-// 	// marioSprite.draw("mario",context,0,0);	
-	
-
-// 	// .then(drawAbles[drawAbles.length - 1].draw("mario",context,0,0));
-		
-// 	// console.log(drawAbles[i]);
-// 	// let tiles = drawAbles[i].tiles; 
-// 	// console.log(tiles);
-// 	// let mapIter = tiles.keys();
-// 	// console.log(mapIter.next().value);
-
-// 	// console.log(drawAbles);
-// 	// drawAbles[i].draw("sky",context,0,0);
-		
-	
-// });	
 
