@@ -55,7 +55,7 @@ class Turtle{
 			&& mario.pos.x + 16 > this.pos.x 
 			&& mario.pos.x < this.pos.x + 16){
 			if(mario.pos.y > this.pos.y - 16 + 8){
-				mario.speed.y = 0;
+				mario.speed.y = -8;
 				mario.pos.y = this.pos.y - 16 + 8;
 				this.quickToDie = true;
 			}	
