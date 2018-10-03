@@ -34,10 +34,10 @@ class Mario{
 		// console.log(this.pos.x);
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
-
 		// 控制水管障礙
-		console.log(this.controlSpeedFactor);
-		console.log(this.pos.x);
+		// console.log(this.controlSpeedFactor);
+		// console.log(this.pos.x);
+		console.log(this.direction);
 		if(this.isRunning){
 			screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
 				if(this.pos.x <= x1 * tubeSprite.width 
@@ -52,7 +52,8 @@ class Mario{
 					}
 				}
 				else if(this.pos.x >= x1 * tubeSprite.width 
-					&& this.pos.y > y1 * tubeSprite.height -  marioSpriteSet.height)
+					&& this.pos.y > y1 * tubeSprite.height -  marioSpriteSet.height
+					&& this.faceDirection == -1)
 				{	
 					if(this.pos.x == x2 * tubeSprite.width){
 						this.speed.x = 0;
@@ -91,31 +92,30 @@ class Mario{
 
 		// -------控制馬力歐移動-----
 		if(this.pos.x + this.speed.x <= window.screen.width && this.pos.x > 0){
-			console.log(window.screen.width);
 			 
-			if(keys.right){
+			if(keys.right && !keys.left){
+				// 這邊判斷式必須要寫兩個，一個是按右鍵，一個是沒按左鍵，這樣才能避免兩個按鍵產生衝突，並且完全獨立開
 				this.moveRight();
-				this.direction = 1;
 				this.faceDirection = this.direction;
 			}
-			if(keys.left){
+			if(keys.left && !keys.right){
+				// 這邊判斷式必須要寫兩個，一個是按右鍵，一個是沒按左鍵，這樣才能避免兩個按鍵產生衝突，並且完全獨立開
 				this.moveLeft();
-				this.direction = -1;
 				this.faceDirection = this.direction;
 			}
 		}
 		else if(this.pos.x == 0){
 			if(keys.right){
 				this.moveRight();
-				this.direction = 1;
 				this.faceDirection = this.direction;
 			}
 		}
 		else if(this.pos.x + this.controlSpeedFactor  == window.screen.width){
+
 			//這邊有點奇怪，筆電的螢幕如果有接大螢幕，跑到終點的時候 screen.width 會變大，可以再往左邊跑，但是沒接的時候不行
+			
 			if(keys.left){
 				this.moveLeft();
-				this.direction = -1;
 				this.faceDirection = this.direction;
 			}
 		}
@@ -123,7 +123,6 @@ class Mario{
 			//這邊有點奇怪，筆電的螢幕如果有接大螢幕，跑到終點的時候 screen.width 會變大，可以再往左邊跑，但是沒接的時候不行
 			if(keys.left){
 				this.moveLeft();
-				this.direction = -1;
 				this.faceDirection = this.direction;
 			}
 		}
@@ -157,11 +156,13 @@ class Mario{
 
 	moveRight(){
 		this.pos.x += this.speed.x;
+		this.direction = 1;
 		this.isRunning = true;
 	}
 
 	moveLeft(){
 		this.pos.x -= this.speed.x;
+		this.direction = -1;
 		this.isRunning = true;
 	}
 
