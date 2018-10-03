@@ -37,7 +37,6 @@ class Mario{
 		// 控制水管障礙
 		// console.log(this.controlSpeedFactor);
 		// console.log(this.pos.x);
-		console.log(this.pos.x);
 		if(this.isRunning){
 			screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
 				if(this.pos.x <= x1 * tubeSprite.width 
@@ -143,7 +142,6 @@ class Mario{
 			this.isJump = false;
 			this.pos.y =  13 * 16;
 			this.speed.y = 0;
-			this.speed.x = 4;
 		}	
 		
 		// 沒有按住按鍵的時候，將方向設回預設值
@@ -195,7 +193,6 @@ class Mario{
 			}else if(mario.pos.x >= 1600){
 				marioSprite.drawMarioSprite(this.running(),context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
 			}
-
 		}
 		else if(this.isJump){
 			if(mario.pos.x < 450 ){

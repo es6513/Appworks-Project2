@@ -54,26 +54,4 @@ function drawBackground(name) {
 	;
 }
 
-function loadMarioImage(name) {
-	return fetch(`/marioJSON/${name}.json`)
-		.then(r=>r.json())
-		.then(marioSprite=> Promise.all([
-			marioSprite,
-			loadImage("../imgs/images/MarioRunRightSet.png"),
-		]))
-		.then(([marioSprite,image])=>{
-			let marioSpriteSet = new Sprites(image,marioSprite.width,marioSprite.height);
-			marioSprite.frames.forEach(spriteFrames=>{
-				marioSpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
-			});
-
-			// 傳遞順序: loadImage.js 呼叫 SpriteSet.js 的 getImage
-			// => marioTest.js 呼叫 marioObject.js 的 mario.draw()方法
-
-			return marioSpriteSet;
-		});
-	
-	
-}
-
-export {loadImage,drawBackground,loadMarioImage,drawTubes};
+export {loadImage,drawBackground,drawTubes};

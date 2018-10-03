@@ -1,8 +1,9 @@
-import {drawScreen,drawBackground,loadMarioImage,drawCoin} from "../Js/drawImage.js";
+import {drawScreen,drawBackground,loadMarioImage,drawCoin,drawTurtle} from "../Js/drawImage.js";
 import {loadMario,loadSky,loadGround,loadTube} from "../Js/loadSprite.js";
 import {loadJson} from "../Js/loadJson.js";
 import {Mario} from "../Js/marioObject.js";
 import {Coin} from "../Js/coinObject.js";
+import {Turtle} from "../Js/turtleObject.js";
 import {Viewport} from "../Js/viewport.js";
 
 
@@ -47,7 +48,6 @@ function createCoinArray(name) {
 	return fetch(`/marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(coinsSprite=>{
-			console.log(coinsSprite.coinPos[0]);
 			let coinArray = [];
 			coinsSprite.coinPos[0].ranges.forEach(([x,y])=>{
 				let coin = new Coin();
@@ -58,17 +58,25 @@ function createCoinArray(name) {
 		});
 }
 
+function createTurtleArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(turtleSprite=>{
+			let turtleArray = [];
+			turtleSprite.turtlePos[0].ranges.forEach(([x,y])=>{
+				let turtle = new Turtle();
+				turtle.pos.set(x,y);
+				turtleArray.push(turtle);
+			});
+			return turtleArray;
+		});
+}
+
 //-------測試區---------
-
-
-// let coin = new Coin();
-// coin.pos.set(64,16 * 13);
-// let coin2 = new Coin();
-// coin2.pos.set(160,16 * 13);
 
 let mario = new Mario();
 mario.pos.set(0,16 * 13);   //馬力歐起始位置
-mario.speed.set(8,2);   //馬力歐起始移動速度
+mario.speed.set(4,2);   //馬力歐起始移動速度
 		
 function promise() {
 	Promise.all([
@@ -77,12 +85,20 @@ function promise() {
 		loadJson("background"),
 		// loadMario(),  // 一開始只畫一個馬力歐的時候用的
 		loadMarioImage("mario"),
-		drawCoin("coin"),
 		loadTube("background"),
 		drawBackground("background"),
+		drawCoin("coin"),
 		createCoinArray("coin"),
-	]).then(([skySprite,groundSprite,screen,marioSpriteSet,coinSpriteSet,tubeSprite,backgroundSprite,coinArray])=>{
-
+		drawTurtle("turtle"),
+		createTurtleArray("turtle")
+	]).then(([
+		skySprite,groundSprite,
+		screen,
+		marioSpriteSet,
+		tubeSprite,
+		backgroundSprite,
+		coinSpriteSet,coinArray,
+		turtleSpriteSet,turtleArray])=>{
 		function animate() {
 			requestAnimationFrame(animate);
 			context.clearRect(0,0, context.canvas.width, context.canvas.height);
@@ -100,6 +116,11 @@ function promise() {
 				coinArray[j].draw(context,coinSpriteSet);
 				coinArray[j].update();
 			}
+
+			for(let j = 0;j < turtleArray.length;j += 1){
+				turtleArray[j].draw(context,turtleSpriteSet);
+				turtleArray[j].update(screen,tubeSprite,turtleSpriteSet);
+			}		
 			// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);
 			mario.update(screen,tubeSprite,marioSpriteSet);
 			mario.draw(context,marioSpriteSet,screen,tubeSprite); //傳進去 marioObject

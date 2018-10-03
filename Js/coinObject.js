@@ -26,20 +26,20 @@ class Coin{
 			&& this.pos.x + 16 >=  mario.pos.x   
 			&& this.pos.y <= mario.pos.y + 16
 			&& this.pos.y >=  mario.pos.y  
-			//16是金幣的寬度， EX : 160<mario.pos
+
+
+		//16是金幣的寬度， EX : 160 < mario.pos < 176
 		){
 			
 			this.show = false;
 		}
 
-		//+8 是馬力歐的寬度一半
 	}
 
 	flashing(){
 		this.frameIndex = ++this.frameIndex % 36 ;
 		return this.framesRun[this.frameIndex];
 	}
-
 
 	draw(context,coinSprite){
 		// console.log(mario.pos.x);

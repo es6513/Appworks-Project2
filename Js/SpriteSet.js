@@ -23,7 +23,7 @@ class Sprites {
 				.drawImage(		
 					this.image,		
 					x,y,			
-					this.width,this.height,		
+					width,height,		
 					0,0,			
 					this.width,this.height
 				);  
@@ -53,8 +53,8 @@ class Sprites {
 		// this.tiles.set(name,sprite);
 	}
 
-	getTileImage(name, x, y) {
-		this.getImage(name, x * this.width, y * this.height, this.width, this.height);
+	getTileImage(name, x, y,width,height) {
+		this.getImage(name, x * this.width, y * this.height, width, height);
 	}
 
 	drawMarioSprite(name,context,x,y,reverse = false){
@@ -75,6 +75,11 @@ class Sprites {
 	
 	drawCoinSprite(name,context,x,y){
 		let sprite = this.tiles.get(name)[0];
+		context.drawImage(sprite,x,y);
+	}
+
+	drawTurtleSprite(name,context,x,y,reverse = false){
+		let sprite = this.tiles.get(name)[reverse ? 1 : 0];
 		context.drawImage(sprite,x,y);
 	}
 

@@ -35,13 +35,44 @@ function  drawTubes(background,context,sprites) {
 
 function  drawClouds(background,context,sprites) {
 	background.ranges.forEach(([x1,x2,y1,y2]) => {
-		console.log(background);
 		for(let x = x1  ; x < x2 ; x += 1){
 			for(let y = y1 ; y < y2 ; y += 1){
 				sprites.drawTile(background.tile,context,x,y);
 			}
 		}
 	});
+}
+
+function drawCoin(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(coinsSprite=> Promise.all([
+			coinsSprite,
+			loadImage("../imgs/images/coinset.png"),
+		]))
+		.then(([coinsSprite,coinSpriteImage])=>{
+			let coinSpriteSet = new Sprites(coinSpriteImage,coinsSprite.width,coinsSprite.height);
+			coinsSprite.frames.forEach(spriteFrames=>{
+				coinSpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
+			});
+			return coinSpriteSet;
+		});
+}
+
+function drawTurtle(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(turtlesSprite=> Promise.all([
+			turtlesSprite,
+			loadImage("../imgs/images/badTurtle.png"),
+		]))
+		.then(([turtlesSprite,turtleSpriteImage])=>{
+			let turtleSpriteSet = new Sprites(turtleSpriteImage,turtlesSprite.width,turtlesSprite.height);
+			turtlesSprite.frames.forEach(spriteFrames=>{
+				turtleSpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
+			});
+			return turtleSpriteSet;
+		});
 }
 
 function loadMarioImage(name) {
@@ -87,20 +118,6 @@ function drawBackground(name) {
 	;
 }
 
-function drawCoin(name) {
-	return fetch(`/marioJSON/${name}.json`)
-		.then(r =>r.json())
-		.then(coinsSprite=> Promise.all([
-			coinsSprite,
-			loadImage("../imgs/images/coinset.png"),
-		]))
-		.then(([coinsSprite,coinSpriteImage])=>{
-			let coinSpriteSet = new Sprites(coinSpriteImage,coinsSprite.width,coinsSprite.height);
-			coinsSprite.frames.forEach(spriteFrames=>{
-				coinSpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
-			});
-			return coinSpriteSet;
-		});
-}
 
-export {drawScreen,loadImage,drawBackground,loadMarioImage,drawTubes,drawCoin};
+
+export {drawScreen,loadImage,drawBackground,loadMarioImage,drawTubes,drawCoin,drawTurtle};
