@@ -104,9 +104,9 @@ function promise() {
 			mario.update(screen,tubeSprite,marioSpriteSet);
 			mario.draw(context,marioSpriteSet,screen,tubeSprite); //傳進去 marioObject
 			
-			if(mario.pos.x > 40){
-				backgroundMusic.play();
-			}   
+			// if(mario.pos.x > 40){
+			// 	backgroundMusic.play();
+			// }   
 			//當馬力歐跑一定的距離之後，開始撥音樂
 		};
 	

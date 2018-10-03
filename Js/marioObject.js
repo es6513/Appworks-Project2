@@ -14,6 +14,8 @@ class Mario{
 		this.isJump = false;
 		this.onTube = false;
 		this.isStop = false;
+		this.controlSpeedFactor; 
+		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 		this.frameIndex = 0;
 		this.framesRunRightArray = ["runRight-1","runRight-1","runRight-1",
 			"runRight-2","runRight-2","runRight-2",
@@ -30,15 +32,19 @@ class Mario{
 	
 	update(screen,tubeSprite,marioSpriteSet){
 		// console.log(this.pos.x);
-		// 控制水管障礙
+		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
+		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 
+		// 控制水管障礙
+		console.log(this.controlSpeedFactor);
+		console.log(this.pos.x);
 		if(this.isRunning){
 			screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
 				if(this.pos.x <= x1 * tubeSprite.width 
 					&& this.pos.y > y1 * tubeSprite.height - marioSpriteSet.height 
 					&& this.faceDirection == 1)
 				{
-					if(this.pos.x + marioSpriteSet.width == x1 * tubeSprite.width && this.isJump == false){
+					if(this.pos.x + marioSpriteSet.width == x1 * tubeSprite.width ){
 						this.speed.x = 0;
 					}
 					if(keys.left){
@@ -48,9 +54,8 @@ class Mario{
 				else if(this.pos.x >= x1 * tubeSprite.width 
 					&& this.pos.y > y1 * tubeSprite.height -  marioSpriteSet.height)
 				{	
-					if(this.pos.x == x2 * tubeSprite.width && this.isJump == false){
+					if(this.pos.x == x2 * tubeSprite.width){
 						this.speed.x = 0;
-						
 					}
 					if(keys.right){
 						this.speed.x = 4;
@@ -86,6 +91,8 @@ class Mario{
 
 		// -------控制馬力歐移動-----
 		if(this.pos.x + this.speed.x <= window.screen.width && this.pos.x > 0){
+			console.log(window.screen.width);
+			 
 			if(keys.right){
 				this.moveRight();
 				this.direction = 1;
@@ -103,7 +110,17 @@ class Mario{
 				this.direction = 1;
 				this.faceDirection = this.direction;
 			}
-		}else if(this.pos.x == window.screen.width ){
+		}
+		else if(this.pos.x + this.controlSpeedFactor  == window.screen.width){
+			//這邊有點奇怪，筆電的螢幕如果有接大螢幕，跑到終點的時候 screen.width 會變大，可以再往左邊跑，但是沒接的時候不行
+			if(keys.left){
+				this.moveLeft();
+				this.direction = -1;
+				this.faceDirection = this.direction;
+			}
+		}
+		else if(this.pos.x  == window.screen.width){
+			//這邊有點奇怪，筆電的螢幕如果有接大螢幕，跑到終點的時候 screen.width 會變大，可以再往左邊跑，但是沒接的時候不行
 			if(keys.left){
 				this.moveLeft();
 				this.direction = -1;
@@ -130,17 +147,13 @@ class Mario{
 			this.speed.x = 4;
 		}	
 		
-
-
 		// 沒有按住按鍵的時候，將方向設回預設值
 		setTimeout(() => {
 			if(pressed == false){
 				this.direction = 0;
-				
 			}
 		});
 	}
-
 
 	moveRight(){
 		this.pos.x += this.speed.x;
@@ -159,7 +172,6 @@ class Mario{
 	running(){
 		if(this.direction == 1){
 			this.frameIndex = ++this.frameIndex % 10;
-			console.log(this.frameIndex);
 			return this.framesRunRightArray[this.frameIndex];
 		}else if(this.direction == -1){
 			this.frameIndex = ++this.frameIndex % 10;
