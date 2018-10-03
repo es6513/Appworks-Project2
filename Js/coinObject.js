@@ -24,9 +24,11 @@ class Coin{
 	update(){
 		if(this.pos.x <= mario.pos.x 
 			&& this.pos.x + 16 >=  mario.pos.x   
-			&& mario.pos.y >= this.pos.y 
+			&& this.pos.y <= mario.pos.y + 16
+			&& this.pos.y >=  mario.pos.y  
 			//16是金幣的寬度， EX : 160<mario.pos
 		){
+			
 			this.show = false;
 		}
 
@@ -38,9 +40,6 @@ class Coin{
 		return this.framesRun[this.frameIndex];
 	}
 
-	interval(){
-		setInterval(this.flashing(),1000);
-	}
 
 	draw(context,coinSprite){
 		// console.log(mario.pos.x);
@@ -52,6 +51,8 @@ class Coin{
 			coinSprite.drawCoinSprite(this.flashing(),context,this.pos.x,this.pos.y);
 		}else if(mario.pos.x >= 450 && mario.pos.x < 1600 && this.show){
 			coinSprite.drawCoinSprite(this.flashing(),context,this.pos.x - mario.pos.x + 450 ,this.pos.y);
+		}else if(mario.pos.x >= 1600 && this.show){
+			coinSprite.drawCoinSprite(this.flashing(),context,this.pos.x  - 1150 ,this.pos.y);
 		}
 		
 		// let point = 0;

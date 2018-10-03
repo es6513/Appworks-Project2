@@ -37,7 +37,7 @@ class Mario{
 		// 控制水管障礙
 		// console.log(this.controlSpeedFactor);
 		// console.log(this.pos.x);
-		console.log(this.direction);
+		console.log(this.pos.x);
 		if(this.isRunning){
 			screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
 				if(this.pos.x <= x1 * tubeSprite.width 
