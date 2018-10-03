@@ -122,7 +122,7 @@ function promise() {
 				turtleArray[j].update(screen,tubeSprite,turtleSpriteSet);
 			}		
 			// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);
-			mario.update(screen,tubeSprite,marioSpriteSet);
+			mario.update(screen,tubeSprite,marioSpriteSet,groundSprite);
 			mario.draw(context,marioSpriteSet,screen,tubeSprite); //傳進去 marioObject
 			
 			// if(mario.pos.x > 40){

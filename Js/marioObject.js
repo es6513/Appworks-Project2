@@ -30,65 +30,12 @@ class Mario{
 
 	}
 	
-	update(screen,tubeSprite,marioSpriteSet){
-		// console.log(this.pos.x);
+	update(screen,tubeSprite,marioSpriteSet,groundSprite){
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
-		// 控制水管障礙
+		
 		// console.log(this.controlSpeedFactor);
 		// console.log(this.pos.x);
-		if(this.isRunning){
-			screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
-				if(this.pos.x <= x1 * tubeSprite.width 
-					&& this.pos.y > y1 * tubeSprite.height - marioSpriteSet.height 
-					&& this.faceDirection == 1)
-				{
-					if(this.pos.x + marioSpriteSet.width == x1 * tubeSprite.width ){
-						this.speed.x = 0;
-					}
-					if(keys.left){
-						this.speed.x = 4;
-					}
-				}
-				else if(this.pos.x >= x1 * tubeSprite.width 
-					&& this.pos.y > y1 * tubeSprite.height -  marioSpriteSet.height
-					&& this.faceDirection == -1)
-				{	
-					if(this.pos.x == x2 * tubeSprite.width){
-						this.speed.x = 0;
-					}
-					if(keys.right){
-						this.speed.x = 4;
-					}
-				}
-
-
-				// ------------控制站在水管上-----------------
-				if(this.speed.y > 0 
-					&& this.pos.x + marioSpriteSet.width > x1 * tubeSprite.width 
-					&& this.pos.x < x1 * tubeSprite.width  + tubeSprite.width ){
-					
-					if(this.pos.y > y1 * tubeSprite.height - marioSpriteSet.height - 1){
-						this.isJump = false;
-						this.onTube = true;
-						this.pos.y = y1 * tubeSprite.height - marioSpriteSet.height - 1;
-						this.speed.y = 0;
-					}	
-					if(keys.top && 	this.onTube && !this.isJump){
-						this.isJump = true;
-						this.onTube = false;
-						this.speed.y -= 8;
-					}
-					this.speed.y += 0.5;
-				}	
-				
-				// ------------end of 控制站在水管上-----------------
-			});
-		}
-
-		// End of 控制水管障礙
-	
-
 		// -------控制馬力歐移動-----
 		if(this.pos.x + this.speed.x <= window.screen.width && this.pos.x > 0){
 			 
@@ -133,16 +80,83 @@ class Mario{
 			this.isJump = true;
 			this.speed.y -= 8;
 			this.speed.x = 4;
-		}
-		
+		}		
 		this.speed.y += 0.5;  //gravity
 		this.pos.y += this.speed.y;
-		
-		if(this.pos.y >= 13 * 16){
-			this.isJump = false;
-			this.pos.y =  13 * 16;
-			this.speed.y = 0;
-		}	
+		console.log(groundSprite);
+		console.log(screen);
+
+
+
+// 把兩段馬力歐物件裡面的兩段程式碼:
+1. 控制馬力歐落地
+2. 控制水管障礙
+移到較後面跳躍及控制移動後面，可以修正加速度過大，在連續跳躍時會產生短暫穿越的問題。
+//
+		// -------控制馬力歐落地時參數回復原狀---------
+		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+			if(this.pos.y > y1 * groundSprite.height - marioSpriteSet.height){
+				this.isJump = false;
+				this.onTube = false;
+				this.pos.y =  y1 * groundSprite.height - marioSpriteSet.height;
+				this.speed.y = 0;
+			}	
+		});
+
+		// -------End   控制馬力歐落地時參數回復原狀---------
+
+
+		// ---------------控制水管障礙---------------
+		if(this.isRunning){
+			screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
+				if(this.pos.x <= x1 * tubeSprite.width 
+					&& this.pos.y > y1 * tubeSprite.height - marioSpriteSet.height 
+					&& this.faceDirection == 1)
+				{
+					if(this.pos.x + marioSpriteSet.width == x1 * tubeSprite.width ){
+						this.speed.x = 0;
+					}
+					if(keys.left){
+						this.speed.x = 4;
+					}
+				}
+				else if(this.pos.x >= x1 * tubeSprite.width 
+					&& this.pos.y > y1 * tubeSprite.height -  marioSpriteSet.height
+					&& this.faceDirection == -1)
+				{	
+					if(this.pos.x == x2 * tubeSprite.width){
+						this.speed.x = 0;
+					}
+					if(keys.right){
+						this.speed.x = 4;
+					}
+				}
+
+
+				// ------------控制站在水管上-----------------
+				if(this.speed.y > 0 
+					&& this.pos.x + marioSpriteSet.width > x1 * tubeSprite.width 
+					&& this.pos.x < x1 * tubeSprite.width  + tubeSprite.width ){
+					
+					if(this.pos.y > y1 * tubeSprite.height - marioSpriteSet.height - 1){
+						this.isJump = false;
+						this.onTube = true;
+						this.pos.y = y1 * tubeSprite.height - marioSpriteSet.height - 1;
+						this.speed.y = 0;
+					}	
+					// if(keys.top && 	this.onTube && !this.isJump){
+					// 	this.isJump = true;
+					// 	this.onTube = false;
+					// 	this.speed.y -= 8;
+					// } // 忘記這幹嘛用的，先 comment 
+					this.speed.y += 0.5;
+				}	
+				
+				// ------------end of 控制站在水管上-----------------
+			});
+		}
+
+		// ------------------End of 控制水管障礙----------
 		
 		// 沒有按住按鍵的時候，將方向設回預設值
 		setTimeout(() => {
