@@ -1,5 +1,5 @@
 import {PositionAndSpeed} from "../Js/positionAndSpeed.js";
-import {mario} from "../Js/marioTest.js";
+import {mario,turtleArray} from "../Js/marioTest.js";
 
 
 class Turtle{
@@ -8,9 +8,13 @@ class Turtle{
 		this.frameIndex = 0;
 		this.die = false;
 		this.quickToDie = false;
+		this.isRotating = false;
 		this.speed = {
 			x:1
 		};
+		this.previousSpeed = this.speed.x;
+		this.previousX;
+		this.previousDirection = this.direction;
 		this.direction = 1;
 		this.faceDirection = 1;
 		this.framesRun = [
@@ -24,42 +28,68 @@ class Turtle{
 
 	}
 	
+	doStuff(){
+		this.quickToDie = false;
+		this.speed.x = 1;
+		this.direction = 1;
+		// this.pos.x = this.previousX;
+	}
+
 	update(screen,tubeSprite,turtleSpriteSet){
+		this.previousX = this.pos.x;
+		// if(this.quickToDie){
+		// 	this.backTostate();
+		// }
+
+		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
+		//	&& shape.pos.x < this.pos.x + this.width
+		//	&& shape.pos.y + shape.height > this.pos.y
+		//	&& shape.pos.y < this.pos.y + this.height
+	
 		this.faceDirection = this.direction;
-		this.move();
-		console.log(mario.pos.y);
-		console.log(this.pos.y);
+		this.move();				
+		
+		// if(this.quickToDie){	
+		// 	setTimeout(() => {
+		// 		this.quickToDie = false;
+		// 		this.speed.x = 1;
+		// 		this.direction = 1;
+		// 		this.pos.x = this.previousX;
+		// 	}, 1500);
+		// }
+		
+		if(this.quickToDie){
+			setTimeout(this.doStuff.bind(this), 1500);
+		}
+
 		screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
-			if(this.pos.x <= x1 * tubeSprite.width  
-				&& this.faceDirection == 1)
-			{
-				if(this.pos.x + turtleSpriteSet.width == x1 * tubeSprite.width ){
-					this.speed.x *= -1;
-					this.direction = -1;
-				}
-			}else if(this.faceDirection == -1){
-				if(this.pos.x == x2 * tubeSprite.width){
-					this.speed.x *= -1;
-					this.direction = 1;
-				}
+			if(this.pos.x +  turtleSpriteSet.width > x1 * tubeSprite.width 
+					&& this.pos.x  < x1 * tubeSprite.width + tubeSprite.width )
+			{	
+				this.speed.x *= -1;
+				this.direction *= -1;
 			}
-			// else if(this.pos.x >= x1 * tubeSprite.width 
-			// 	&& this.faceDirection == -1){
-			// 	this.speed.x *= -1;
-			// 	this.direction = 1;
-			// }
 		});
 
-
-		if(mario.speed.y > 0 
+		if(!this.quickToDie && mario.speed.y > 0 
 			&& mario.pos.x + 16 > this.pos.x 
-			&& mario.pos.x < this.pos.x + 16){
-			if(mario.pos.y > this.pos.y - 16 + 8){
+			&& mario.pos.x < this.pos.x + 16
+			&& mario.pos.y > this.pos.y - 16 + 8){
+			{
+				this.quickToDie = true;
 				mario.speed.y = -8;
 				mario.pos.y = this.pos.y - 16 + 8;
-				this.quickToDie = true;
-			}	
-		}	
+				this.speed.x = 0;
+			}		
+		}
+
+		
+
+		// if(!this.die
+		// 	&& mario.pos.x + 16 > this.pos.x 
+		// 	&& mario.pos.x < this.pos.x + 16){
+		// 	this.quickToDie = false;
+		// }
 		// if(mario.isJump && mario.pos.y > this.pos.y - 16){
 		// 	this.die = true;
 		// 	mario.pos.y = this.pos.y - 16;
@@ -111,9 +141,7 @@ class Turtle{
 			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x - mario.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
 		}else if(mario.pos.x >= 1600 && this.quickToDie){
 			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x  - 1150 ,this.pos.y,this.faceDirection < 0);
-		}
-		
-	
+		}	
 	}
 }
 

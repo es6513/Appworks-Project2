@@ -57,12 +57,12 @@ function createCoinArray(name) {
 			return coinArray;
 		});
 }
-
+let turtleArray = [];
 function createTurtleArray(name) {
 	return fetch(`/marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(turtleSprite=>{
-			let turtleArray = [];
+			// let turtleArray = [];
 			turtleSprite.turtlePos[0].ranges.forEach(([x,y])=>{
 				let turtle = new Turtle();
 				turtle.pos.set(x,y);
@@ -120,13 +120,19 @@ function promise() {
 			}
 
 			for(let j = 0;j < turtleArray.length;j += 1){
-				turtleArray[j].draw(context,turtleSpriteSet);
-				turtleArray[j].update(screen,tubeSprite,turtleSpriteSet);
-			}		
+				if(turtleArray[j].quickToDie == false){
+					turtleArray[j].draw(context,turtleSpriteSet);
+					turtleArray[j].update(screen,tubeSprite,turtleSpriteSet);
+				}if(turtleArray[j].quickToDie == true){
+					turtleArray[j].draw(context,turtleSpriteSet);
+					turtleArray[j].update(screen,tubeSprite,turtleSpriteSet);
+				}
+				
+			}	
+			
 			// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);
 			mario.update(screen,tubeSprite,marioSpriteSet,groundSprite);
 			mario.draw(context,marioSpriteSet,screen,tubeSprite); //傳進去 marioObject
-			
 			// if(mario.pos.x > 40){
 			// 	backgroundMusic.play();
 			// }   
@@ -138,7 +144,8 @@ function promise() {
 	});
 }
 
-promise();
+promise()
+;
 
-export {promise,mario};
+export {mario,turtleArray};
 

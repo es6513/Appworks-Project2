@@ -27,25 +27,31 @@ class Mario{
 			"runRight-3",
 			"mario"
 		];
-
 	}
-	
+
 	update(screen,tubeSprite,marioSpriteSet,groundSprite){
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 		// console.log(this.direction);
+		// console.log(this.speed.x);
 		// console.log(this.pos.x);
 
 		// -------控制馬力歐移動-----
 		if(this.pos.x + this.speed.x <= window.screen.width && this.pos.x > 0){
 			 
-			if(keys.right && !keys.left ){
+			if(keys.right && !keys.left && !this.stop){
 				// 這邊判斷式必須要寫兩個，一個是按右鍵，一個是沒按左鍵，這樣才能避免兩個按鍵產生衝突，並且完全獨立開
+				if(this.stop){
+					this.stop = false;
+				}		
 				this.moveRight();
 				this.faceDirection = this.direction;
 			}
-			if(keys.left && !keys.right){
+			if(keys.left && !keys.right && !this.stop){
 				// 這邊判斷式必須要寫兩個，一個是按右鍵，一個是沒按左鍵，這樣才能避免兩個按鍵產生衝突，並且完全獨立開
+				if(this.stop){
+					this.stop = false;
+				}			
 				this.moveLeft();
 				this.faceDirection = this.direction;
 			}
@@ -77,8 +83,12 @@ class Mario{
 		if(keys.top && this.isJump == false){
 			this.isJump = true;
 			this.speed.y -= 8;
+			
 			this.speed.x = 4;
+			
 		}		
+		
+
 		this.speed.y += 0.5;  //gravity
 		this.pos.y += this.speed.y;
 
@@ -101,23 +111,31 @@ class Mario{
 
 
 		// ---------------控制水管障礙---------------
+
+		// 10/4 稍作修正，碰到障礙物時，馬力歐速度不變，只是 X 位置停在原地。
 		if(this.isRunning){
 			screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
-				if(this.pos.x + marioSpriteSet.width == x1 * tubeSprite.width
-					&& this.pos.y > y1 * tubeSprite.height - marioSpriteSet.height 
+				if( this.pos.x + marioSpriteSet.width == x1 * tubeSprite.width
+					&& this.pos.y > y1 * tubeSprite.height  
 				)
 				{
-					this.speed.x = 0;
+					this.pos.x = x1 * tubeSprite.width - marioSpriteSet.width ;
+					this.stop = true;
+					// this.speed.x = 0;
 					if(keys.left && !keys.right){
-						this.speed.x = 4;
+						// this.speed.x = 4;
+						this.stop = false;
 					}
 				}
 				else if(this.pos.x == x2 * tubeSprite.width
-					&& this.pos.y > y1 * tubeSprite.height -  marioSpriteSet.height)
+					&& this.pos.y > y1 * tubeSprite.height )
 				{	
-					this.speed.x = 0;
+					this.pos.x = x1 * tubeSprite.width + tubeSprite.width;
+					this.stop = true;
+					// this.speed.x = 0;
 					if(keys.right && !keys.left){
-						this.speed.x = 4;
+						// this.speed.x = 4;
+						this.stop = false;
 					}
 				}
 
@@ -126,10 +144,10 @@ class Mario{
 					&& this.pos.x + marioSpriteSet.width > x1 * tubeSprite.width 
 					&& this.pos.x < x1 * tubeSprite.width  + tubeSprite.width ){
 					
-					if(this.pos.y > y1 * tubeSprite.height - marioSpriteSet.height - 0.5){
+					if(this.pos.y > y1 * tubeSprite.height - marioSpriteSet.height){
 						this.isJump = false;
 						this.onTube = true;
-						this.pos.y = y1 * tubeSprite.height - marioSpriteSet.height - 0.5;
+						this.pos.y = y1 * tubeSprite.height - marioSpriteSet.height;
 						this.speed.y = 0;
 					}	
 					// if(keys.top && 	this.onTube && !this.isJump){
