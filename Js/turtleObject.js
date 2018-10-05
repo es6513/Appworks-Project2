@@ -10,7 +10,7 @@ class Turtle{
 		this.speed = {
 			x:1
 		};
-		this.canRotate = false;
+		this.isRotating = false;
 		this.clearTimeout;
 		this.previousX;
 		this.direction = 1;
@@ -22,6 +22,7 @@ class Turtle{
 			"turtleRun-2","turtleRun-2","turtleRun-2","turtleRun-2",
 			"turtleRun-2","turtleRun-2","turtleRun-2","turtleRun-2",
 			"turtleRun-2","turtleRun-2"
+
 		];
 	}
 	
@@ -35,12 +36,12 @@ class Turtle{
 		
 		this.faceDirection = this.direction;
 
-		if(!this.quickToDie && !this.canRotate){
+		if(!this.quickToDie){
 			this.move();	
 		}	
 
 		// ---------烏龜會飛出去----------
-		if(this.canRotate){
+		if(this.isRotating){
 			this.rotate();	
 		}	
 
@@ -50,7 +51,7 @@ class Turtle{
 			&& mario.pos.y > this.pos.y - 16 + 8){
 			{
 				this.speed.x = 4;
-				this.canRotate = true;
+				this.isRotating = true;
 				mario.speed.y = -8;
 			}		
 		}
@@ -79,11 +80,9 @@ class Turtle{
 			&& mario.pos.y > this.pos.y - 16 + 8){
 			{
 				this.quickToDie = true;
-				this.canRotate = true;
 				mario.speed.y = -8;
 				// mario.pos.y = this.pos.y - 16 + 8;
-				this.speed.x = 0;
-				console.log("hi");
+				// this.speed.x = 0;
 			}		
 		}
 
@@ -97,13 +96,14 @@ class Turtle{
 
 		let timeoutId;
 	
-		if(!this.canRotate && this.quickToDie && !this.clearTimeout){
+		if(this.quickToDie && !this.clearTimeout){
 			timeoutId = setTimeout(() => {
-				this.quickToDie = false;
+				if(!this.isRotating){
+					this.quickToDie = false;
+				}				
 				// this.speed.x = 1;
 				// this.direction = 1;
 				this.clearTimeout = null;
-				this.canRotate = false;
 			}, 3000);
 			this.clearTimeout = timeoutId;
 		}	

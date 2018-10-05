@@ -29,10 +29,10 @@ class Mario{
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 		// console.log(this.direction);
 		// console.log(this.speed.x);
-		// console.log(this.pos.x);
+		console.log(this.pos.x);
 
 		// -------控制馬力歐移動-----
-		if(this.pos.x + this.speed.x <= window.screen.width && this.pos.x > 0){
+		if(this.pos.x + this.speed.x <= 2900 && this.pos.x > 0){
 			 
 			if(keys.right && !keys.left && !this.stopX){
 				// 這邊判斷式必須要寫兩個，一個是按右鍵，一個是沒按左鍵，這樣才能避免兩個按鍵產生衝突，並且完全獨立開
@@ -224,6 +224,8 @@ class Mario{
 				marioSprite.drawMarioSprite("jump",context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
 			}
 		}
+
+		// 讓馬力歐的位置可以始終在螢幕的中心點。
 
 		
 

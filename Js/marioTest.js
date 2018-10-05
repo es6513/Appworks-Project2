@@ -82,7 +82,7 @@ function promise() {
 			}else if(mario.pos.x >= 450 && mario.pos.x < 1600) {
 				context.drawImage(backgroundSprite,mario.pos.x - 450,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			}else if(mario.pos.x >= 1600){
-				context.drawImage(backgroundSprite, 1150,0,context.canvas.width,640,0,0,context.canvas.width,640);
+				context.drawImage(backgroundSprite, mario.pos.x - 450,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 			
 			
