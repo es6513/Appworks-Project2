@@ -3,10 +3,12 @@ import {loadSky, loadGround,loadTube,loadClouds } from "../Js/loadSprite.js";
 import {Coin} from "../Js/coinObject.js";
 
 
+
+// 用來畫不會動背景的部分
 function  drawScreen(background,context,sprites) {
 	background.ranges.forEach(([x1,x2,y1,y2]) => {
-		for(let x = x1  ; x < x2 ; x += 1){
-			for(let y = y1 ; y < y2 ; y += 1){
+		for(let x = x1  ; x <= x2 ; x += 1){
+			for(let y = y1 ; y <= y2 ; y += 1){
 				sprites.drawTile(background.tile,context,x,y);
 			}
 		}
@@ -35,8 +37,8 @@ function  drawTubes(background,context,sprites) {
 
 function  drawClouds(background,context,sprites) {
 	background.ranges.forEach(([x1,x2,y1,y2]) => {
-		for(let x = x1  ; x < x2 ; x += 1){
-			for(let y = y1 ; y < y2 ; y += 1){
+		for(let x = x1  ; x <= x2 ; x += 1){
+			for(let y = y1 ; y <= y2 ; y += 1){
 				sprites.drawTile(background.tile,context,x,y);
 			}
 		}

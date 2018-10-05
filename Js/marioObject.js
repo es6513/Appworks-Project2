@@ -29,7 +29,7 @@ class Mario{
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 		// console.log(this.direction);
 		// console.log(this.speed.x);
-		// console.log(this.pos.x);
+		console.log(this.pos.x);
 
 		// -------控制馬力歐移動-----
 		if(this.pos.x + this.speed.x <= window.screen.width && this.pos.x > 0){
@@ -206,24 +206,15 @@ class Mario{
 		// console.log(marioSprite.image);
 		//呼叫 SpriteSet 的 draw 方法
 
-		if(!this.isJump ){
-			if(mario.pos.x < 450 ){
-				marioSprite.drawMarioSprite(this.running(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(mario.pos.x >= 450 && mario.pos.x < 1600){
-				marioSprite.drawMarioSprite(this.running(),context,450,this.pos.y,this.faceDirection < 0);
-			}else if(mario.pos.x >= 1600){
-				marioSprite.drawMarioSprite(this.running(),context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
-			}
+
+		if(mario.pos.x < 450 ){
+			marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
+		}else if(mario.pos.x >= 450 && mario.pos.x < 1600){
+			marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,450,this.pos.y,this.faceDirection < 0);
+		}else if(mario.pos.x >= 1600){
+			marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
 		}
-		else if(this.isJump){
-			if(mario.pos.x < 450 ){
-				marioSprite.drawMarioSprite("jump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(mario.pos.x >= 450 && mario.pos.x < 1600){
-				marioSprite.drawMarioSprite("jump",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(mario.pos.x >= 1600){
-				marioSprite.drawMarioSprite("jump",context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
-			}
-		}
+
 
 		
 
