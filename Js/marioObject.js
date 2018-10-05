@@ -3,7 +3,7 @@ import {pressed,keys,keyup,keydown} from "../Js/keyEvent.js";
 import {loadMario,loadSky,loadGround} from "../Js/loadSprite.js";
 import { mario } from "./marioTest.js";
 
-
+let windowWidth = $(window).width();
 class Mario{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);
@@ -205,14 +205,29 @@ class Mario{
 	draw(context,marioSprite,screen,tubeSprite){
 		// console.log(marioSprite.image);
 		//呼叫 SpriteSet 的 draw 方法
+		// console.log( windowWidth - mario.pos.x - 8);
+		// // console.log(1920 - mario.pos.x - 8);
+		// if(1920 - mario.pos.x - 8 ==  windowWidth - mario.pos.x - 8){
+		// 	console.log("不要捲");
+		// }
 
-
-		if(mario.pos.x < 450 ){
+		// if(mario.pos.x < 450 ){
+		// 	marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
+		// }else if(mario.pos.x >= 450 && mario.pos.x < 1600){
+		// 	marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,450,this.pos.y,this.faceDirection < 0);
+		// }else if(mario.pos.x >= 1600){
+		// 	marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
+		// }
+		
+		// console.log(1920 - mario.pos.x - 8);
+		// console.log(windowWidth - mario.pos.x );
+		if(mario.pos.x < windowWidth / 2 - 8 ){
 			marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		}else if(mario.pos.x >= 450 && mario.pos.x < 1600){
-			marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,450,this.pos.y,this.faceDirection < 0);
-		}else if(mario.pos.x >= 1600){
-			marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
+		}else if(mario.pos.x >= windowWidth / 2 - 8  && mario.pos.x < 956 + windowWidth / 2){
+			marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,windowWidth / 2 - 8,this.pos.y,this.faceDirection < 0);
+		}
+		else if(mario.pos.x >= (1920 - 8 + windowWidth) / 2){
+			marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x - 964 - 8 ,this.pos.y,this.faceDirection < 0);
 		}
 
 

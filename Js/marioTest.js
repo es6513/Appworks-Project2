@@ -7,7 +7,7 @@ import {Turtle} from "../Js/turtleObject.js";
 import {Viewport} from "../Js/viewport.js";
 
 
-
+let windowWidth = $(window).width();
 const canvas = document.getElementById("cvs");
 const context = canvas.getContext("2d");
 
@@ -77,13 +77,21 @@ function promise() {
 			
 			
 
-			if(mario.pos.x < 450){
+			if(mario.pos.x < windowWidth / 2 - 8){
 				context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			}else if(mario.pos.x >= 450 && mario.pos.x < 1600) {
-				context.drawImage(backgroundSprite,mario.pos.x - 450,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			}else if(mario.pos.x >= 1600){
-				context.drawImage(backgroundSprite, 1150,0,context.canvas.width,640,0,0,context.canvas.width,640);
+			}else if(mario.pos.x >= windowWidth / 2 - 8  && mario.pos.x < 956 + windowWidth / 2) {
+				context.drawImage(backgroundSprite,mario.pos.x - windowWidth / 2 + 8 ,0,context.canvas.width,640,0,0,context.canvas.width,640);
+			}else if(mario.pos.x >= (1920 - 8 + windowWidth) / 2){
+				context.drawImage(backgroundSprite, 964 - 8,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
+
+			// if(mario.pos.x < 450){
+			// 	context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
+			// }else if(mario.pos.x >= 450 && mario.pos.x < 1600) {
+			// 	context.drawImage(backgroundSprite,mario.pos.x - 450,0,context.canvas.width,640,0,0,context.canvas.width,640);
+			// }else if(mario.pos.x >= 1600){
+			// 	context.drawImage(backgroundSprite, 1150,0,context.canvas.width,640,0,0,context.canvas.width,640);
+			// } // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 			
 			
 			//原本是用這一個控制捲動，目前是超過200才開始捲

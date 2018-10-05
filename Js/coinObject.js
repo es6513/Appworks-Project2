@@ -51,6 +51,7 @@ class Coin{
 		// 	coinSprite.drawCoinSprite(this.flashing(),context,this.pos.x,this.pos.y);
 		// }
 		
+		
 		if(mario.pos.x < 450 && this.show){
 			coinSprite.drawCoinSprite(this.flashing(),context,this.pos.x,this.pos.y);
 		}else if(mario.pos.x >= 450 && mario.pos.x < 1600 && this.show){
