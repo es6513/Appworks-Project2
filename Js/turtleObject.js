@@ -10,6 +10,7 @@ class Turtle{
 		this.speed = {
 			x:1
 		};
+		this.canRotate = false;
 		this.clearTimeout;
 		this.previousX;
 		this.direction = 1;
@@ -24,30 +25,37 @@ class Turtle{
 		];
 	}
 	
-	doStuff(){
-		let timeoutId;
-		timeoutId = setTimeout(() => {
-			this.quickToDie = false;
-			this.speed.x = 1;
-			this.direction = 1;
-		}, 1500);	
-		clearTimeout(timeoutId);
-	}
-
 	update(screen,tubeSprite,turtleSpriteSet){
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
 
+		// console.log(this.speed.x);
 		
-
-		this.previousX = this.pos.x;
 		this.faceDirection = this.direction;
-		if(!this.quickToDie){
+
+		if(!this.quickToDie && !this.canRotate){
 			this.move();	
 		}	
-		// console.log(this.timerCalculate);
+
+		// ---------烏龜會飛出去----------
+		if(this.canRotate){
+			this.rotate();	
+		}	
+
+		if(this.quickToDie && mario.speed.y > 0 
+			&& mario.pos.x + 16 > this.pos.x 
+			&& mario.pos.x < this.pos.x + 16
+			&& mario.pos.y > this.pos.y - 16 + 8){
+			{
+				this.speed.x = 4;
+				this.canRotate = true;
+				mario.speed.y = -8;
+			}		
+		}
+
+		// ---------End烏龜會飛出去----------
 		
 		// -------烏龜與障礙物之間的碰撞-------
 		screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
@@ -62,25 +70,7 @@ class Turtle{
 		// -------End 烏龜與障礙物之間的碰撞-------
 
 
-		// ------------烏龜復活----------------
-
-		//每次都要去判斷 setTimeout 產生的排程是否已經存在，才不會重複執行排程
-
-		let timeoutId;
 	
-		if(this.quickToDie && !this.clearTimeout){
-			timeoutId = setTimeout(() => {
-				this.quickToDie = false;
-				this.speed.x = 1;
-				this.direction = 1;
-				this.clearTimeout = null;
-			}, 3000);
-			this.clearTimeout = timeoutId;
-		}	
-		
-		// ------------End of 烏龜復活----------------
-		
-
 		// -------馬力歐跳躍攻擊烏龜-----------
 
 		if(!this.quickToDie && mario.speed.y > 0 
@@ -89,37 +79,36 @@ class Turtle{
 			&& mario.pos.y > this.pos.y - 16 + 8){
 			{
 				this.quickToDie = true;
+				this.canRotate = true;
 				mario.speed.y = -8;
 				// mario.pos.y = this.pos.y - 16 + 8;
-				this.pos.x = this.previousX;
-				// this.speed.x = 0;
+				this.speed.x = 0;
+				console.log("hi");
 			}		
 		}
 
-		if(this.quickToDie && mario.speed.y > 0 
-			&& mario.pos.x + 16 > this.pos.x 
-			&& mario.pos.x < this.pos.x + 16
-			&& mario.pos.y > this.pos.y - 16 + 8){
-			{
-				this.speed.x = 2;
-				// this.pos.x +
-			}		
-		}
+	
 
 		// -------End 馬力歐跳躍攻擊烏龜-----------
 
-		// if(timeoutId){
-		// 	clearTimeout(timeoutId);
+		// ------------烏龜復活----------------
 
-		// }
+		//每次都要去判斷 setTimeout 產生的排程是否已經存在，才不會重複執行排程
 
-		// var id1 = setTimeout(f,1000);
-		// var id2 = setInterval(f,1000);
-
-		// clearTimeout(id1);
-		// clearInterval(id2);
-		// 清除setTimeOut 用 ID
+		let timeoutId;
+	
+		if(!this.canRotate && this.quickToDie && !this.clearTimeout){
+			timeoutId = setTimeout(() => {
+				this.quickToDie = false;
+				// this.speed.x = 1;
+				// this.direction = 1;
+				this.clearTimeout = null;
+				this.canRotate = false;
+			}, 3000);
+			this.clearTimeout = timeoutId;
+		}	
 		
+		// ------------End of 烏龜復活----------------
 		
 
 		// if(!this.die
@@ -145,6 +134,10 @@ class Turtle{
 	}
 
 	move(){
+		this.pos.x += this.speed.x;
+	}
+
+	rotate(){
 		this.pos.x += this.speed.x;
 	}
 
