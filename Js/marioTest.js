@@ -11,34 +11,6 @@ import {Viewport} from "../Js/viewport.js";
 const canvas = document.getElementById("cvs");
 const context = canvas.getContext("2d");
 
-// let tubeImage = loadImage("../imgs/images/tube.png");
-
-// tubeImage.addEventListener("load",function () {
-// 	let groundSprite = new Sprites(tubeImage,16,32);
-// 	groundSprite.getImage("tube");
-// 	groundSprite.draw("tube",context,16,16);
-// });
-
-// class Layers{
-// 	constructor(){
-// 		this.layers = [];
-// 	}
-
-// 	draw(context){
-// 		this.layers.forEach(layer=>{
-// 			layer(context);
-// 		});
-// 	};
-// }
-// function createBackgroundLayer(backgrounds,sprites) {
-// 	let backgroundSprite = document.createElement("canvas");
-// 	backgroundSprite.width = 640;
-// 	backgroundSprite.height = 640;
-// 	drawScreen(backgrounds[0],backgroundSprite.getContext("2d"),skySprite);
-// 	drawScreen(backgrounds[1],backgroundSprite.getContext("2d"),groundSprite);
-// 	return function drawBackgroundLayer(context) {
-// 		context.drawImage(backgroundSprite,0,0);
-// 	};
 
 //-----測試區---------
 
@@ -75,9 +47,9 @@ function createTurtleArray(name) {
 //-------測試區---------
 
 let mario = new Mario();
-mario.pos.set(0,16 * 13);   //馬力歐起始位置
-mario.speed.set(4,2);   //馬力歐起始移動速度
-		
+mario.pos.set(0,160);   //馬力歐起始位置
+mario.speed.set(4,-4);   //馬力歐起始移動速度
+
 function promise() {
 	Promise.all([
 		loadSky(),  //產出 skySprite, 目前沒用，已整合至 loadBackground
@@ -102,6 +74,8 @@ function promise() {
 		function animate() {
 			requestAnimationFrame(animate);
 			context.clearRect(0,0, context.canvas.width, context.canvas.height);
+			
+			
 
 			if(mario.pos.x < 450){
 				context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
@@ -127,8 +101,8 @@ function promise() {
 					turtleArray[j].draw(context,turtleSpriteSet);
 					turtleArray[j].update(screen,tubeSprite,turtleSpriteSet);
 				}
-				
 			}	
+	
 			
 			// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);
 			mario.update(screen,tubeSprite,marioSpriteSet,groundSprite);
@@ -138,14 +112,12 @@ function promise() {
 			// }   
 			//當馬力歐跑一定的距離之後，開始撥音樂
 		};
-	
 		animate();
 		
 	});
 }
 
-promise()
-;
+promise();
 
 export {mario,turtleArray};
 

@@ -22,13 +22,17 @@ class Coin{
 	}
 	
 	update(){
-		if(this.pos.x <= mario.pos.x 
+		// X 軸判定要再調整一下
+
+		
+		if(this.pos.x <= mario.pos.x + 8
 			&& this.pos.x + 16 >=  mario.pos.x   
 			&& this.pos.y <= mario.pos.y + 16
 			&& this.pos.y >=  mario.pos.y  
 
 
 		//16是金幣的寬度， EX : 160 < mario.pos < 176
+		// +8 => 讓判定範圍加大
 		){
 			
 			this.show = false;

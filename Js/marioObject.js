@@ -13,18 +13,13 @@ class Mario{
 		this.faceDirection = 1;
 		this.isJump = false;
 		this.onTube = false;
-		this.stop = false;
+		this.stopX = false;
 		this.controlSpeedFactor; 
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 		this.frameIndex = 0;
 		this.framesRunArray = ["runRight-1","runRight-1","runRight-1",
 			"runRight-2","runRight-2","runRight-2",
 			"runRight-3","runRight-3","runRight-3",
-			"mario"
-		];
-		this.framesRunTest = ["runRight-1",
-			"runRight-2",
-			"runRight-3",
 			"mario"
 		];
 	}
@@ -39,18 +34,18 @@ class Mario{
 		// -------控制馬力歐移動-----
 		if(this.pos.x + this.speed.x <= window.screen.width && this.pos.x > 0){
 			 
-			if(keys.right && !keys.left && !this.stop){
+			if(keys.right && !keys.left && !this.stopX){
 				// 這邊判斷式必須要寫兩個，一個是按右鍵，一個是沒按左鍵，這樣才能避免兩個按鍵產生衝突，並且完全獨立開
-				if(this.stop){
-					this.stop = false;
+				if(this.stopX){
+					this.stopX = false;
 				}		
 				this.moveRight();
 				this.faceDirection = this.direction;
 			}
-			if(keys.left && !keys.right && !this.stop){
+			if(keys.left && !keys.right && !this.stopX){
 				// 這邊判斷式必須要寫兩個，一個是按右鍵，一個是沒按左鍵，這樣才能避免兩個按鍵產生衝突，並且完全獨立開
-				if(this.stop){
-					this.stop = false;
+				if(this.stopX){
+					this.stopX = false;
 				}			
 				this.moveLeft();
 				this.faceDirection = this.direction;
@@ -120,22 +115,22 @@ class Mario{
 				)
 				{
 					this.pos.x = x1 * tubeSprite.width - marioSpriteSet.width ;
-					this.stop = true;
+					this.stopX = true;
 					// this.speed.x = 0;
 					if(keys.left && !keys.right){
 						// this.speed.x = 4;
-						this.stop = false;
+						this.stopX = false;
 					}
 				}
 				else if(this.pos.x == x2 * tubeSprite.width
 					&& this.pos.y > y1 * tubeSprite.height )
 				{	
 					this.pos.x = x1 * tubeSprite.width + tubeSprite.width;
-					this.stop = true;
+					this.stopX = true;
 					// this.speed.x = 0;
 					if(keys.right && !keys.left){
 						// this.speed.x = 4;
-						this.stop = false;
+						this.stopX = false;
 					}
 				}
 
@@ -165,7 +160,11 @@ class Mario{
 		// ------------------End of 控制水管障礙----------
 
 		// ------------------以上兩段----------------------
+		// ------------------打烏龜-----------------------
+
 		
+
+		// ------------------End 打烏龜-----------------------
 		// 沒有按住按鍵的時候，將方向設回預設值
 		setTimeout(() => {
 			if(pressed == false){

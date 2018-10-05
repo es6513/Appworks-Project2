@@ -6,15 +6,12 @@ class Turtle{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);
 		this.frameIndex = 0;
-		this.die = false;
 		this.quickToDie = false;
-		this.isRotating = false;
 		this.speed = {
 			x:1
 		};
-		this.previousSpeed = this.speed.x;
+		this.clearTimeout;
 		this.previousX;
-		this.previousDirection = this.direction;
 		this.direction = 1;
 		this.faceDirection = 1;
 		this.framesRun = [
@@ -25,43 +22,34 @@ class Turtle{
 			"turtleRun-2","turtleRun-2","turtleRun-2","turtleRun-2",
 			"turtleRun-2","turtleRun-2"
 		];
-
 	}
 	
 	doStuff(){
-		this.quickToDie = false;
-		this.speed.x = 1;
-		this.direction = 1;
-		// this.pos.x = this.previousX;
+		let timeoutId;
+		timeoutId = setTimeout(() => {
+			this.quickToDie = false;
+			this.speed.x = 1;
+			this.direction = 1;
+		}, 1500);	
+		clearTimeout(timeoutId);
 	}
 
 	update(screen,tubeSprite,turtleSpriteSet){
-		this.previousX = this.pos.x;
-		// if(this.quickToDie){
-		// 	this.backTostate();
-		// }
-
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-	
-		this.faceDirection = this.direction;
-		this.move();				
-		
-		// if(this.quickToDie){	
-		// 	setTimeout(() => {
-		// 		this.quickToDie = false;
-		// 		this.speed.x = 1;
-		// 		this.direction = 1;
-		// 		this.pos.x = this.previousX;
-		// 	}, 1500);
-		// }
-		
-		if(this.quickToDie){
-			setTimeout(this.doStuff.bind(this), 1500);
-		}
 
+		
+
+		this.previousX = this.pos.x;
+		this.faceDirection = this.direction;
+		if(!this.quickToDie){
+			this.move();	
+		}	
+		// console.log(this.timerCalculate);
+		
+		// -------烏龜與障礙物之間的碰撞-------
 		screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
 			if(this.pos.x +  turtleSpriteSet.width > x1 * tubeSprite.width 
 					&& this.pos.x  < x1 * tubeSprite.width + tubeSprite.width )
@@ -71,6 +59,30 @@ class Turtle{
 			}
 		});
 
+		// -------End 烏龜與障礙物之間的碰撞-------
+
+
+		// ------------烏龜復活----------------
+
+		//每次都要去判斷 setTimeout 產生的排程是否已經存在，才不會重複執行排程
+
+		let timeoutId;
+	
+		if(this.quickToDie && !this.clearTimeout){
+			timeoutId = setTimeout(() => {
+				this.quickToDie = false;
+				this.speed.x = 1;
+				this.direction = 1;
+				this.clearTimeout = null;
+			}, 3000);
+			this.clearTimeout = timeoutId;
+		}	
+		
+		// ------------End of 烏龜復活----------------
+		
+
+		// -------馬力歐跳躍攻擊烏龜-----------
+
 		if(!this.quickToDie && mario.speed.y > 0 
 			&& mario.pos.x + 16 > this.pos.x 
 			&& mario.pos.x < this.pos.x + 16
@@ -78,11 +90,36 @@ class Turtle{
 			{
 				this.quickToDie = true;
 				mario.speed.y = -8;
-				mario.pos.y = this.pos.y - 16 + 8;
-				this.speed.x = 0;
+				// mario.pos.y = this.pos.y - 16 + 8;
+				this.pos.x = this.previousX;
+				// this.speed.x = 0;
 			}		
 		}
 
+		if(this.quickToDie && mario.speed.y > 0 
+			&& mario.pos.x + 16 > this.pos.x 
+			&& mario.pos.x < this.pos.x + 16
+			&& mario.pos.y > this.pos.y - 16 + 8){
+			{
+				this.speed.x = 2;
+				// this.pos.x +
+			}		
+		}
+
+		// -------End 馬力歐跳躍攻擊烏龜-----------
+
+		// if(timeoutId){
+		// 	clearTimeout(timeoutId);
+
+		// }
+
+		// var id1 = setTimeout(f,1000);
+		// var id2 = setInterval(f,1000);
+
+		// clearTimeout(id1);
+		// clearInterval(id2);
+		// 清除setTimeOut 用 ID
+		
 		
 
 		// if(!this.die
