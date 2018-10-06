@@ -10,6 +10,8 @@ class Turtle{
 		this.speed = {
 			x:1
 		};
+		this.width = 16;
+		this.height = 24;
 		this.isRotating = false;
 		this.clearTimeout;
 		this.previousX;
@@ -31,41 +33,68 @@ class Turtle{
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-
 		// console.log(this.speed.x);
-		
+		// console.log(this.quickToDie);
 		this.faceDirection = this.direction;
-
 		if(!this.quickToDie){
 			this.move();	
 		}	
-
-	
 		
 		
 		// 在烏龜活著及旋轉的狀態下，若馬力歐不是處於跳躍狀態被碰到，則馬力歐死掉
 		
+		// if(!mario.isDie 
+		// 	&& mario.pos.x + 16 > this.pos.x 
+		// 	&& mario.pos.x < this.pos.x + 16
+		// 	&& mario.pos.y + 16 > this.pos.y
+		// 	&& mario.pos.y < this.pos.y + 24
+		// 	&& !mario.isJump
+		// 	&& this.isRotating 
+		// 	&& mario.isOnGround
+		// 	|| 
+		// 	!mario.isDie 
+		// 	&& mario.pos.x + 16 > this.pos.x 
+		// 	&& mario.pos.x < this.pos.x + 16
+		// 	&& mario.pos.y + 16 > this.pos.y
+		// 	&& mario.pos.y < this.pos.y + 24
+		// 	&& !mario.isJump
+		// 	&& mario.isOnGround
+		// 	&& !this.quickToDie ){
+		// 	mario.isDie = true;
+		// 	mario.speed.y = -8;
+		// 	mario.pos.y += mario.speed.y;
+		// }
+
+
+		// X軸的判定 用 width/2 比較好一點,
+
 		if(!mario.isDie 
-			&& mario.pos.x + 16 > this.pos.x 
-			&& mario.pos.x < this.pos.x + 16
-			&& mario.pos.y + 16 > this.pos.y
-			&& mario.pos.y < this.pos.y + 24
+			&& mario.pos.x + mario.width  > this.pos.x 
+			&& mario.pos.x < this.pos.x + this.width 
+			&& mario.pos.y + mario.height > this.pos.y
+			&& mario.pos.y < this.pos.y + this.height
 			&& !mario.isJump
-			&& this.isRotating 
 			&& mario.isOnGround
-			|| 
-			!mario.isDie 
-			&& mario.pos.x + 16 > this.pos.x 
-			&& mario.pos.x < this.pos.x + 16
-			&& mario.pos.y + 16 > this.pos.y
-			&& mario.pos.y < this.pos.y + 24
+			&& this.isRotating 
+		){
+			mario.isDie = true;
+			mario.speed.y = -8;
+			mario.pos.y += mario.speed.y;
+		}
+		if(!mario.isDie 
+			&& mario.pos.x + mario.width   > this.pos.x 
+			&& mario.pos.x < this.pos.x + this.width 
+			&& mario.pos.y + mario.height > this.pos.y
+			&& mario.pos.y < this.pos.y + this.height
 			&& !mario.isJump
 			&& mario.isOnGround
 			&& !this.quickToDie ){
 			mario.isDie = true;
-			mario.speed.y = -3;
+			mario.speed.y = -6;
 			mario.pos.y += mario.speed.y;
-		}
+		}		
+
+		
 
 		// End如果在馬力歐不是跳躍的情況下、並且烏龜不是旋轉狀態下，馬力歐掛掉
 
@@ -74,10 +103,10 @@ class Turtle{
 			this.rotate();	
 		}	
 
-		if(this.quickToDie && mario.speed.y > 0 
-			&& mario.pos.x + 16 > this.pos.x 
-			&& mario.pos.x < this.pos.x + 16
-			&& mario.pos.y > this.pos.y - 16 + 8){
+		if(!mario.isDie && this.quickToDie  
+			&& mario.pos.x + mario.width > this.pos.x 
+			&& mario.pos.x < this.pos.x + this.width 
+			&& mario.pos.y > this.pos.y - this.height / 2){
 			{
 				this.speed.x = 4;
 				this.isRotating = true;
@@ -89,21 +118,13 @@ class Turtle{
 		
 		// -------烏龜與障礙物之間的碰撞-------
 		tubeJson.Pos[0].ranges.forEach(([x,y])=>{
-			if(this.pos.x +  turtleSpriteSet.width > x  
+			if(this.pos.x +  this.width > x  
 				&& this.pos.x  < x + tubeJson.width )
 			{	
 				this.speed.x *= -1;
 				this.direction *= -1;
 			}
 		});
-		// screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
-		// 	if(this.pos.x +  turtleSpriteSet.width > x1 * tubeSprite.width 
-		// 			&& this.pos.x  < x1 * tubeSprite.width + tubeSprite.width )
-		// 	{	
-		// 		this.speed.x *= -1;
-		// 		this.direction *= -1;
-		// 	}
-		// });
 
 		// -------End 烏龜與障礙物之間的碰撞-------
 
@@ -133,8 +154,11 @@ class Turtle{
 		let timeoutId;
 	
 		if(this.quickToDie && !this.clearTimeout){
+
 			timeoutId = setTimeout(() => {
+
 				if(!this.isRotating){
+
 					this.quickToDie = false;
 				}				
 				// this.speed.x = 1;

@@ -8,6 +8,8 @@ class Mario{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);
 		this.speed = new PositionAndSpeed(0,0);
+		this.width = 16;
+		this.height = 16;
 		this.direction = 0;
 		this.isRunning = false;
 		this.faceDirection = 1;
@@ -33,6 +35,7 @@ class Mario{
 		// console.log(this.direction);
 		// console.log(this.speed.x);
 		// console.log(this.pos.x);
+		// console.log(this.isDie);
 		let timeoutId;
 		if(this.isDie && !this.clearTimeout){
 			timeoutId = setTimeout(() => {
@@ -90,6 +93,7 @@ class Mario{
 	 	// --------跳躍的設定 ---------------
 		if(!this.isDie && keys.top && this.isJump == false){
 			this.isJump = true;
+			this.isOnGround = false;
 			this.speed.y -= 8;
 			this.speed.x = 4;	
 		}		
@@ -112,7 +116,6 @@ class Mario{
 			if(!this.isDie && this.pos.y > y1 * groundSprite.height - marioSpriteSet.height){
 				this.isJump = false;
 				this.isOnGround = true;
-				this.onTube = false;
 				this.pos.y =  y1 * groundSprite.height - marioSpriteSet.height;
 				this.speed.y = 0;
 			}	
@@ -157,7 +160,6 @@ class Mario{
 					if(this.pos.y > y - marioSpriteSet.height){
 						this.isJump = false;
 						this.isOnGround = false;
-						this.onTube = true;
 						this.pos.y = y - marioSpriteSet.height;
 						this.speed.y = 0;
 					}	

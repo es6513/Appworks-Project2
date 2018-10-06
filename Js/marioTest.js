@@ -5,6 +5,7 @@ import {Mario} from "../Js/ObjectJs/marioObject.js";
 import {Coin} from "../Js/ObjectJs/coinObject.js";
 import {Turtle} from "./ObjectJs/turtleObject.js";
 import {Tube} from "./ObjectJs/tubeObject.js";
+import {Goomba} from "./ObjectJs/goombaObject.js";
 
 let windowWidth = $(window).width();
 let windowHeight = $(window).height();
@@ -32,6 +33,20 @@ function createCoinArray(name) {
 		});
 }
 
+function createTubeArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(tubeSprite=>{
+			let tubeArray = [];
+			tubeSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let tube = new Tube();
+				tube.pos.set(x,y);
+				tubeArray.push(tube);
+			});
+			return tubeArray;
+		});
+}
+
 function createTurtleArray(name) {
 	return fetch(`/marioJSON/${name}.json`)
 		.then(r =>r.json())
@@ -46,17 +61,17 @@ function createTurtleArray(name) {
 		});
 }
 
-function createTubeArray(name) {
+function createGoombaArray(name) {
 	return fetch(`/marioJSON/${name}.json`)
 		.then(r =>r.json())
-		.then(tubeSprite=>{
-			let tubeArray = [];
-			tubeSprite.Pos[0].ranges.forEach(([x,y])=>{
-				let tube = new Tube();
-				tube.pos.set(x,y);
-				tubeArray.push(tube);
+		.then(goombaSprite=>{
+			let goombaArray = [];
+			goombaSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let goomba = new Goomba();
+				goomba.pos.set(x,y);
+				goombaArray.push(goomba);
 			});
-			return tubeArray;
+			return goombaArray;
 		});
 }
 
@@ -79,6 +94,8 @@ function promise() {
 		drawObjects("tube"),
 		createTubeArray("tube"),
 		loadJson("tube"),
+		drawObjects("goomba"),
+		createGoombaArray("goomba")
 	]).then(([
 		groundSprite,
 		screen,
@@ -86,7 +103,8 @@ function promise() {
 		backgroundSprite,
 		coinSpriteSet,coinArray,
 		turtleSpriteSet,turtleArray,
-		tubeSpriteSet,tubeArray,tubeJson])=>{
+		tubeSpriteSet,tubeArray,tubeJson,
+		goombaSpriteSet,goombaArray])=>{
 
 	
 		function animate() {
@@ -122,18 +140,21 @@ function promise() {
 				coinArray[j].draw(context,coinSpriteSet);
 				coinArray[j].update();
 			}
-	
-			for(let j = 0;j < turtleArray.length;j += 1){
-				turtleArray[j].draw(context,turtleSpriteSet);
-				turtleArray[j].update(screen,tubeSpriteSet,turtleSpriteSet,tubeJson);
-			}	
-	
+
 			for(let j = 0;j < tubeArray.length;j += 1){
 				tubeArray[j].draw(context,tubeSpriteSet);
 				tubeArray[j].update();
 			}	
+				
+			for(let j = 0;j < turtleArray.length;j += 1){
+				turtleArray[j].draw(context,turtleSpriteSet);
+				turtleArray[j].update(screen,tubeSpriteSet,turtleSpriteSet,tubeJson);
+			}	
 			
-	
+			for(let j = 0;j < goombaArray.length;j += 1){
+				goombaArray[j].draw(context,goombaSpriteSet);
+				goombaArray[j].update(tubeJson);
+			}				
 
 			
 			// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);

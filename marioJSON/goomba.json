@@ -1,53 +1,44 @@
 {
   "frames": [
     {
-      "name": "turtleRun-1",
+      "name": "goombaDie",
       "ranges": [
         0,
         0,
         16,
-        24
+        16
       ]
     },
     {
-      "name": "turtleRun-2",
+      "name": "goombaRun-1",
       "ranges": [
         16,
         0,
         16,
-        24
+        16
       ]
     },
     {
-      "name": "turtleDie-1",
+      "name": "goombaRun-2",
       "ranges": [
         32,
         0,
         16,
-        24
-      ]
-    },
-    {
-      "name": "turtleDie-2",
-      "ranges": [
-        48,
-        0,
-        16,
-        24
+        16
       ]
     }
   ],
   "Pos": [
     {
-      "tile": "turtle",
+      "tile": "goomba",
       "ranges": [
         [
-          560,
-          200
+          700,
+          208
         ]
       ]
     }
   ],
   "width": 16,
-  "height": 24
+  "height": 16
 }

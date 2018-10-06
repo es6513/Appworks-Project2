@@ -5,6 +5,8 @@ import {mario} from "../marioTest.js";
 class Tube{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);
+		this.width = 32;
+		this.height = 32;
 	}
 	
 	update(){
