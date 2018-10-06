@@ -15,9 +15,16 @@ let fps = 100;
 let backgroundDOM = document.getElementById("background");
 
 
+
+// -------------------音效--------------------
+let backgroundMusic = new Audio("../music/TitleBGM.mp3");
+
+
+
+// -------------------end 音效--------------------
+
 //-----測試區---------
 
-let backgroundMusic = new Audio("../music/TitleBGM.mp3");
 
 function createCoinArray(name) {
 	return fetch(`/marioJSON/${name}.json`)
@@ -80,6 +87,7 @@ function createGoombaArray(name) {
 let mario = new Mario();
 mario.pos.set(0,160);   //馬力歐起始位置
 mario.speed.set(4,-4);   //馬力歐起始移動速度
+let coinSound = new Audio("/music/mario-coin-sound.wav");
 
 function promise() {
 	Promise.all([

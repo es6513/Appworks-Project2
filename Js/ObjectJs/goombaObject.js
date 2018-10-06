@@ -50,6 +50,8 @@ class Goomba{
 			&& mario.pos.y < this.pos.y + this.height
 			&& !mario.isJump
 			&& mario.isOnGround	){
+			let dieSound = new Audio("/music/mario-die-sound.wav");
+			dieSound.play();
 			mario.isDie = true;
 			mario.speed.y = -8;
 			mario.pos.y += mario.speed.y;
@@ -63,6 +65,8 @@ class Goomba{
 			&& !mario.isJump
 			&& mario.isOnGround
 		){
+			let dieSound = new Audio("/music/mario-die-sound.wav");
+			dieSound.play();
 			mario.isDie = true;
 			mario.speed.y = -6;
 			mario.pos.y += mario.speed.y;
@@ -92,6 +96,7 @@ class Goomba{
 			&& mario.pos.x < this.pos.x + 16
 			&& mario.pos.y > this.pos.y - 16 + 8){
 			{
+				this.dieSound();
 				this.isDie = true;
 				mario.speed.y = -4;
 			}		
@@ -109,7 +114,6 @@ class Goomba{
 	
 		if(this.isDie && !this.clearTimeout){
 			timeoutId = setTimeout(() => {
-
 				this.isHide = true;	
 				this.clearTimeout = null;
 			}, 2000);
@@ -122,6 +126,11 @@ class Goomba{
 
 	move(){
 		this.pos.x += this.speed.x;
+	}
+  
+	dieSound(){
+		let dieSound = new Audio("/music/mario-kick-sound.wav");
+		dieSound.play();
 	}
 
 	running(){

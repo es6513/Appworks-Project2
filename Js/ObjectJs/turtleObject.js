@@ -43,31 +43,10 @@ class Turtle{
 		
 		// 在烏龜活著及旋轉的狀態下，若馬力歐不是處於跳躍狀態被碰到，則馬力歐死掉
 		
-		// if(!mario.isDie 
-		// 	&& mario.pos.x + 16 > this.pos.x 
-		// 	&& mario.pos.x < this.pos.x + 16
-		// 	&& mario.pos.y + 16 > this.pos.y
-		// 	&& mario.pos.y < this.pos.y + 24
-		// 	&& !mario.isJump
-		// 	&& this.isRotating 
-		// 	&& mario.isOnGround
-		// 	|| 
-		// 	!mario.isDie 
-		// 	&& mario.pos.x + 16 > this.pos.x 
-		// 	&& mario.pos.x < this.pos.x + 16
-		// 	&& mario.pos.y + 16 > this.pos.y
-		// 	&& mario.pos.y < this.pos.y + 24
-		// 	&& !mario.isJump
-		// 	&& mario.isOnGround
-		// 	&& !this.quickToDie ){
-		// 	mario.isDie = true;
-		// 	mario.speed.y = -8;
-		// 	mario.pos.y += mario.speed.y;
-		// }
-
-
 		// X軸的判定 用 width/2 比較好一點,
 
+
+	
 		if(!mario.isDie 
 			&& mario.pos.x + mario.width  > this.pos.x 
 			&& mario.pos.x < this.pos.x + this.width 
@@ -77,6 +56,8 @@ class Turtle{
 			&& mario.isOnGround
 			&& this.isRotating 
 		){
+			let dieSound = new Audio("/music/mario-die-sound.wav");
+			dieSound.play();
 			mario.isDie = true;
 			mario.speed.y = -8;
 			mario.pos.y += mario.speed.y;
@@ -89,6 +70,8 @@ class Turtle{
 			&& !mario.isJump
 			&& mario.isOnGround
 			&& !this.quickToDie ){
+			let dieSound = new Audio("/music/mario-die-sound.wav");
+			dieSound.play();
 			mario.isDie = true;
 			mario.speed.y = -6;
 			mario.pos.y += mario.speed.y;
@@ -110,7 +93,7 @@ class Turtle{
 			{
 				this.speed.x = 4;
 				this.isRotating = true;
-				mario.speed.y = -8;
+				mario.speed.y = -6;
 			}		
 		}
 

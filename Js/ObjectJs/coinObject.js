@@ -26,13 +26,14 @@ class Coin{
 	update(){
 		// X 軸判定要再調整一下
 
-		if(this.pos.x <= mario.pos.x + 8
+		if(this.show && this.pos.x <= mario.pos.x + 8
 			&& this.pos.x + 10 >=  mario.pos.x   
 			&& this.pos.y <= mario.pos.y + 16
 			&& this.pos.y >=  mario.pos.y  
 		
 		){		
 			this.show = false;
+			this.coinSound();
 		}
 		//16是金幣的寬度， EX : 160 < mario.pos < 176
 		// 前兩行的 +8 +10 => 讓判定範圍更精準，並非真正碰撞
@@ -41,6 +42,11 @@ class Coin{
 	flashing(){
 		this.frameIndex = ++this.frameIndex % 36 ;
 		return this.framesRun[this.frameIndex];
+	}
+
+	coinSound(){
+		let coinSound = new Audio("/music/mario-coin-sound.wav");
+		coinSound.play();
 	}
 
 	draw(context,coinSprite){

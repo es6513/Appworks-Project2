@@ -96,6 +96,7 @@ class Mario{
 			this.isOnGround = false;
 			this.speed.y -= 8;
 			this.speed.x = 4;	
+			this.jumpSound();
 		}		
 
 		if(!this.isDie && this.isJump && this.stopX){
@@ -105,6 +106,9 @@ class Mario{
 
 		this.speed.y += 0.5;  //gravity
 		this.pos.y += this.speed.y;
+
+
+		// --------end 跳躍的設定 ---------------
 
 		//	把兩段馬力歐物件裡面的兩段程式碼:
 		//	1. 控制馬力歐落地
@@ -177,6 +181,10 @@ class Mario{
 		// ------------------End of 控制水管障礙----------
 
 		// ------------------以上兩段----------------------
+
+		// --------死亡撥放音樂---------------
+
+		//---------End of 死亡撥放音樂----------------
 	
 		// 沒有按住按鍵的時候，將方向設回預設值
 		setTimeout(() => {
@@ -184,6 +192,11 @@ class Mario{
 				this.direction = 0;
 			}
 		});
+	}
+
+	jumpSound(){
+		let jumpSound = new Audio("/music/maro-jump-sound.wav");
+		jumpSound.play();
 	}
 
 	moveRight(){
