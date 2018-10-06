@@ -37,7 +37,7 @@
       ]
     }
   ],
-  "Pos": [
+  "turtlePos": [
     {
       "tile": "turtle",
       "ranges": [

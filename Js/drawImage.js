@@ -1,14 +1,11 @@
 import {Sprites} from "../Js/SpriteSet.js";
 import {loadSky, loadGround,loadTube,loadClouds } from "../Js/loadSprite.js";
-import {Coin} from "../Js/coinObject.js";
-
-
 
 // 用來畫不會動背景的部分
 function  drawScreen(background,context,sprites) {
 	background.ranges.forEach(([x1,x2,y1,y2]) => {
 		for(let x = x1  ; x <= x2 ; x += 1){
-			for(let y = y1 ; y <= y2 ; y += 1){
+			for(let y = y1 ; y <= window.screen.width ; y += 1){
 				sprites.drawTile(background.tile,context,x,y);
 			}
 		}
@@ -45,35 +42,19 @@ function  drawClouds(background,context,sprites) {
 	});
 }
 
-function drawCoin(name) {
+function drawObjects(name) {
 	return fetch(`/marioJSON/${name}.json`)
 		.then(r =>r.json())
-		.then(coinsSprite=> Promise.all([
-			coinsSprite,
-			loadImage("../imgs/images/coinset.png"),
+		.then(Sprite=> Promise.all([
+			Sprite,
+			loadImage(`../imgs/images/${name}.png`),
 		]))
-		.then(([coinsSprite,coinSpriteImage])=>{
-			let coinSpriteSet = new Sprites(coinSpriteImage,coinsSprite.width,coinsSprite.height);
-			coinsSprite.frames.forEach(spriteFrames=>{
-				coinSpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
+		.then(([Sprite,SpriteImage])=>{
+			let SpriteSet = new Sprites(SpriteImage,Sprite.width,Sprite.height);
+			Sprite.frames.forEach(spriteFrames=>{
+				SpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
 			});
-			return coinSpriteSet;
-		});
-}
-
-function drawTurtle(name) {
-	return fetch(`/marioJSON/${name}.json`)
-		.then(r =>r.json())
-		.then(turtlesSprite=> Promise.all([
-			turtlesSprite,
-			loadImage("../imgs/images/badTurtle.png"),
-		]))
-		.then(([turtlesSprite,turtleSpriteImage])=>{
-			let turtleSpriteSet = new Sprites(turtleSpriteImage,turtlesSprite.width,turtlesSprite.height);
-			turtlesSprite.frames.forEach(spriteFrames=>{
-				turtleSpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
-			});
-			return turtleSpriteSet;
+			return SpriteSet;
 		});
 }
 
@@ -121,5 +102,39 @@ function drawBackground(name) {
 }
 
 
+// function drawCoin(name) {
+// 	return fetch(`/marioJSON/${name}.json`)
+// 		.then(r =>r.json())
+// 		.then(coinsSprite=> Promise.all([
+// 			coinsSprite,
+// 			loadImage("../imgs/images/coinset.png"),
+// 		]))
+// 		.then(([coinsSprite,coinSpriteImage])=>{
+// 			let coinSpriteSet = new Sprites(coinSpriteImage,coinsSprite.width,coinsSprite.height);
+// 			coinsSprite.frames.forEach(spriteFrames=>{
+// 				coinSpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
+// 			});
+// 			return coinSpriteSet;
+// 		});
+// }
 
-export {drawScreen,loadImage,drawBackground,loadMarioImage,drawTubes,drawCoin,drawTurtle};
+// function drawTurtle(name) {
+// 	return fetch(`/marioJSON/${name}.json`)
+// 		.then(r =>r.json())
+// 		.then(turtlesSprite=> Promise.all([
+// 			turtlesSprite,
+// 			loadImage("../imgs/images/badTurtle.png"),
+// 		]))
+// 		.then(([turtlesSprite,turtleSpriteImage])=>{
+// 			let turtleSpriteSet = new Sprites(turtleSpriteImage,turtlesSprite.width,turtlesSprite.height);
+// 			turtlesSprite.frames.forEach(spriteFrames=>{
+// 				turtleSpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
+// 			});
+// 			return turtleSpriteSet;
+// 		});
+// }
+
+
+
+export {drawScreen,loadImage,drawBackground,
+	loadMarioImage,drawTubes,drawObjects};

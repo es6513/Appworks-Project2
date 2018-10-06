@@ -1,5 +1,5 @@
-import {PositionAndSpeed} from "../Js/positionAndSpeed.js";
-import {mario} from "../Js/marioTest.js";
+import {PositionAndSpeed} from "../positionAndSpeed.js";
+import {mario} from "../marioTest.js";
 
 
 class Coin{
@@ -46,10 +46,6 @@ class Coin{
 	}
 
 	draw(context,coinSprite){
-		// console.log(mario.pos.x);
-		// if(this.show){
-		// 	coinSprite.drawCoinSprite(this.flashing(),context,this.pos.x,this.pos.y);
-		// }
 		
 		
 		if(mario.pos.x < 450 && this.show){
@@ -59,11 +55,7 @@ class Coin{
 		}else if(mario.pos.x >= 1600 && this.show){
 			coinSprite.drawCoinSprite(this.flashing(),context,this.pos.x  - 1150 ,this.pos.y);
 		}
-		
-		// let point = 0;
-		// if(mario.pos.x <= this.pos.x - 16){
-		// 	coinSprite.drawCoinSprite(this.flashing(),context,this.pos.x,this.pos.y);
-		// }   用這種判斷是可以視覺上看起來吃掉金幣，但是回頭後金幣還是會重新出現
+	
 	}
 }
 

@@ -28,7 +28,7 @@
       ]
     }
   ],
-  "coinPos": [
+  "Pos": [
     {
       "tile": "coin",
       "ranges": [
