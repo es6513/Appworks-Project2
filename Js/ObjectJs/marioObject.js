@@ -25,7 +25,7 @@ class Mario{
 		];
 	}
 
-	update(screen,tubeSprite,marioSpriteSet,groundSprite){
+	update(screen,tubeSprite,marioSpriteSet,groundSprite,tubeJson){
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 		// console.log(this.direction);
@@ -110,12 +110,12 @@ class Mario{
 
 		// 10/4 稍作修正，碰到障礙物時，馬力歐速度不變，只是 X 位置停在原地。
 		if(this.isRunning){
-			screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
-				if( this.pos.x + marioSpriteSet.width == x1 * tubeSprite.width
-					&& this.pos.y > y1 * tubeSprite.height  
+			tubeJson.Pos[0].ranges.forEach(([x,y])=>{
+				if( this.pos.x + marioSpriteSet.width == x
+					&& this.pos.y > y  
 				)
 				{
-					this.pos.x = x1 * tubeSprite.width - marioSpriteSet.width ;
+					this.pos.x = x - marioSpriteSet.width ;
 					this.stopX = true;
 					// this.speed.x = 0;
 					if(keys.left && !keys.right){
@@ -123,10 +123,10 @@ class Mario{
 						this.stopX = false;
 					}
 				}
-				else if(this.pos.x == x1 * tubeSprite.width + tubeSprite.width 
-					&& this.pos.y > y1 * tubeSprite.height )
+				else if(this.pos.x == x + tubeJson.width
+					&& this.pos.y > y )
 				{	
-					this.pos.x = x1 * tubeSprite.width + tubeSprite.width;
+					this.pos.x = x + tubeJson.width  ;
 					this.stopX = true;
 					// this.speed.x = 0;
 					if(keys.right && !keys.left){
@@ -137,13 +137,13 @@ class Mario{
 
 				// ------------控制站在水管上-----------------
 				if(this.speed.y > 0 
-					&& this.pos.x + marioSpriteSet.width > x1 * tubeSprite.width 
-					&& this.pos.x < x1 * tubeSprite.width  + tubeSprite.width ){
+					&& this.pos.x + marioSpriteSet.width > x
+					&& this.pos.x < x + tubeJson.width ){
 					
-					if(this.pos.y > y1 * tubeSprite.height - marioSpriteSet.height){
+					if(this.pos.y > y - marioSpriteSet.height){
 						this.isJump = false;
 						this.onTube = true;
-						this.pos.y = y1 * tubeSprite.height - marioSpriteSet.height;
+						this.pos.y = y - marioSpriteSet.height;
 						this.speed.y = 0;
 					}	
 					// if(keys.top && 	this.onTube && !this.isJump){

@@ -26,7 +26,7 @@ class Turtle{
 		];
 	}
 	
-	update(screen,tubeSprite,turtleSpriteSet){
+	update(screen,tubeSprite,turtleSpriteSet,tubeJson){
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
@@ -59,14 +59,22 @@ class Turtle{
 		// ---------End烏龜會飛出去----------
 		
 		// -------烏龜與障礙物之間的碰撞-------
-		screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
-			if(this.pos.x +  turtleSpriteSet.width > x1 * tubeSprite.width 
-					&& this.pos.x  < x1 * tubeSprite.width + tubeSprite.width )
+		tubeJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  turtleSpriteSet.width > x  
+				&& this.pos.x  < x + tubeJson.width )
 			{	
 				this.speed.x *= -1;
 				this.direction *= -1;
 			}
 		});
+		// screen.tubes[0].ranges.forEach(([x1,x2,y1,y2]) =>{
+		// 	if(this.pos.x +  turtleSpriteSet.width > x1 * tubeSprite.width 
+		// 			&& this.pos.x  < x1 * tubeSprite.width + tubeSprite.width )
+		// 	{	
+		// 		this.speed.x *= -1;
+		// 		this.direction *= -1;
+		// 	}
+		// });
 
 		// -------End 烏龜與障礙物之間的碰撞-------
 

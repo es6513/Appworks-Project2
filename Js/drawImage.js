@@ -94,7 +94,7 @@ function drawBackground(name) {
 			backgroundSprite.height = 640;
 			drawScreen(screen.backgrounds[0],backgroundSprite.getContext("2d"),skySprite);
 			drawScreen(screen.backgrounds[1],backgroundSprite.getContext("2d"),groundSprite);
-			drawTubes(screen.tubes[0],backgroundSprite.getContext("2d"),tubeSprite);
+			// drawTubes(screen.tubes[0],backgroundSprite.getContext("2d"),tubeSprite);
 			drawClouds(screen.clouds[0],backgroundSprite.getContext("2d"),cloudSprite);
 			return backgroundSprite;
 		});

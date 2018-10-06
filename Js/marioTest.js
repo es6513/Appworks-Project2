@@ -4,12 +4,11 @@ import {loadJson} from "../Js/loadJson.js";
 import {Mario} from "../Js/ObjectJs/marioObject.js";
 import {Coin} from "../Js/ObjectJs/coinObject.js";
 import {Turtle} from "./ObjectJs/turtleObject.js";
-
+import {Tube} from "./ObjectJs/tubeObject.js";
 
 let windowWidth = $(window).width();
 const canvas = document.getElementById("cvs");
 const context = canvas.getContext("2d");
-
 
 //-----測試區---------
 
@@ -43,6 +42,20 @@ function createTurtleArray(name) {
 		});
 }
 
+function createTubeArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(tubeSprite=>{
+			let tubeArray = [];
+			tubeSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let tube = new Tube();
+				tube.pos.set(x,y);
+				tubeArray.push(tube);
+			});
+			return tubeArray;
+		});
+}
+
 //-------測試區---------
 
 let mario = new Mario();
@@ -54,20 +67,22 @@ function promise() {
 		loadGround(), //產出 groundSprite, 用來傳進 mario object 處理馬力歐落地
 		loadJson("background"),
 		loadMarioImage("mario"),
-		loadTube("background"),
 		drawBackground("background"),
 		drawObjects("coin"),
 		createCoinArray("coin"),
-		drawObjects("badturtle"),
-		createTurtleArray("turtle")
+		drawObjects("badTurtle"),
+		createTurtleArray("badTurtle"),
+		drawObjects("tube"),
+		createTubeArray("tube"),
+		loadJson("tube"),
 	]).then(([
 		groundSprite,
 		screen,
 		marioSpriteSet,
-		tubeSprite,
 		backgroundSprite,
 		coinSpriteSet,coinArray,
-		turtleSpriteSet,turtleArray])=>{
+		turtleSpriteSet,turtleArray,
+		tubeSpriteSet,tubeArray,tubeJson])=>{
 
 	
 		function animate() {
@@ -83,7 +98,7 @@ function promise() {
 			// 	context.drawImage(backgroundSprite, 964 - 8,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			// } // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 			// ------------------end 根據不同螢幕解析度做控制----------------------
-
+			
 			if(mario.pos.x < 450){
 				context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			}else if(mario.pos.x >= 450 && mario.pos.x < 1600) {
@@ -99,12 +114,17 @@ function promise() {
 
 			for(let j = 0;j < turtleArray.length;j += 1){
 				turtleArray[j].draw(context,turtleSpriteSet);
-				turtleArray[j].update(screen,tubeSprite,turtleSpriteSet);
+				turtleArray[j].update(screen,tubeSpriteSet,turtleSpriteSet,tubeJson);
+			}	
+
+			for(let j = 0;j < tubeArray.length;j += 1){
+				tubeArray[j].draw(context,tubeSpriteSet);
+				tubeArray[j].update();
 			}	
 			
 			// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);
-			mario.update(screen,tubeSprite,marioSpriteSet,groundSprite);
-			mario.draw(context,marioSpriteSet,screen,tubeSprite); //傳進去 marioObject
+			mario.update(screen,tubeSpriteSet,marioSpriteSet,groundSprite,tubeJson);
+			mario.draw(context,marioSpriteSet,screen,tubeSpriteSet); //傳進去 marioObject
 			// if(mario.pos.x > 40){
 			// 	backgroundMusic.play();
 			// }   
