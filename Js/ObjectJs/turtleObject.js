@@ -191,7 +191,6 @@ class Turtle{
 		// return this.framesRun[this.frameIndex];
 	}
 
-
 	draw(context,turtleSprite){
 		if(mario.pos.x < 450 && !this.quickToDie){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x,this.pos.y,this.faceDirection < 0);

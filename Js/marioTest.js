@@ -10,10 +10,9 @@ let windowWidth = $(window).width();
 let windowHeight = $(window).height();
 const canvas = document.getElementById("cvs");
 const context = canvas.getContext("2d");
-let fps = 10000;
-let timeoutId;
-const canvas2 = document.getElementById("cvs2");
-const context2 = canvas.getContext("2d");
+let fps = 100;
+let backgroundDOM = document.getElementById("background");
+
 
 //-----測試區---------
 
@@ -110,7 +109,7 @@ function promise() {
 			// } // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 			// ------------------end 根據不同螢幕解析度做控制----------------------
 			
-
+			
 			if(mario.pos.x < 450){
 				context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			}else if(mario.pos.x >= 450 && mario.pos.x < 1600) {
@@ -133,14 +132,9 @@ function promise() {
 				tubeArray[j].draw(context,tubeSpriteSet);
 				tubeArray[j].update();
 			}	
-	
 			
-			if(mario.isDie){
-				context.font = "50px  Comic Sans MS";
-				context.fillStyle = "black";
-				context.fillText("You GG", windowWidth / 2 , windowHeight / 4);
-				context.textAlign = "center";
-			}			
+	
+
 			
 			// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);
 			mario.update(screen,tubeSpriteSet,marioSpriteSet,groundSprite,tubeJson);
