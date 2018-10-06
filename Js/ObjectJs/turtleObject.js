@@ -40,6 +40,35 @@ class Turtle{
 			this.move();	
 		}	
 
+	
+		
+		
+		// 在烏龜活著及旋轉的狀態下，若馬力歐不是處於跳躍狀態被碰到，則馬力歐死掉
+		
+		if(!mario.isDie 
+			&& mario.pos.x + 16 > this.pos.x 
+			&& mario.pos.x < this.pos.x + 16
+			&& mario.pos.y + 16 > this.pos.y
+			&& mario.pos.y < this.pos.y + 24
+			&& !mario.isJump
+			&& this.isRotating 
+			&& mario.isOnGround
+			|| 
+			!mario.isDie 
+			&& mario.pos.x + 16 > this.pos.x 
+			&& mario.pos.x < this.pos.x + 16
+			&& mario.pos.y + 16 > this.pos.y
+			&& mario.pos.y < this.pos.y + 24
+			&& !mario.isJump
+			&& mario.isOnGround
+			&& !this.quickToDie ){
+			mario.isDie = true;
+			mario.speed.y = -3;
+			mario.pos.y += mario.speed.y;
+		}
+
+		// End如果在馬力歐不是跳躍的情況下、並且烏龜不是旋轉狀態下，馬力歐掛掉
+
 		// ---------烏龜會飛出去----------
 		if(this.isRotating){
 			this.rotate();	
@@ -78,11 +107,10 @@ class Turtle{
 
 		// -------End 烏龜與障礙物之間的碰撞-------
 
-
 	
 		// -------馬力歐跳躍攻擊烏龜-----------
 
-		if(!this.quickToDie && mario.speed.y > 0 
+		if(!mario.isDie && !this.quickToDie && mario.speed.y > 0 
 			&& mario.pos.x + 16 > this.pos.x 
 			&& mario.pos.x < this.pos.x + 16
 			&& mario.pos.y > this.pos.y - 16 + 8){

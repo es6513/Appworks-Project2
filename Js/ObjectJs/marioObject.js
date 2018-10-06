@@ -15,6 +15,8 @@ class Mario{
 		this.onTube = false;
 		this.stopX = false;
 		this.isDie = false;
+		this.isOnGround = false;
+		this.clearTimeout;
 		this.controlSpeedFactor; 
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 		this.frameIndex = 0;
@@ -31,11 +33,21 @@ class Mario{
 		// console.log(this.direction);
 		// console.log(this.speed.x);
 		// console.log(this.pos.x);
+		let timeoutId;
+		if(this.isDie && !this.clearTimeout){
+			timeoutId = setTimeout(() => {
+				this.isDie = false;
+				this.clearTimeout = null;
+			},3000);
+			this.clearTimeout = timeoutId;
+		}
+
 
 		// -------控制馬力歐移動-----
-		if(this.pos.x + this.speed.x <= window.screen.width && this.pos.x > 0){
+		if(!this.isDie && this.pos.x + this.speed.x <= window.screen.width && this.pos.x > 0){
 			 
 			if(keys.right && !keys.left && !this.stopX){
+				
 				// 這邊判斷式必須要寫兩個，一個是按右鍵，一個是沒按左鍵，這樣才能避免兩個按鍵產生衝突，並且完全獨立開
 				if(this.stopX){
 					this.stopX = false;
@@ -76,13 +88,15 @@ class Mario{
 		// ------End of 控制馬力歐移動-----
 
 	 	// --------跳躍的設定 ---------------
-		if(keys.top && this.isJump == false){
+		if(!this.isDie && keys.top && this.isJump == false){
 			this.isJump = true;
 			this.speed.y -= 8;
-			
-			this.speed.x = 4;
-			
+			this.speed.x = 4;	
 		}		
+
+		if(!this.isDie && this.isJump && this.stopX){
+			this.stopX = false;
+		} //這一段暫時可以解決如果離障礙物已經是0的狀態不能跳起來移動
 		
 
 		this.speed.y += 0.5;  //gravity
@@ -95,8 +109,9 @@ class Mario{
 
 		// -------控制馬力歐落地時參數回復原狀---------
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
-			if(this.pos.y > y1 * groundSprite.height - marioSpriteSet.height){
+			if(!this.isDie && this.pos.y > y1 * groundSprite.height - marioSpriteSet.height){
 				this.isJump = false;
+				this.isOnGround = true;
 				this.onTube = false;
 				this.pos.y =  y1 * groundSprite.height - marioSpriteSet.height;
 				this.speed.y = 0;
@@ -109,11 +124,10 @@ class Mario{
 		// ---------------控制水管障礙---------------
 
 		// 10/4 稍作修正，碰到障礙物時，馬力歐速度不變，只是 X 位置停在原地。
-		if(this.isRunning){
+		if(!this.isDie && this.isRunning){
 			tubeJson.Pos[0].ranges.forEach(([x,y])=>{
 				if( this.pos.x + marioSpriteSet.width == x
-					&& this.pos.y > y  
-				)
+					&& this.pos.y > y )
 				{
 					this.pos.x = x - marioSpriteSet.width ;
 					this.stopX = true;
@@ -142,6 +156,7 @@ class Mario{
 					
 					if(this.pos.y > y - marioSpriteSet.height){
 						this.isJump = false;
+						this.isOnGround = false;
 						this.onTube = true;
 						this.pos.y = y - marioSpriteSet.height;
 						this.speed.y = 0;
@@ -160,11 +175,7 @@ class Mario{
 		// ------------------End of 控制水管障礙----------
 
 		// ------------------以上兩段----------------------
-		// ------------------打烏龜-----------------------
-
-		
-
-		// ------------------End 打烏龜-----------------------
+	
 		// 沒有按住按鍵的時候，將方向設回預設值
 		setTimeout(() => {
 			if(pressed == false){
@@ -210,17 +221,25 @@ class Mario{
 		// if(1920 - mario.pos.x - 8 ==  windowWidth - mario.pos.x - 8){
 		// 	console.log("不要捲");
 		// }
-
-		if(mario.pos.x < 450 ){
-			marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		}else if(mario.pos.x >= 450 && mario.pos.x < 1600){
-			marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,450,this.pos.y,this.faceDirection < 0);
-		}else if(mario.pos.x >= 1600){
-			marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
+		if(!this.isDie){
+			if(mario.pos.x < 450 ){
+				marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
+			}else if(mario.pos.x >= 450 && mario.pos.x < 1600){
+				marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,450,this.pos.y,this.faceDirection < 0);
+			}else if(mario.pos.x >= 1600){
+				marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
+			}		
 		}
 		
-			
-
+		if(this.isDie){
+			if(mario.pos.x < 450 ){
+				marioSprite.drawMarioSprite("die",context,this.pos.x,this.pos.y,this.faceDirection < 0);
+			}else if(mario.pos.x >= 450 && mario.pos.x < 1600){
+				marioSprite.drawMarioSprite( "die",context,450,this.pos.y,this.faceDirection < 0);
+			}else if(mario.pos.x >= 1600){
+				marioSprite.drawMarioSprite("die",context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
+			}
+		}
 
 		// ------------------根據不同螢幕解析度做控制----------------------
 		// console.log(1920 - mario.pos.x - 8);
@@ -236,9 +255,6 @@ class Mario{
 		// }
 
 		// --------------end 根據不同螢幕解析度做控制--------------
-
-
-		
 
 		// marioSprite.drawMarioSprite(this.running(),context,50,this.pos.y,this.faceDirection < 0);
 		// 用來控制馬力歐的絕對位置

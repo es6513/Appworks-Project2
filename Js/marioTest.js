@@ -7,8 +7,13 @@ import {Turtle} from "./ObjectJs/turtleObject.js";
 import {Tube} from "./ObjectJs/tubeObject.js";
 
 let windowWidth = $(window).width();
+let windowHeight = $(window).height();
 const canvas = document.getElementById("cvs");
 const context = canvas.getContext("2d");
+let fps = 10000;
+let timeoutId;
+const canvas2 = document.getElementById("cvs2");
+const context2 = canvas.getContext("2d");
 
 //-----測試區---------
 
@@ -86,7 +91,13 @@ function promise() {
 
 	
 		function animate() {
-			requestAnimationFrame(animate);
+			setTimeout(function() {
+				requestAnimationFrame(animate);
+
+				// your draw() stuff goes here
+
+			}, 1000 / fps);
+			// requestAnimationFrame(animate);
 			context.clearRect(0,0, context.canvas.width, context.canvas.height);
 						
 			// ------------------根據不同螢幕解析度做控制----------------------
@@ -99,6 +110,7 @@ function promise() {
 			// } // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 			// ------------------end 根據不同螢幕解析度做控制----------------------
 			
+
 			if(mario.pos.x < 450){
 				context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			}else if(mario.pos.x >= 450 && mario.pos.x < 1600) {
@@ -106,21 +118,29 @@ function promise() {
 			}else if(mario.pos.x >= 1600){
 				context.drawImage(backgroundSprite, 1150,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
-			
+				
 			for(let j = 0;j < coinArray.length;j += 1){
 				coinArray[j].draw(context,coinSpriteSet);
 				coinArray[j].update();
 			}
-
+	
 			for(let j = 0;j < turtleArray.length;j += 1){
 				turtleArray[j].draw(context,turtleSpriteSet);
 				turtleArray[j].update(screen,tubeSpriteSet,turtleSpriteSet,tubeJson);
 			}	
-
+	
 			for(let j = 0;j < tubeArray.length;j += 1){
 				tubeArray[j].draw(context,tubeSpriteSet);
 				tubeArray[j].update();
 			}	
+	
+			
+			if(mario.isDie){
+				context.font = "50px  Comic Sans MS";
+				context.fillStyle = "black";
+				context.fillText("You GG", windowWidth / 2 , windowHeight / 4);
+				context.textAlign = "center";
+			}			
 			
 			// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);
 			mario.update(screen,tubeSpriteSet,marioSpriteSet,groundSprite,tubeJson);
