@@ -86,14 +86,14 @@ function createGoombaArray(name) {
 
 let mario = new Mario();
 mario.pos.set(0,160);   //馬力歐起始位置
-mario.speed.set(4,-4);   //馬力歐起始移動速度
+mario.speed.set(4,2);   //馬力歐起始移動速度
 let coinSound = new Audio("/music/mario-coin-sound.wav");
 
 function promise() {
 	Promise.all([
 		loadGround(), //產出 groundSprite, 用來傳進 mario object 處理馬力歐落地
 		loadJson("background"),
-		loadMarioImage("mario"),
+		loadMarioImage("marioRedder"),
 		drawBackground("background"),
 		drawObjects("coin"),
 		createCoinArray("coin"),
@@ -163,11 +163,11 @@ function promise() {
 				goombaArray[j].draw(context,goombaSpriteSet);
 				goombaArray[j].update(tubeJson);
 			}				
-
 			
 			// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);
 			mario.update(screen,tubeSpriteSet,marioSpriteSet,groundSprite,tubeJson);
 			mario.draw(context,marioSpriteSet,screen,tubeSpriteSet); //傳進去 marioObject
+
 			// if(mario.pos.x > 40){
 			// 	backgroundMusic.play();
 			// }   
@@ -178,7 +178,14 @@ function promise() {
 	});
 }
 
-promise();
+// if(mario.isDie){
+// 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+// 	promise();
+// }
+if(!mario.isDie){
+	promise();
+}
+
 
 export {mario};
 

@@ -96,7 +96,7 @@ class Goomba{
 			&& mario.pos.x < this.pos.x + 16
 			&& mario.pos.y > this.pos.y - 16 + 8){
 			{
-				this.dieSound();
+				this.turtleDieSound();
 				this.isDie = true;
 				mario.speed.y = -4;
 			}		
@@ -116,7 +116,7 @@ class Goomba{
 			timeoutId = setTimeout(() => {
 				this.isHide = true;	
 				this.clearTimeout = null;
-			}, 2000);
+			}, 1500);
 			this.clearTimeout = timeoutId;
 		}	
 		
@@ -128,7 +128,7 @@ class Goomba{
 		this.pos.x += this.speed.x;
 	}
   
-	dieSound(){
+	turtleDieSound(){
 		let dieSound = new Audio("/music/mario-kick-sound.wav");
 		dieSound.play();
 	}

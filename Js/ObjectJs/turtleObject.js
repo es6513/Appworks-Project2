@@ -46,7 +46,6 @@ class Turtle{
 		// X軸的判定 用 width/2 比較好一點,
 
 
-	
 		if(!mario.isDie 
 			&& mario.pos.x + mario.width  > this.pos.x 
 			&& mario.pos.x < this.pos.x + this.width 
@@ -55,6 +54,7 @@ class Turtle{
 			&& !mario.isJump
 			&& mario.isOnGround
 			&& this.isRotating 
+			&& this.quickToDie
 		){
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
@@ -86,6 +86,7 @@ class Turtle{
 			this.rotate();	
 		}	
 
+
 		if(!mario.isDie && this.quickToDie  
 			&& mario.pos.x + mario.width > this.pos.x 
 			&& mario.pos.x < this.pos.x + this.width 
@@ -94,6 +95,7 @@ class Turtle{
 				this.speed.x = 4;
 				this.isRotating = true;
 				mario.speed.y = -6;
+				this.turtleDieSound();
 			}		
 		}
 
@@ -106,6 +108,10 @@ class Turtle{
 			{	
 				this.speed.x *= -1;
 				this.direction *= -1;
+				if(this.isRotating){
+					let bumpSound = new Audio("/music/mario-bump-sound.wav");
+					bumpSound.play();
+				}
 			}
 		});
 
@@ -120,7 +126,8 @@ class Turtle{
 			&& mario.pos.y > this.pos.y - 16 + 8){
 			{
 				this.quickToDie = true;
-				mario.speed.y = -8;
+				mario.speed.y = -10;
+				this.turtleDieSound();
 				// mario.pos.y = this.pos.y - 16 + 8;
 				// this.speed.x = 0;
 			}		
@@ -175,6 +182,12 @@ class Turtle{
 
 		//+8 是馬力歐的寬度一半
 	}
+
+	turtleDieSound(){
+		let dieSound = new Audio("/music/mario-kick-sound.wav");
+		dieSound.play();
+	}
+
 
 	move(){
 		this.pos.x += this.speed.x;

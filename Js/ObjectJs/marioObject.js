@@ -117,26 +117,62 @@ class Mario{
 
 		// -------控制馬力歐落地時參數回復原狀---------
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
-			if(!this.isDie && this.pos.y > y1 * groundSprite.height - marioSpriteSet.height){
-				this.isJump = false;
-				this.isOnGround = true;
-				this.pos.y =  y1 * groundSprite.height - marioSpriteSet.height;
-				this.speed.y = 0;
-			}	
+			// if(!this.isDie && this.pos.y >= y1 * screen.height - this.height){
+			// 	this.isJump = false;
+			// 	this.isOnGround = true;
+			// 	this.pos.y =  y1 * screen.height - this.height;
+			// 	this.speed.y = 0;
+			// }	
+
+			if(!this.isDie && this.speed.y > 0 && this.pos.x + this.width > x1 * 16
+				&& this.pos.x < x2 * 16 + 16)
+			{
+				if(this.pos.y >= y1 * screen.height - this.height)
+				{
+					this.isJump = false;
+					this.isOnGround = true;
+					this.pos.y = y1 * screen.height - this.height;
+					this.speed.y = 0;
+				}
+				this.speed.y += 0.5;
+			}else if(!this.isDie && this.pos.y > y2 * screen.height ){
+				this.isDie = true;
+				mario.speed.y = -16;
+				let dieSound = new Audio("/music/mario-die-sound.wav");
+				dieSound.play();			
+			}
+
 		});
 
 		// -------End   控制馬力歐落地時參數回復原狀---------
 
-
+	
+		// if(this.speed.y > 0 
+		// 	&& this.pos.x + this.width > x
+		// 	&& this.pos.x < x + tubeJson.width ){
+			
+		// 	if(this.pos.y > y - this.height){
+		// 		this.isJump = false;
+		// 		this.isOnGround = false;
+		// 		this.pos.y = y - this.height;
+		// 		this.speed.y = 0;
+		// 	}	
+		// 	// if(keys.top && 	this.onTube && !this.isJump){
+		// 	// 	this.isJump = true;
+		// 	// 	this.onTube = false;
+		// 	// 	this.speed.y -= 8;
+		// 	// } // 忘記這幹嘛用的，先 comment 
+		// 	this.speed.y += 0.5;
+		// }					
 		// ---------------控制水管障礙---------------
 
 		// 10/4 稍作修正，碰到障礙物時，馬力歐速度不變，只是 X 位置停在原地。
 		if(!this.isDie && this.isRunning){
 			tubeJson.Pos[0].ranges.forEach(([x,y])=>{
-				if( this.pos.x + marioSpriteSet.width == x
+				if( this.pos.x + this.width == x
 					&& this.pos.y > y )
-				{
-					this.pos.x = x - marioSpriteSet.width ;
+				{ //從左側碰到水管
+					this.pos.x = x - this.width ;
 					this.stopX = true;
 					// this.speed.x = 0;
 					if(keys.left && !keys.right){
@@ -146,7 +182,7 @@ class Mario{
 				}
 				else if(this.pos.x == x + tubeJson.width
 					&& this.pos.y > y )
-				{	
+				{	// 從右側碰到水管
 					this.pos.x = x + tubeJson.width  ;
 					this.stopX = true;
 					// this.speed.x = 0;
@@ -158,13 +194,13 @@ class Mario{
 
 				// ------------控制站在水管上-----------------
 				if(this.speed.y > 0 
-					&& this.pos.x + marioSpriteSet.width > x
+					&& this.pos.x + this.width > x
 					&& this.pos.x < x + tubeJson.width ){
 					
-					if(this.pos.y > y - marioSpriteSet.height){
+					if(this.pos.y > y - this.height){
 						this.isJump = false;
 						this.isOnGround = false;
-						this.pos.y = y - marioSpriteSet.height;
+						this.pos.y = y - this.height;
 						this.speed.y = 0;
 					}	
 					// if(keys.top && 	this.onTube && !this.isJump){
