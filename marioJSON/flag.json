@@ -1,0 +1,26 @@
+{
+  "frames": [
+    {
+      "name": "flag",
+      "ranges": [
+        0,
+        0,
+        16,
+        16
+      ]
+    }
+  ],
+  "Pos": [
+    {
+      "tile": "flag",
+      "ranges": [
+        [
+          1800,
+          96
+        ]
+      ]
+    }
+  ],
+  "width": 16,
+  "height": 16
+}

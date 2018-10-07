@@ -83,6 +83,11 @@ class Sprites {
 		context.drawImage(sprite,x,y);
 	}
 
+	drawSprite(name,context,x,y){
+		let sprite = this.tiles.get(name)[0];
+		context.drawImage(sprite,x,y);
+	}
+
 	drawGoombaSprite(name,context,x,y){
 		let sprite = this.tiles.get(name)[0];
 		context.drawImage(sprite,x,y);

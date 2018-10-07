@@ -18,6 +18,10 @@ class Mario{
 		this.stopX = false;
 		this.isDie = false;
 		this.isOnGround = false;
+		this.passStage = false;
+		this.canPlayPassMusic = false;
+		this.walkToCastle = false;
+		this.hide = false;
 		this.clearTimeout;
 		this.controlSpeedFactor; 
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
@@ -29,15 +33,16 @@ class Mario{
 		];
 	}
 
-	update(screen,tubeSprite,marioSpriteSet,groundSprite,tubeJson){
+	update(screen,tubeJson,poleJson,castleJson,flagArray){
+		console.log(this.pos.x);
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 		// console.log(this.direction);
 		// console.log(this.speed.x);
-		// console.log(this.pos.x);
+		// console.log(this.pos.y);
 		// console.log(this.isDie);
 		let timeoutId;
-		if(this.isDie && !this.clearTimeout){
+		if( this.isDie && !this.clearTimeout){
 			timeoutId = setTimeout(() => {
 				this.isDie = false;
 				this.clearTimeout = null;
@@ -47,7 +52,13 @@ class Mario{
 
 
 		// -------控制馬力歐移動-----
-		if(!this.isDie && this.pos.x + this.speed.x <= window.screen.width && this.pos.x > 0){
+
+		// 過關後用passStage轉換成true，讓玩家不再能透過按鍵控制馬力歐
+		if(!this.passStage && 
+			!this.isDie && 
+			this.pos.x + this.speed.x <= window.screen.width 
+			&& this.pos.x > 0)
+		{
 			 
 			if(keys.right && !keys.left && !this.stopX){
 				
@@ -73,14 +84,14 @@ class Mario{
 				this.faceDirection = this.direction;
 			}
 		}
-		else if(this.pos.x + this.controlSpeedFactor  == window.screen.width){
+		else if(!this.passStage && this.pos.x + this.controlSpeedFactor  == window.screen.width){
 			//這邊有點奇怪，筆電的螢幕如果有接大螢幕，跑到終點的時候 screen.width 會變大，可以再往左邊跑，但是沒接的時候不行
 			if(keys.left){
 				this.moveLeft();
 				this.faceDirection = this.direction;
 			}
 		}
-		else if(this.pos.x  == window.screen.width){
+		else if(!this.passStage && this.pos.x  == window.screen.width){
 			//這邊有點奇怪，筆電的螢幕如果有接大螢幕，跑到終點的時候 screen.width 會變大，可以再往左邊跑，但是沒接的時候不行
 			if(keys.left){
 				this.moveLeft();
@@ -91,13 +102,15 @@ class Mario{
 		// ------End of 控制馬力歐移動-----
 
 	 	// --------跳躍的設定 ---------------
-		if(!this.isDie && keys.top && this.isJump == false){
-			this.isJump = true;
-			this.isOnGround = false;
-			this.speed.y -= 8;
-			this.speed.x = 4;	
-			this.jumpSound();
-		}		
+		// if(!this.isDie && keys.top && this.isJump == false){
+		// 	this.isJump = true;
+		// 	this.isOnGround = false;
+		// 	this.speed.y -= 8;
+		// 	this.speed.x = 4;	
+		// 	this.jumpSound();
+		// }		
+
+		//上面這段程式碼現在移到下方，在有地面的情況下才可跳躍。
 
 		if(!this.isDie && this.isJump && this.stopX){
 			this.stopX = false;
@@ -123,6 +136,17 @@ class Mario{
 			// 	this.pos.y =  y1 * screen.height - this.height;
 			// 	this.speed.y = 0;
 			// }	
+			if(!this.passStage && !this.isDie && keys.top && this.isJump == false 
+				&& (this.pos.x + this.width > x1 * 16)
+				&& (this.pos.x < x2 * 16 + 16)){
+				this.isJump = true;
+				this.isOnGround = false;
+				this.speed.y -= 8;
+				this.speed.x = 4;	
+				this.jumpSound();
+			}		
+
+			//移到這裡(上方)，在有地面的情況下才可跳躍。
 
 			if(!this.isDie && this.speed.y > 0 && this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16)
@@ -135,9 +159,10 @@ class Mario{
 					this.speed.y = 0;
 				}
 				this.speed.y += 0.5;
-			}else if(!this.isDie && this.pos.y > y2 * screen.height ){
+			}else if(!this.isDie && this.pos.y >= y2 * screen.height - 24 ){
+				// 用-24讓死亡掉下去的死亡判定範圍加大，可以避免按左右鍵馬力歐又回到地面上
 				this.isDie = true;
-				mario.speed.y = -16;
+				this.speed.y = -12;
 				let dieSound = new Audio("/music/mario-die-sound.wav");
 				dieSound.play();			
 			}
@@ -218,9 +243,51 @@ class Mario{
 
 		// ------------------以上兩段----------------------
 
-		// --------死亡撥放音樂---------------
 
-		//---------End of 死亡撥放音樂----------------
+		// -----------------馬力歐過關---------------------
+
+
+		// 1. -----停在旗子前面-----
+		poleJson.Pos[0].ranges.forEach(([x,y])=>{
+			if( this.pos.x + this.width == x && !this.walkToCastle)
+			{ 
+				this.pos.x = x - this.width - 2 ;
+				this.passStage = true;
+				this.canPlayPassMusic = true;
+			}
+		});
+
+		//下面這段利用 canPlayPassMusic 及上面的-2 來控制撥放，並且將其反運算，避免音樂持續撥放好幾段
+		if(!this.isDie && this.passStage && this.canPlayPassMusic && !this.walkToCastle){
+			this.canPlayPassMusic = false;
+			this.passSound();
+		}
+
+		if(flagArray[0].isOnBottom && !this.hide){
+			this.walkToCastle = true;
+			this.speed.x = 2;
+			this.pos.x += this.speed.x;
+		}
+
+		// END -----停在旗子前面-----
+
+		// 2. -----走到城堡中間消失-----
+
+		castleJson.Pos[0].ranges.forEach(([x,y])=>{
+			if( this.pos.x + this.width / 2 == x + 72 )
+			{ 
+				this.hide = true;
+				this.pos.x = x + 72 - this.width / 2;
+			}
+		});
+
+
+
+		// End -----走到城堡中間消失-----
+
+
+
+		// -----------------End 馬力歐過關---------------------
 	
 		// 沒有按住按鍵的時候，將方向設回預設值
 		setTimeout(() => {
@@ -228,6 +295,11 @@ class Mario{
 				this.direction = 0;
 			}
 		});
+	}
+
+	passSound(){
+		let passSound = new Audio("/music/mario-stage-clear.wav");
+		passSound.play();		
 	}
 
 	jumpSound(){
@@ -258,6 +330,9 @@ class Mario{
 		}else if(this.direction == -1){
 			this.frameIndex = ++this.frameIndex % 10;
 			return this.framesRunArray[this.frameIndex];
+		}else if(this.direction == 0 && this.walkToCastle){
+			this.frameIndex = ++this.frameIndex % 10;
+			return this.framesRunArray[this.frameIndex];
 		}
 		return"mario";
 	}
@@ -272,36 +347,50 @@ class Mario{
 		// if(1920 - mario.pos.x - 8 ==  windowWidth - mario.pos.x - 8){
 		// 	console.log("不要捲");
 		// }
-		if(!this.isDie){
-			if(mario.pos.x < 450 ){
+		if(!this.hide && !this.isDie && !this.passStage && !this.walkToCastle){
+			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(mario.pos.x >= 450 && mario.pos.x < 1600){
+			}else if(this.pos.x >= 450 && this.pos.x < 1600){
 				marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(mario.pos.x >= 1600){
+			}else if(this.pos.x >= 1600){
 				marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
 			}		
 		}
 		
-		if(this.isDie){
-			if(mario.pos.x < 450 ){
+		if(!this.hide && this.isDie && !this.passStage && !this.walkToCastle){
+			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite("die",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(mario.pos.x >= 450 && mario.pos.x < 1600){
+			}else if(this.pos.x >= 450 && this.pos.x < 1600){
 				marioSprite.drawMarioSprite( "die",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(mario.pos.x >= 1600){
+			}else if(this.pos.x >= 1600){
 				marioSprite.drawMarioSprite("die",context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
 			}
 		}
 
+		if(!this.hide && this.passStage && !this.walkToCastle){
+			if(this.pos.x < 450 ){
+				marioSprite.drawMarioSprite("mario",context,this.pos.x,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 450 && this.pos.x < 1600){
+				marioSprite.drawMarioSprite("mario",context,450,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 1600){
+				marioSprite.drawMarioSprite("mario",context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
+			}		
+		}
+
+		if(!this.hide && this.walkToCastle){
+			marioSprite.drawMarioSprite(this.running(),context,this.pos.x - 1150,this.pos.y,this.faceDirection < 0);
+		}
+
 		// ------------------根據不同螢幕解析度做控制----------------------
-		// console.log(1920 - mario.pos.x - 8);
+		// console.log(1920 - this.pos.x - 8);
 		// console.log(windowWidth);
-		// console.log(windowWidth - mario.pos.x );
-		// if(mario.pos.x < windowWidth / 2 - 8 ){
+		// console.log(windowWidth - this.pos.x );
+		// if(this.pos.x < windowWidth / 2 - 8 ){
 		// 	marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		// }else if(mario.pos.x >= windowWidth / 2 - 8  && mario.pos.x < 956 + windowWidth / 2){
+		// }else if(this.pos.x >= windowWidth / 2 - 8  && this.pos.x < 956 + windowWidth / 2){
 		// 	marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,windowWidth / 2 - 8,this.pos.y,this.faceDirection < 0);
 		// }
-		// else if(mario.pos.x >= (1920 - 8 + windowWidth) / 2){
+		// else if(this.pos.x >= (1920 - 8 + windowWidth) / 2){
 		// 	marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x - 964 - 8 ,this.pos.y,this.faceDirection < 0);
 		// }
 

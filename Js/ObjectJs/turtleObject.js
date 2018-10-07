@@ -15,7 +15,7 @@ class Turtle{
 		this.isRotating = false;
 		this.clearTimeout;
 		this.previousX;
-		this.direction = 1;
+		this.direction = -1;
 		this.faceDirection = 1;
 		this.framesRun = [
 			"turtleRun-1","turtleRun-1","turtleRun-1","turtleRun-1",
@@ -190,7 +190,7 @@ class Turtle{
 
 
 	move(){
-		this.pos.x += this.speed.x;
+		this.pos.x -= this.speed.x;
 	}
 
 	rotate(){
