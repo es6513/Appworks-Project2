@@ -253,6 +253,7 @@ class Mario{
 		poleJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.pos.x + this.width == x && !this.canPlayPassMusic)
 			{ 
+				this.direction = 0;
 				this.pos.x = x - this.width  ;
 				this.passStage = true;
 			}

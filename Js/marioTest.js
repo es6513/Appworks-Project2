@@ -12,8 +12,8 @@ import {Castle} from "./ObjectJs/castleObject.js";
 
 let windowWidth = $(window).width();
 let windowHeight = $(window).height();
-const canvas = document.getElementById("cvs");
-const context = canvas.getContext("2d");
+// const canvas = document.getElementById("cvs");
+// const context = canvas.getContext("2d");
 let fps = 100;
 let backgroundDOM = document.getElementById("background");
 
@@ -191,50 +191,82 @@ Promise.all([
 	flagSprite,flagArray,
 	castleSprite,castleArray,castleJson,
 	marioSprite,marioArray])=>{
+	
+
+	function startGame() {
+		marioArray = [];
+		coinArray = [];
+		turtleArray = [];
+		tubeArray = [];
+		goombaArray = [];
+		poleArray = [];
+		flagArray = [];
+		castleArray = [];
+		Promise.all([
+			createCoinArray("coin"),
+			createTurtleArray("badTurtle"),
+			createTubeArray("tube"),
+			createGoombaArray("goomba"),
+			createPoleArray("pole"),
+			createFlagArray("flag"),
+			createCastleArray("highCastle"),
+			createMarioArray("mario")
+		]).then(([
+			coin,
+			turtle,
+			tube,
+			goomba,
+			pole,
+			flag,
+			castle,
+			mario
+		])=>{
+			marioArray = mario;
+			coinArray = coin;
+			turtleArray = turtle;
+			tubeArray = tube;
+			goombaArray = goomba;
+			poleArray = pole;
+			flagArray = flag;
+			castleArray = castle;
+		});
+		myGameArea.start();
+	}
+	
+	let myGameArea = {
+		canvas : document.createElement("canvas"),
+		start : function() {
+			this.canvas.width = 3000;
+			this.canvas.height = 300;
+			this.context = this.canvas.getContext("2d");
+			document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+			this.frameNo = 0;
+			this.interval = setInterval(animate, 20);
+		},
+		clear : function() {
+			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		},
+		stop : function() {
+			clearInterval(this.interval);
+		}
+	};
+	
+	
+	function restart() {
 		
-
-	const timeElem = document.querySelector("#time");
-	var requestId;
-
-	function loop(time) {
-		requestId = undefined;
-		animate();
-		start();
-	}
-
-	function start() {
-		if (!requestId) {
-			requestId = window.requestAnimationFrame(loop);
-		}
-	}
-
-	function stop() {
-		if (requestId) {
-			window.cancelAnimationFrame(requestId);
-			requestId = undefined;
-		}
-	}
-
-	function doStuff(time) {
-		timeElem.textContent = (time * 0.001).toFixed(2);
+		myGameArea.stop();
+		// myGameArea.clear();
+		startGame();
 	}
   
 
-	document.querySelector("#start").addEventListener("click", function() {
+	document.querySelector("#stop").addEventListener("click", function() {
 		start();
 	});
 
-	document.querySelector("#stop").addEventListener("click", function() {
-		stop();
+	document.querySelector("#start").addEventListener("click", function() {
+		restart();
 	});
-
-	// if(mario.isDie){
-	// 	if (requestId) {
-	// 		window.cancelAnimationFrame(requestId);
-	// 		requestId = undefined;
-	// 	}
-	// }
-
 
 
 	function animate() {
@@ -264,16 +296,20 @@ Promise.all([
 		// 	context.drawImage(backgroundSprite, 964 - 8,0,context.canvas.width,640,0,0,context.canvas.width,640);
 		// } // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 		// ------------------end 根據不同螢幕解析度做控制----------------------
+		let context = myGameArea.context;
+		for(let i = 0;i < marioArray.length;i += 1){
+			if(	marioArray[i].pos.x < 450){
+				context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
+			}else if(	marioArray[i].pos.x >= 450 && 	marioArray[i].pos.x < 1800) {
+				context.drawImage(backgroundSprite,	marioArray[i].pos.x - 450,0,context.canvas.width,640,0,0,context.canvas.width,640);
+			}else if(	marioArray[i].pos.x >= 1800){
+				context.drawImage(backgroundSprite, 1350,0,context.canvas.width,640,0,0,context.canvas.width,640);
+			} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
+			if(marioArray[i].isDie && marioArray[i].pos.y > 3500){
+				restart();
+			}
+		}		
 		
-
-		if(	marioArray[0].pos.x < 450){
-			context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
-		}else if(	marioArray[0].pos.x >= 450 && 	marioArray[0].pos.x < 1800) {
-			context.drawImage(backgroundSprite,	marioArray[0].pos.x - 450,0,context.canvas.width,640,0,0,context.canvas.width,640);
-		}else if(	marioArray[0].pos.x >= 1800){
-			context.drawImage(backgroundSprite, 1350,0,context.canvas.width,640,0,0,context.canvas.width,640);
-		} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
-				
 		for(let j = 0;j < coinArray.length;j += 1){
 			coinArray[j].draw(context,coinSpriteSet,marioArray[0]);
 			coinArray[j].update(marioArray[0]);
