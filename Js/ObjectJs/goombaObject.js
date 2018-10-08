@@ -1,5 +1,5 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-import {mario} from "../marioTest.js";
+// import {marioArray} from "../marioArrayTest.js";
 
 
 class Goomba{
@@ -26,7 +26,7 @@ class Goomba{
 		];
 	}
 	
-	update(tubeJson,turtleArray){
+	update(tubeJson,turtleArray,marioArray){
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
@@ -42,35 +42,22 @@ class Goomba{
 	
 		// X軸的判定 用 width/2 比較好一點,
 
-		if(!mario.isDie 
+		if(!marioArray.isDie 
       && !this.isDie
-			&& mario.pos.x + mario.width  > this.pos.x 
-			&& mario.pos.x < this.pos.x + this.width 
-			&& mario.pos.y + mario.height > this.pos.y
-			&& mario.pos.y < this.pos.y + this.height
-			&& !mario.isJump
-			&& mario.isOnGround	){
+			&& marioArray.pos.x + marioArray.width  > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height > this.pos.y
+			&& marioArray.pos.y < this.pos.y + this.height
+			&& !marioArray.isJump
+			&& marioArray.isOnGround	)
+		{
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
-			mario.isDie = true;
-			mario.speed.y = -8;
-			mario.pos.y += mario.speed.y;
+			marioArray.isDie = true;
+			marioArray.speed.y = -10;
+			marioArray.pos.y += marioArray.speed.y;
 		}
-		if(!mario.isDie 
-      && !this.isDie
-			&& mario.pos.x + mario.width   > this.pos.x 
-			&& mario.pos.x < this.pos.x + this.width 
-			&& mario.pos.y + mario.height > this.pos.y
-			&& mario.pos.y < this.pos.y + this.height
-			&& !mario.isJump
-			&& mario.isOnGround
-		){
-			let dieSound = new Audio("/music/mario-die-sound.wav");
-			dieSound.play();
-			mario.isDie = true;
-			mario.speed.y = -6;
-			mario.pos.y += mario.speed.y;
-		}		
+	
 	
 
 		// -------End 馬力歐碰到壞香菇死掉-------
@@ -91,14 +78,14 @@ class Goomba{
 	
 		// -------馬力歐跳躍攻擊 壞香菇-----------
 
-		if(!mario.isDie && !this.isDie && mario.speed.y > 0 
-			&& mario.pos.x + 16 > this.pos.x 
-			&& mario.pos.x < this.pos.x + 16
-			&& mario.pos.y > this.pos.y - 16 + 8){
+		if(!marioArray.isDie && !this.isDie && marioArray.speed.y > 0 
+			&& marioArray.pos.x + 16 > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + 16
+			&& marioArray.pos.y > this.pos.y - 16){
 			{
 				this.turtleDieSound();
 				this.isDie = true;
-				mario.speed.y = -4;
+				marioArray.speed.y = -4;
 			}		
 		}
 	
@@ -162,20 +149,20 @@ class Goomba{
 		// return this.framesRun[this.frameIndex];
 	}
 
-	draw(context,goombaSprite){
-		if(mario.pos.x < 450 && !this.isDie && !this.isHide){
+	draw(context,goombaSprite,marioArray){
+		if(marioArray.pos.x < 450 && !this.isDie && !this.isHide){
 			goombaSprite.drawSprite(this.running(),context,this.pos.x,this.pos.y);
-		}else if(mario.pos.x >= 450 && mario.pos.x < 1600 && !this.isDie && !this.isHide){
-			goombaSprite.drawSprite(this.running(),context,this.pos.x - mario.pos.x + 450 ,this.pos.y);
-		}else if(mario.pos.x >= 1600 && !	this.isDie && !this.isHide){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1600 && !this.isDie && !this.isHide){
+			goombaSprite.drawSprite(this.running(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+		}else if(marioArray.pos.x >= 1600 && !	this.isDie && !this.isHide){
 			goombaSprite.drawSprite(this.running(),context,this.pos.x  - 1150 ,this.pos.y);
 		}
 
-		if(mario.pos.x < 450 && this.isDie && !this.isHide){
+		if(marioArray.pos.x < 450 && this.isDie && !this.isHide){
 			goombaSprite.drawSprite("goombaDie",context,this.pos.x,this.pos.y);
-		}else if(mario.pos.x >= 450 && mario.pos.x < 1600 && 	this.isDie && !this.isHide){
-			goombaSprite.drawSprite("goombaDie",context,this.pos.x - mario.pos.x + 450 ,this.pos.y);
-		}else if(mario.pos.x >= 1600 && 	this.isDie && !this.isHide){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1600 && 	this.isDie && !this.isHide){
+			goombaSprite.drawSprite("goombaDie",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+		}else if(marioArray.pos.x >= 1600 && 	this.isDie && !this.isHide){
 			goombaSprite.drawSprite("goombaDie",context,this.pos.x  - 1150 ,this.pos.y);
 		}	
 	}

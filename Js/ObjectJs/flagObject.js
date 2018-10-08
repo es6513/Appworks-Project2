@@ -1,5 +1,5 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-import {mario} from "../marioTest.js";
+// import {mario} from "../marioTest.js";
 
 
 class Flag{
@@ -13,13 +13,13 @@ class Flag{
 		this.isOnBottom = false;
 	}
 	
-	update(poleJson){
-		if(!this.isOnBottom && mario.passStage){
+	update(poleJson,marioArray){
+		if(!this.isOnBottom && marioArray.canPlayPassMusic){
 			this.moveDown();
 		}
 		poleJson.Pos[0].ranges.forEach(([x,y])=>{
 			if( this.pos.y  == y + poleJson.height - 16 - this.height)
-			{ //從左側碰到水管
+			{ 
 				this.pos.y =  y + poleJson.height - 16 - this.height;
 				this.isOnBottom = true;
 			}
@@ -30,14 +30,13 @@ class Flag{
 		this.pos.y += this.speed.y;
 	}
 
-	draw(context,flagSprite){
-				
-		if(mario.pos.x < 450 ){
+	draw(context,flagSprite,marioArray){
+		if(marioArray.pos.x < 450 ){
 			flagSprite.drawSprite("flag",context,this.pos.x,this.pos.y);
-		}else if(mario.pos.x >= 450 && mario.pos.x < 1600){
-			flagSprite.drawSprite("flag",context,this.pos.x - mario.pos.x + 450 ,this.pos.y);
-		}else if(mario.pos.x >= 1600 ){
-			flagSprite.drawSprite("flag",context,this.pos.x  - 1150 ,this.pos.y);
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800){
+			flagSprite.drawSprite("flag",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+		}else if(marioArray.pos.x >= 1800 ){
+			flagSprite.drawSprite("flag",context,this.pos.x  - 1350 ,this.pos.y);
 		}
 	
 	}

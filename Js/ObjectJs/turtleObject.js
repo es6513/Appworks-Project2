@@ -1,5 +1,5 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-import {mario} from "../marioTest.js";
+// import {marioArray} from "../marioArrayTest.js";
 
 
 class Turtle{
@@ -28,7 +28,7 @@ class Turtle{
 		];
 	}
 	
-	update(screen,tubeSprite,turtleSpriteSet,tubeJson){
+	update(screen,tubeSprite,turtleSpriteSet,tubeJson,marioArray){
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
@@ -46,35 +46,35 @@ class Turtle{
 		// X軸的判定 用 width/2 比較好一點,
 
 
-		if(!mario.isDie 
-			&& mario.pos.x + mario.width  > this.pos.x 
-			&& mario.pos.x < this.pos.x + this.width 
-			&& mario.pos.y + mario.height > this.pos.y
-			&& mario.pos.y < this.pos.y + this.height
-			&& !mario.isJump
-			&& mario.isOnGround
+		if(!marioArray.isDie 
+			&& marioArray.pos.x + marioArray.width  > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height > this.pos.y
+			&& marioArray.pos.y < this.pos.y + this.height
+			&& !marioArray.isJump
+			&& marioArray.isOnGround
 			&& this.isRotating 
 			&& this.quickToDie
 		){
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
-			mario.isDie = true;
-			mario.speed.y = -8;
-			mario.pos.y += mario.speed.y;
+			marioArray.isDie = true;
+			marioArray.speed.y = -10;
+			marioArray.pos.y += marioArray.speed.y;
 		}
-		if(!mario.isDie 
-			&& mario.pos.x + mario.width   > this.pos.x 
-			&& mario.pos.x < this.pos.x + this.width 
-			&& mario.pos.y + mario.height > this.pos.y
-			&& mario.pos.y < this.pos.y + this.height
-			&& !mario.isJump
-			&& mario.isOnGround
+		if(!marioArray.isDie 
+			&& marioArray.pos.x + marioArray.width   > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height > this.pos.y
+			&& marioArray.pos.y < this.pos.y + this.height
+			&& !marioArray.isJump
+			&& marioArray.isOnGround
 			&& !this.quickToDie ){
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
-			mario.isDie = true;
-			mario.speed.y = -6;
-			mario.pos.y += mario.speed.y;
+			marioArray.isDie = true;
+			marioArray.speed.y = -10;
+			marioArray.pos.y += marioArray.speed.y;
 		}		
 
 		
@@ -87,14 +87,14 @@ class Turtle{
 		}	
 
 
-		if(!mario.isDie && this.quickToDie  
-			&& mario.pos.x + mario.width > this.pos.x 
-			&& mario.pos.x < this.pos.x + this.width 
-			&& mario.pos.y > this.pos.y - this.height / 2){
+		if(!marioArray.isDie && this.quickToDie  
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width 
+			&& marioArray.pos.y > this.pos.y - this.height / 2){
 			{
 				this.speed.x = 4;
 				this.isRotating = true;
-				mario.speed.y = -6;
+				marioArray.speed.y = -6;
 				this.turtleDieSound();
 			}		
 		}
@@ -120,15 +120,15 @@ class Turtle{
 	
 		// -------馬力歐跳躍攻擊烏龜-----------
 
-		if(!mario.isDie && !this.quickToDie && mario.speed.y > 0 
-			&& mario.pos.x + 16 > this.pos.x 
-			&& mario.pos.x < this.pos.x + 16
-			&& mario.pos.y > this.pos.y - 16 + 8){
+		if(!marioArray.isDie && !this.quickToDie && marioArray.speed.y > 0 
+			&& marioArray.pos.x + 16 > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + 16
+			&& marioArray.pos.y > this.pos.y - 16){
 			{
 				this.quickToDie = true;
-				mario.speed.y = -10;
+				marioArray.speed.y = -10;
 				this.turtleDieSound();
-				// mario.pos.y = this.pos.y - 16 + 8;
+				// marioArray.pos.y = this.pos.y - 16 + 8;
 				// this.speed.x = 0;
 			}		
 		}
@@ -162,20 +162,20 @@ class Turtle{
 		
 
 		// if(!this.die
-		// 	&& mario.pos.x + 16 > this.pos.x 
-		// 	&& mario.pos.x < this.pos.x + 16){
+		// 	&& marioArray.pos.x + 16 > this.pos.x 
+		// 	&& marioArray.pos.x < this.pos.x + 16){
 		// 	this.quickToDie = false;
 		// }
-		// if(mario.isJump && mario.pos.y > this.pos.y - 16){
+		// if(marioArray.isJump && marioArray.pos.y > this.pos.y - 16){
 		// 	this.die = true;
-		// 	mario.pos.y = this.pos.y - 16;
+		// 	marioArray.pos.y = this.pos.y - 16;
 		// 	console.log("hi");
 		// }
-		// if(this.pos.x <= mario.pos.x 
-		// 	&& this.pos.x + 16 >=  mario.pos.x   
-		// 	&& this.pos.y <= mario.pos.y + 16
-		// 	&& this.pos.y >=  mario.pos.y  
-		// 	//16是金幣的寬度， EX : 160<mario.pos
+		// if(this.pos.x <= marioArray.pos.x 
+		// 	&& this.pos.x + 16 >=  marioArray.pos.x   
+		// 	&& this.pos.y <= marioArray.pos.y + 16
+		// 	&& this.pos.y >=  marioArray.pos.y  
+		// 	//16是金幣的寬度， EX : 160<marioArray.pos
 		// )
 		// 	this.die = true;
 		// }
@@ -211,20 +211,20 @@ class Turtle{
 		// return this.framesRun[this.frameIndex];
 	}
 
-	draw(context,turtleSprite){
-		if(mario.pos.x < 450 && !this.quickToDie){
+	draw(context,turtleSprite,marioArray){
+		if(marioArray.pos.x < 450 && !this.quickToDie){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		}else if(mario.pos.x >= 450 && mario.pos.x < 1600 && !this.quickToDie){
-			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x - mario.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
-		}else if(mario.pos.x >= 1600 && !this.quickToDie){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1600 && !this.quickToDie){
+			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
+		}else if(marioArray.pos.x >= 1600 && !this.quickToDie){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x  - 1150 ,this.pos.y,this.faceDirection < 0);
 		}
 
-		if(mario.pos.x < 450 && this.quickToDie){
+		if(marioArray.pos.x < 450 && this.quickToDie){
 			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		}else if(mario.pos.x >= 450 && mario.pos.x < 1600 && this.quickToDie){
-			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x - mario.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
-		}else if(mario.pos.x >= 1600 && this.quickToDie){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1600 && this.quickToDie){
+			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
+		}else if(marioArray.pos.x >= 1600 && this.quickToDie){
 			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x  - 1150 ,this.pos.y,this.faceDirection < 0);
 		}	
 	}

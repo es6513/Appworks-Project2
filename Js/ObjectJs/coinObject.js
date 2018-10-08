@@ -1,5 +1,5 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-import {mario} from "../marioTest.js";
+// import {marioArray} from "../marioArrayTest.js";
 
 
 class Coin{
@@ -23,19 +23,19 @@ class Coin{
 
 	}
 	
-	update(){
+	update(marioArray){
 		// X 軸判定要再調整一下
 
-		if(this.show && this.pos.x <= mario.pos.x + 8
-			&& this.pos.x + 10 >=  mario.pos.x   
-			&& this.pos.y <= mario.pos.y + 16
-			&& this.pos.y >=  mario.pos.y  
+		if(this.show && this.pos.x <= marioArray.pos.x + 8 
+			&& this.pos.x + 8 >=  marioArray.pos.x   
+			&& this.pos.y <= marioArray.pos.y + 16
+			&& this.pos.y >=  marioArray.pos.y  
 		
 		){		
 			this.show = false;
 			this.coinSound();
 		}
-		//16是金幣的寬度， EX : 160 < mario.pos < 176
+		//16是金幣的寬度， EX : 160 < marioArray.pos < 176
 		// 前兩行的 +8 +10 => 讓判定範圍更精準，並非真正碰撞
 	}
 
@@ -49,15 +49,14 @@ class Coin{
 		coinSound.play();
 	}
 
-	draw(context,coinSprite){
-		
-		
-		if(mario.pos.x < 450 && this.show){
+	draw(context,coinSprite,marioArray){
+	
+		if(marioArray.pos.x < 450 && this.show){
 			coinSprite.drawSprite(this.flashing(),context,this.pos.x,this.pos.y);
-		}else if(mario.pos.x >= 450 && mario.pos.x < 1600 && this.show){
-			coinSprite.drawSprite(this.flashing(),context,this.pos.x - mario.pos.x + 450 ,this.pos.y);
-		}else if(mario.pos.x >= 1600 && this.show){
-			coinSprite.drawSprite(this.flashing(),context,this.pos.x  - 1150 ,this.pos.y);
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && this.show){
+			coinSprite.drawSprite(this.flashing(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+		}else if(marioArray.pos.x >= 1800 && this.show){
+			coinSprite.drawSprite(this.flashing(),context,this.pos.x  - 1350 ,this.pos.y);
 		}
 	
 	}

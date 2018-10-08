@@ -17,15 +17,32 @@ const context = canvas.getContext("2d");
 let fps = 100;
 let backgroundDOM = document.getElementById("background");
 
+// window.onload = startGame;
 
 // -------------------音效--------------------
 let backgroundMusic = new Audio("../music/TitleBGM.mp3");
 
-
-
 // -------------------end 音效--------------------
 
+
+
 //-----測試區---------
+
+function createMarioArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(marioSprite=>{
+			let marioArray = [];
+			marioSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let mario = new Mario();
+				mario.pos.set(x,y);
+				mario.speed.set(4,10);
+				marioArray.push(mario);
+			});
+
+			return marioArray;
+		});
+}
 
 
 function createCoinArray(name) {
@@ -128,137 +145,188 @@ function createCastleArray(name) {
 
 
 
+
+
 //-------測試區---------
 
-let mario = new Mario();
-mario.pos.set(1740,160);   //馬力歐起始位置
-mario.speed.set(4,2);   //馬力歐起始移動速度
-let coinSound = new Audio("/music/mario-coin-sound.wav");
+// let mario = new Mario();
+// mario.pos.set(1000,240);   //馬力歐起始位置
+// mario.speed.set(4,10);   //馬力歐起始移動速度
 
 
+Promise.all([
+	loadGround(), //產出 groundSprite, 用來傳進 mario object 處理馬力歐落地
+	loadJson("background"),
+	loadMarioImage("marioRedder"),
+	drawBackground("background"),
+	drawObjects("coin"),
+	createCoinArray("coin"),
+	drawObjects("badTurtle"),
+	createTurtleArray("badTurtle"),
+	drawObjects("tube"),
+	createTubeArray("tube"),
+	loadJson("tube"),
+	drawObjects("goomba"),
+	createGoombaArray("goomba"),
+	drawObjects("pole"),
+	createPoleArray("pole"),
+	loadJson("pole"),
+	drawObjects("flag"),
+	createFlagArray("flag"),
+	drawObjects("highCastle"),
+	createCastleArray("highCastle"),
+	loadJson("highCastle"),
+	drawObjects("mario"),
+	createMarioArray("mario"),
+]).then(([
+	groundSprite,
+	screen,
+	marioSpriteSet,
+	backgroundSprite,
+	coinSpriteSet,coinArray,
+	turtleSpriteSet,turtleArray,
+	tubeSpriteSet,tubeArray,tubeJson,
+	goombaSpriteSet,goombaArray,
+	poleSprite,poleArray,poleJson,
+	flagSprite,flagArray,
+	castleSprite,castleArray,castleJson,
+	marioSprite,marioArray])=>{
+		
 
-function promise() {
-	Promise.all([
-		loadGround(), //產出 groundSprite, 用來傳進 mario object 處理馬力歐落地
-		loadJson("background"),
-		loadMarioImage("marioRedder"),
-		drawBackground("background"),
-		drawObjects("coin"),
-		createCoinArray("coin"),
-		drawObjects("badTurtle"),
-		createTurtleArray("badTurtle"),
-		drawObjects("tube"),
-		createTubeArray("tube"),
-		loadJson("tube"),
-		drawObjects("goomba"),
-		createGoombaArray("goomba"),
-		drawObjects("pole"),
-		createPoleArray("pole"),
-		loadJson("pole"),
-		drawObjects("flag"),
-		createFlagArray("flag"),
-		drawObjects("highCastle"),
-		createCastleArray("highCastle"),
-		loadJson("highCastle"),
-	]).then(([
-		groundSprite,
-		screen,
-		marioSpriteSet,
-		backgroundSprite,
-		coinSpriteSet,coinArray,
-		turtleSpriteSet,turtleArray,
-		tubeSpriteSet,tubeArray,tubeJson,
-		goombaSpriteSet,goombaArray,
-		poleSprite,poleArray,poleJson,
-		flagSprite,flagArray,
-		castleSprite,castleArray,castleJson])=>{
-	
-		function animate() {
-			setTimeout(function() {
-				requestAnimationFrame(animate);
+	const timeElem = document.querySelector("#time");
+	var requestId;
 
-				// your draw() stuff goes here
-
-			}, 1000 / fps);
-			// requestAnimationFrame(animate);
-			context.clearRect(0,0, context.canvas.width, context.canvas.height);
-
-			// if(mario.isDie){
-			// 	setTimeout(function() {
-			// 		window.location.reload();
-			// 	},3000);
-			// } //重刷整個瀏覽器，看有沒有更好的方式解決
-
-			// ------------------根據不同螢幕解析度做控制----------------------
-			// if(mario.pos.x < windowWidth / 2 - 8){
-			// 	context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			// }else if(mario.pos.x >= windowWidth / 2 - 8  && mario.pos.x < 956 + windowWidth / 2) {
-			// 	context.drawImage(backgroundSprite,mario.pos.x - windowWidth / 2 + 8 ,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			// }else if(mario.pos.x >= (1920 - 8 + windowWidth) / 2){
-			// 	context.drawImage(backgroundSprite, 964 - 8,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			// } // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
-			// ------------------end 根據不同螢幕解析度做控制----------------------
-			
-			
-			if(mario.pos.x < 450){
-				context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			}else if(mario.pos.x >= 450 && mario.pos.x < 1600) {
-				context.drawImage(backgroundSprite,mario.pos.x - 450,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			}else if(mario.pos.x >= 1600){
-				context.drawImage(backgroundSprite, 1150,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
-				
-			for(let j = 0;j < coinArray.length;j += 1){
-				coinArray[j].draw(context,coinSpriteSet);
-				coinArray[j].update();
-			}
-
-			for(let j = 0;j < tubeArray.length;j += 1){
-				tubeArray[j].draw(context,tubeSpriteSet);
-				tubeArray[j].update();
-			}	
-				
-			for(let j = 0;j < turtleArray.length;j += 1){
-				turtleArray[j].draw(context,turtleSpriteSet);
-				turtleArray[j].update(screen,tubeSpriteSet,turtleSpriteSet,tubeJson);
-			}	
-			
-			for(let j = 0;j < goombaArray.length;j += 1){
-				goombaArray[j].draw(context,goombaSpriteSet);
-				goombaArray[j].update(tubeJson,turtleArray);
-			}
-
-			for(let j = 0;j < poleArray.length;j += 1){
-				poleArray[j].draw(context,poleSprite);
-				poleArray[j].update();
-			}
-
-			for(let j = 0;j < flagArray.length;j += 1){
-				flagArray[j].draw(context,flagSprite);
-				flagArray[j].update(poleJson);
-			}	
-			
-			for(let j = 0;j < castleArray.length;j += 1){
-				castleArray[j].draw(context,castleSprite);
-				castleArray[j].update();
-			}		
-
-			// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);
-			mario.update(screen,tubeJson,poleJson,castleJson,flagArray);
-			mario.draw(context,marioSpriteSet,screen,tubeSpriteSet); //傳進去 marioObject
-
-			// if(mario.pos.x > 40){
-			// 	backgroundMusic.play();
-			// }   
-			//當馬力歐跑一定的距離之後，開始撥音樂
-		};
+	function loop(time) {
+		requestId = undefined;
 		animate();
+		start();
+	}
+
+	function start() {
+		if (!requestId) {
+			requestId = window.requestAnimationFrame(loop);
+		}
+	}
+
+	function stop() {
+		if (requestId) {
+			window.cancelAnimationFrame(requestId);
+			requestId = undefined;
+		}
+	}
+
+	function doStuff(time) {
+		timeElem.textContent = (time * 0.001).toFixed(2);
+	}
+  
+
+	document.querySelector("#start").addEventListener("click", function() {
+		start();
 	});
-}
+
+	document.querySelector("#stop").addEventListener("click", function() {
+		stop();
+	});
+
+	// if(mario.isDie){
+	// 	if (requestId) {
+	// 		window.cancelAnimationFrame(requestId);
+	// 		requestId = undefined;
+	// 	}
+	// }
 
 
-promise();
+
+	function animate() {
+		// setTimeout(function() {
+		// requestAnimationFrame(animate);
+
+		// 	// your draw() stuff goes here
+
+		// }, 1000 / fps)
+
+		// requestAnimationFrame(animate);
+
+			
+		// context.clearRect(0,0, context.canvas.width, context.canvas.height);
+		// if(mario.isDie){
+		// 	setTimeout(function() {
+		// 		window.location.reload();
+		// 	},3000);
+		// } //重刷整個瀏覽器，看有沒有更好的方式解決
+
+		// ------------------根據不同螢幕解析度做控制----------------------
+		// if(mario.pos.x < windowWidth / 2 - 8){
+		// 	context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
+		// }else if(mario.pos.x >= windowWidth / 2 - 8  && mario.pos.x < 956 + windowWidth / 2) {
+		// 	context.drawImage(backgroundSprite,mario.pos.x - windowWidth / 2 + 8 ,0,context.canvas.width,640,0,0,context.canvas.width,640);
+		// }else if(mario.pos.x >= (1920 - 8 + windowWidth) / 2){
+		// 	context.drawImage(backgroundSprite, 964 - 8,0,context.canvas.width,640,0,0,context.canvas.width,640);
+		// } // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
+		// ------------------end 根據不同螢幕解析度做控制----------------------
+		
+
+		if(	marioArray[0].pos.x < 450){
+			context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
+		}else if(	marioArray[0].pos.x >= 450 && 	marioArray[0].pos.x < 1800) {
+			context.drawImage(backgroundSprite,	marioArray[0].pos.x - 450,0,context.canvas.width,640,0,0,context.canvas.width,640);
+		}else if(	marioArray[0].pos.x >= 1800){
+			context.drawImage(backgroundSprite, 1350,0,context.canvas.width,640,0,0,context.canvas.width,640);
+		} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
+				
+		for(let j = 0;j < coinArray.length;j += 1){
+			coinArray[j].draw(context,coinSpriteSet,marioArray[0]);
+			coinArray[j].update(marioArray[0]);
+		}
+
+		for(let j = 0;j < tubeArray.length;j += 1){
+			tubeArray[j].draw(context,tubeSpriteSet,marioArray[0]);
+			tubeArray[j].update(marioArray[0]);
+		}	
+				
+		for(let j = 0;j < turtleArray.length;j += 1){
+			turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
+			turtleArray[j].update(screen,tubeSpriteSet,turtleSpriteSet,tubeJson,marioArray[0]);
+		}	
+			
+		for(let j = 0;j < goombaArray.length;j += 1){
+			goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
+			goombaArray[j].update(tubeJson,turtleArray,marioArray[0]);
+		}
+
+		for(let j = 0;j < poleArray.length;j += 1){
+			poleArray[j].draw(context,poleSprite,marioArray[0]);
+			poleArray[j].update(marioArray[0]);
+		}
+
+		for(let j = 0;j < flagArray.length;j += 1){
+			flagArray[j].draw(context,flagSprite,marioArray[0]);
+			flagArray[j].update(poleJson,marioArray[0]);
+		}	
+			
+		for(let j = 0;j < castleArray.length;j += 1){
+			castleArray[j].draw(context,castleSprite,marioArray[0]);
+			castleArray[j].update(marioArray[0]);
+		}	
+
+		for(let j = 0;j < marioArray.length;j += 1){
+			marioArray[j].draw(context,marioSpriteSet,screen,tubeSpriteSet,flagArray);
+			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray);
+		}	
+		
+		
+		// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);
+		// mario.update(screen,tubeJson,poleJson,castleJson,flagArray);
+		// mario.draw(context,marioSpriteSet,screen,tubeSpriteSet,flagArray); //傳進去 marioObject
+
+		// if(mario.pos.x > 40){
+		// 	backgroundMusic.play();
+		// }   
+		//當馬力歐跑一定的距離之後，開始撥音樂
+	};
+	// animate();
+});
 
 
-export {mario};
+// export {mario};
 

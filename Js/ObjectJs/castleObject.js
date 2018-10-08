@@ -1,5 +1,5 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-import {mario} from "../marioTest.js";
+// import {mario} from "../marioTest.js";
 
 
 class Castle{
@@ -9,18 +9,18 @@ class Castle{
 		this.height = 176;
 	}
 	
-	update(){
+	update(marioArray){
 
 	}
 
-	draw(context,castleSprite){
+	draw(context,castleSprite,marioArray){
 				
-		if(mario.pos.x < 450 ){
+		if(marioArray.pos.x < 450 ){
 			castleSprite.drawSprite("castle",context,this.pos.x,this.pos.y);
-		}else if(mario.pos.x >= 450 && mario.pos.x < 1600){
-			castleSprite.drawSprite("castle",context,this.pos.x - mario.pos.x + 450 ,this.pos.y);
-		}else if(mario.pos.x >= 1600 ){
-			castleSprite.drawSprite("castle",context,this.pos.x  - 1150 ,this.pos.y);
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800){
+			castleSprite.drawSprite("castle",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+		}else if(marioArray.pos.x >= 1800 ){
+			castleSprite.drawSprite("castle",context,this.pos.x  - 1350 ,this.pos.y);
 		}
 	
 	}
