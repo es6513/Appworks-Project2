@@ -18,8 +18,10 @@ class Mario{
 		this.stopX = false;
 		this.isDie = false;
 		this.isOnGround = false;
+		this.stopY = false;
 		this.passStage = false;
 		this.canPlayPassMusic = false;
+		this.onPoleBottom = false;
 		this.walkToCastle = false;
 		this.hide = false;
 		this.clearTimeout;
@@ -33,11 +35,12 @@ class Mario{
 		];
 	}
 
-	update(screen,tubeJson,poleJson,castleJson,flagArray){
+	update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson){
+		// console.log(this);
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 		// console.log(this.direction);
-		// console.log(this.speed.x);
+		// console.log(this.speed.y);
 		// console.log(this.pos.y);
 		// console.log(this.isDie);
 		let timeoutId;
@@ -113,11 +116,13 @@ class Mario{
 
 		if(!this.isDie && this.isJump && this.stopX && this.pos.y < 208){
 			this.stopX = false;
-		} //這一段用 this.pos.y<208 暫時可以解決如果離障礙物已經是0的狀態不能跳起來移動
+		} //這一段用 this.pos.y<208 暫時可以解決如果離障礙物已經是0的狀態不能跳起來移動 bug
 		
-
-		this.speed.y += 0.5;  //gravity
-		this.pos.y += this.speed.y; 
+		if(!this.canPlayPassMusic){
+			this.speed.y += 0.5;  //gravity
+			this.pos.y += this.speed.y; 
+		}
+		
 		
 		
 
@@ -137,8 +142,8 @@ class Mario{
 			// 	this.speed.y = 0;
 			// }	
 			if(!this.canPlayPassMusic && !this.isDie && keys.top && this.isJump == false 
-				&& (this.pos.x + this.width > x1 * 16)
-				&& (this.pos.x < x2 * 16 + 16)){
+				&& this.pos.x + this.width > x1 * 16
+				&& this.pos.x < x2 * 16 + 16){
 				this.isJump = true;
 				this.isOnGround = false;
 				this.speed.y -= 10;  //起始跳躍速度，這個速度加上馬力歐的身高，剛好可以跳到最高的水管上面
@@ -158,12 +163,12 @@ class Mario{
 					this.pos.y = y1 * screen.height - this.height;
 					this.speed.y = 0;
 				}
-				this.speed.y += 0.5;
-			}else if(!this.isDie && this.pos.y >= y2 * screen.height - 24){
-				// 用-24讓死亡掉下去的死亡判定範圍加大，可以避免按左右鍵馬力歐又回到地面上
+				// this.speed.y += 0.5;
+			}else if(!this.isDie && this.pos.y >= y2 * screen.height + 96){
+				// 用+96讓馬力歐掉下去一段距離才死掉，只是目前尚有按左右鍵會跑回來的 bug
 				this.speed.x = 0;
 				this.isDie = true;
-				this.speed.y = -12;
+				this.speed.y = -16;
 				let dieSound = new Audio("/music/mario-die-sound.wav");
 				dieSound.play();			
 			}
@@ -189,7 +194,9 @@ class Mario{
 		// 	// 	this.speed.y -= 8;
 		// 	// } // 忘記這幹嘛用的，先 comment 
 		// 	this.speed.y += 0.5;
-		// }					
+		// }			
+		
+		
 		// ---------------控制水管障礙---------------
 
 		// 10/4 稍作修正，碰到障礙物時，馬力歐速度不變，只是 X 位置停在原地。
@@ -245,22 +252,70 @@ class Mario{
 		// ------------------以上兩段----------------------
 
 
+		// ---------------控制磚塊障礙---------------
+
+		// brickJson.Pos[0].ranges.forEach(([x,y])=>{
+		// 	if(this.pos.x + this.width > x
+		// 		&& this.pos.x < x + brickJson.width){
+		// 		if(this.isJump && this.speed.y < 0 && this.pos.y + this.height > y && this.pos.y < y + brickJson.height){
+		// 			this.speed.y *= -1;
+		// 			this.stopY = true;
+		// 		}
+		// 		if( this.speed.y > 0 && this.pos.y + this.height > y ){
+				
+		// 			this.pos.y = 184;
+		// 			this.speed.y = 0;
+		// 		}
+		// 	}
+			
+
+		// });
+		
+	
+		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
+		//	&& shape.pos.x < this.pos.x + this.width 右
+		//	&& shape.pos.y + shape.height > this.pos.y 上
+		//	&& shape.pos.y < this.pos.y + this.height 下
+
+		// ---------------End of 控制磚塊障礙---------------
+
 		// -----------------馬力歐過關---------------------
 
 
-		// 1. -----停在旗子前面-----
+		// 1. -----碰到旗桿後馬力歐下降-----
 
 		poleJson.Pos[0].ranges.forEach(([x,y])=>{
-			if(this.pos.x + this.width == x && !this.canPlayPassMusic)
+			if(this.pos.x + this.width >= x + 10 
+				&& this.pos.y <= y + 155 
+				&& !this.canPlayPassMusic)
 			{ 
 				this.direction = 0;
-				this.pos.x = x - this.width  ;
+				this.pos.x = x - this.width + 10  ;
 				this.passStage = true;
+			}
+
+			if(!this.onPoleBottom && !this.isJump && this.pos.x + this.width >= x){
+				this.pos.x = x - this.width;
+			}
+
+			if(this.canPlayPassMusic && !this.onPoleBottom){
+				this.speed.y = 2;
+				this.pos.y = this.pos.y + 2;
+
+				if(this.pos.y >= y + 144){
+					this.pos.y = y + 144;
+					this.onPoleBottom = true;
+				}
+			}
+			if(this.pos.x >= x + 16){
+				this.speed.y = 2;
+				this.pos.y += this.speed.y;
 			}
 		});
 
 		//下面這段利用 canPlayPassMusic 來控制撥放，並且將其反運算，避免音樂持續撥放好幾段，
 		//另外也用這個開關控制上面的移動，使玩家不能在控制馬力歐，以及這個開關也用在 flagObject裡面控制旗子下降。
+	
 		if(!this.isDie && this.passStage){
 			this.passStage = false;
 			this.passSound();
@@ -273,9 +328,7 @@ class Mario{
 			this.pos.x += this.speed.x;
 		}
 
-		// END -----停在旗子前面-----
-
-
+		// END -----碰到旗桿後馬力歐下降-----
 		
 		// 2. -----走到城堡中間消失-----
 
@@ -290,10 +343,7 @@ class Mario{
 		});
 
 
-
 		// End -----走到城堡中間消失-----
-
-
 
 		// -----------------End 馬力歐過關---------------------
 	
@@ -302,9 +352,7 @@ class Mario{
 		if(!keys.left && !keys.right){
 			this.direction = 0;
 		}
-
 	}
-
 	passSound(){
 		let passSound = new Audio("/music/mario-stage-clear.wav");
 		passSound.play();		
@@ -355,7 +403,7 @@ class Mario{
 		// if(1920 - mario.pos.x - 8 ==  windowWidth - mario.pos.x - 8){
 		// 	console.log("不要捲");
 		// }
-		if(!this.hide && !this.isDie && !this.passStage && !this.walkToCastle){
+		if(!this.hide && !this.isDie && !this.canPlayPassMusic && !this.walkToCastle){
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 450 && this.pos.x < 1800){
@@ -365,7 +413,7 @@ class Mario{
 			}		
 		}
 		
-		if(!this.hide && this.isDie && !this.passStage && !this.walkToCastle){
+		if(!this.hide && this.isDie && !this.canPlayPassMusic && !this.walkToCastle){
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite("die",context,this.pos.x,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 450 && this.pos.x < 1800){
@@ -375,14 +423,8 @@ class Mario{
 			}
 		}
 
-		if(!this.hide && this.passStage && !this.walkToCastle){
-			if(this.pos.x < 450 ){
-				marioSprite.drawMarioSprite("mario",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 1800){
-				marioSprite.drawMarioSprite("mario",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 1800){
-				marioSprite.drawMarioSprite("mario",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
-			}		
+		if(!this.hide && this.canPlayPassMusic && !this.walkToCastle){
+			marioSprite.drawMarioSprite("passed",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);	
 		}
 
 		if(!this.hide && this.walkToCastle){

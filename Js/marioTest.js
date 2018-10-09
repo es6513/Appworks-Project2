@@ -9,6 +9,8 @@ import {Goomba} from "./ObjectJs/goombaObject.js";
 import {Pole} from "./ObjectJs/poleObject.js";
 import {Flag} from "./ObjectJs/flagObject.js";
 import {Castle} from "./ObjectJs/castleObject.js";
+import {Brick} from "./ObjectJs/brickObject.js";
+import {QuestionBrick} from "./ObjectJs/questionBrickObject.js";
 
 let windowWidth = $(window).width();
 let windowHeight = $(window).height();
@@ -25,7 +27,6 @@ let backgroundMusic = new Audio("../music/TitleBGM.mp3");
 // -------------------end 音效--------------------
 
 
-
 //-----測試區---------
 
 function createMarioArray(name) {
@@ -36,14 +37,12 @@ function createMarioArray(name) {
 			marioSprite.Pos[0].ranges.forEach(([x,y])=>{
 				let mario = new Mario();
 				mario.pos.set(x,y);
-				mario.speed.set(4,10);
+				mario.speed.set(4,2);
 				marioArray.push(mario);
 			});
-
 			return marioArray;
 		});
 }
-
 
 function createCoinArray(name) {
 	return fetch(`/marioJSON/${name}.json`)
@@ -143,9 +142,33 @@ function createCastleArray(name) {
 		});
 }
 
+function createBrickArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(brickSprite=>{
+			let brickArray = [];
+			brickSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let brick = new Brick();
+				brick.pos.set(x,y);
+				brickArray.push(brick);
+			});
+			return brickArray;
+		});
+}
 
-
-
+function createQuestionBrickArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(questionBrickSprite=>{
+			let questionBrickArray = [];
+			questionBrickSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let questionBrick = new QuestionBrick();
+				questionBrick.pos.set(x,y);
+				questionBrickArray.push(questionBrick);
+			});
+			return questionBrickArray;
+		});
+}
 
 //-------測試區---------
 
@@ -176,6 +199,12 @@ Promise.all([
 	drawObjects("highCastle"),
 	createCastleArray("highCastle"),
 	loadJson("highCastle"),
+	drawObjects("brick"),
+	createBrickArray("brick"),
+	loadJson("brick"),
+	drawObjects("questionBrick"),
+	createQuestionBrickArray("questionBrick"),
+	loadJson("questionBrick"),
 	drawObjects("mario"),
 	createMarioArray("mario"),
 ]).then(([
@@ -190,8 +219,11 @@ Promise.all([
 	poleSprite,poleArray,poleJson,
 	flagSprite,flagArray,
 	castleSprite,castleArray,castleJson,
+	brickSprite,brickArray,brickJson,
+	questionBrickSprite,questionBrickArray,questionBrickJson,
 	marioSprite,marioArray])=>{
 	
+	//--------------------遊戲控制流程-----------------------
 
 	function startGame() {
 		marioArray = [];
@@ -202,6 +234,8 @@ Promise.all([
 		poleArray = [];
 		flagArray = [];
 		castleArray = [];
+		brickArray = [];
+		questionBrickArray = [];
 		Promise.all([
 			createCoinArray("coin"),
 			createTurtleArray("badTurtle"),
@@ -210,6 +244,8 @@ Promise.all([
 			createPoleArray("pole"),
 			createFlagArray("flag"),
 			createCastleArray("highCastle"),
+			createBrickArray("brick"),
+			createQuestionBrickArray("questionBrick"),
 			createMarioArray("mario")
 		]).then(([
 			coin,
@@ -219,6 +255,8 @@ Promise.all([
 			pole,
 			flag,
 			castle,
+			brick,
+			questionBrick,
 			mario
 		])=>{
 			marioArray = mario;
@@ -229,6 +267,8 @@ Promise.all([
 			poleArray = pole;
 			flagArray = flag;
 			castleArray = castle;
+			brickArray = brick;
+			questionBrickArray = questionBrick;
 		});
 		myGameArea.start();
 	}
@@ -237,7 +277,7 @@ Promise.all([
 		canvas : document.createElement("canvas"),
 		start : function() {
 			this.canvas.width = 3000;
-			this.canvas.height = 300;
+			this.canvas.height = 640;
 			this.context = this.canvas.getContext("2d");
 			document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 			this.frameNo = 0;
@@ -250,23 +290,24 @@ Promise.all([
 			clearInterval(this.interval);
 		}
 	};
-	
-	
+		
 	function restart() {
 		
 		myGameArea.stop();
 		// myGameArea.clear();
 		startGame();
 	}
+
+	// document.querySelector("#stop").addEventListener("click", function() {
+	// 	start();
+	// });
+
+	// document.querySelector("#start").addEventListener("click", function() {
+	// 	restart();
+	// });
   
-
-	document.querySelector("#stop").addEventListener("click", function() {
-		start();
-	});
-
-	document.querySelector("#start").addEventListener("click", function() {
-		restart();
-	});
+	//--------------------遊戲控制流程-----------------------
+	
 
 
 	function animate() {
@@ -278,14 +319,6 @@ Promise.all([
 		// }, 1000 / fps)
 
 		// requestAnimationFrame(animate);
-
-			
-		// context.clearRect(0,0, context.canvas.width, context.canvas.height);
-		// if(mario.isDie){
-		// 	setTimeout(function() {
-		// 		window.location.reload();
-		// 	},3000);
-		// } //重刷整個瀏覽器，看有沒有更好的方式解決
 
 		// ------------------根據不同螢幕解析度做控制----------------------
 		// if(mario.pos.x < windowWidth / 2 - 8){
@@ -305,10 +338,12 @@ Promise.all([
 			}else if(	marioArray[i].pos.x >= 1800){
 				context.drawImage(backgroundSprite, 1350,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
-			if(marioArray[i].isDie && marioArray[i].pos.y > 3500){
+			if(marioArray[i].isDie && marioArray[i].pos.y > 3600){
 				restart();
 			}
 		}		
+
+	
 		
 		for(let j = 0;j < coinArray.length;j += 1){
 			coinArray[j].draw(context,coinSpriteSet,marioArray[0]);
@@ -345,9 +380,19 @@ Promise.all([
 			castleArray[j].update(marioArray[0]);
 		}	
 
+		for(let j = 0;j < brickArray.length;j += 1){
+			brickArray[j].draw(context,brickSprite,marioArray[0]);
+			brickArray[j].update(marioArray[0]);
+		}	
+
+		for(let j = 0;j < questionBrickArray.length;j += 1){
+			questionBrickArray[j].draw(context,questionBrickSprite,marioArray[0]);
+			questionBrickArray[j].update(marioArray[0]);
+		}	
+
 		for(let j = 0;j < marioArray.length;j += 1){
 			marioArray[j].draw(context,marioSpriteSet,screen,tubeSpriteSet,flagArray);
-			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray);
+			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson);
 		}	
 		
 		
@@ -361,6 +406,7 @@ Promise.all([
 		//當馬力歐跑一定的距離之後，開始撥音樂
 	};
 	// animate();
+	startGame();
 });
 
 

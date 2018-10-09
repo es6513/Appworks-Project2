@@ -1,0 +1,53 @@
+{
+  "frames": [
+    {
+      "name": "questionBrick-1",
+      "ranges": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "questionBrick-2",
+      "ranges": [
+        16,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "questionBrick-3",
+      "ranges": [
+        32,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "uselessBrick",
+      "ranges": [
+        48,
+        0,
+        16,
+        16
+      ]
+    }
+  ],
+  "Pos": [
+    {
+      "tile": "questionBrick",
+      "ranges": [
+        [
+          1300,
+          176
+        ]
+      ]
+    }
+  ],
+  "width": 16,
+  "height": 16
+}
