@@ -79,11 +79,12 @@
       "ranges": [
         [
           1584,
-          224
+          240
         ]
       ]
     }
   ],
   "width": 16,
-  "height": 16
+  "height": 16,
+  "Bigheight": 32
 }

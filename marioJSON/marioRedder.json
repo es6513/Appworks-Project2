@@ -71,8 +71,81 @@
         16,
         16
       ]
+    },
+    {
+      "name": "Bmario",
+      "ranges": [
+        241,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "BrunRight-1",
+      "ranges": [
+        144,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "BrunRight-2",
+      "ranges": [
+        160,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "BrunRight-3",
+      "ranges": [
+        176,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Bstop",
+      "ranges": [
+        193,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Bjump",
+      "ranges": [
+        209,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Bsquat",
+      "ranges": [
+        225,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Bpassed",
+      "ranges": [
+        257,
+        0,
+        16,
+        32
+      ]
     }
   ],
   "width": 16,
-  "height": 16
+  "height": 16,
+  "Bigheight": 32
 }

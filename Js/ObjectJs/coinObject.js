@@ -25,10 +25,15 @@ class Coin{
 	
 	update(marioArray){
 		// X 軸判定要再調整一下
+	// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
+		//	&& shape.pos.x < this.pos.x + this.width 右
+		//	&& shape.pos.y + shape.height > this.pos.y 上
+		//	&& shape.pos.y < this.pos.y + this.height 下
 
+		
 		if(this.show && this.pos.x <= marioArray.pos.x + 8 
 			&& this.pos.x + 8 >=  marioArray.pos.x   
-			&& this.pos.y <= marioArray.pos.y + 16
+			&& this.pos.y <= marioArray.pos.y + marioArray.height
 			&& this.pos.y >=  marioArray.pos.y  
 		
 		){		

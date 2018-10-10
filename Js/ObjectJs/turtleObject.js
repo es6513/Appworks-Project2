@@ -43,10 +43,14 @@ class Turtle{
 		
 		// 在烏龜活著及旋轉的狀態下，若馬力歐不是處於跳躍狀態被碰到，則馬力歐死掉
 		
+
+		//--------存在一個馬力歐碰到龜殼會死掉的bug-------
 		// X軸的判定 用 width/2 比較好一點,
 
-
-		if(!marioArray.isDie 
+		//------1.小馬力歐的死亡-------
+		if(!marioArray.isInvincible 
+			&& !marioArray.isBigMario 
+			&& !marioArray.isDie 
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -62,7 +66,9 @@ class Turtle{
 			marioArray.speed.y = -10;
 			marioArray.pos.y += marioArray.speed.y;
 		}
-		if(!marioArray.isDie 
+		if(!marioArray.isInvincible 
+			&& !marioArray.isBigMario 
+			&& !marioArray.isDie 
 			&& marioArray.pos.x + marioArray.width   > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -77,6 +83,37 @@ class Turtle{
 			marioArray.pos.y += marioArray.speed.y;
 		}		
 
+		//------2.大馬力歐的死亡-------
+
+		if(marioArray.isBigMario 
+			&& !marioArray.isDie 
+			&& marioArray.pos.x + marioArray.width  > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height > this.pos.y
+			&& marioArray.pos.y < this.pos.y + this.height
+			&& !marioArray.isJump
+			&& marioArray.isOnGround
+			&& this.isRotating 
+			&& this.quickToDie
+		){
+			marioArray.isInvincible = true;
+			marioArray.isBigMario = false; 
+		}
+
+		if(marioArray.isBigMario 
+			&& !marioArray.isDie 
+			&& marioArray.pos.x + marioArray.width   > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height > this.pos.y
+			&& marioArray.pos.y < this.pos.y + this.height
+			&& !marioArray.isJump
+			&& marioArray.isOnGround
+			&& !this.quickToDie ){
+			marioArray.isInvincible = true;
+			marioArray.isBigMario = false; 
+		}	
+
+		
 		
 
 		// End如果在馬力歐不是跳躍的情況下、並且烏龜不是旋轉狀態下，馬力歐掛掉
@@ -86,11 +123,11 @@ class Turtle{
 			this.rotate();	
 		}	
 
-
-		if(!marioArray.isDie && this.quickToDie  
+		// ---------1.小馬力歐的狀況----------------
+		if(!marioArray.isBigMario && !marioArray.isDie && this.quickToDie  
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
-			&& marioArray.pos.y > this.pos.y - this.height / 2){
+			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
 				this.speed.x = 4;
 				this.isRotating = true;
@@ -98,6 +135,23 @@ class Turtle{
 				this.turtleDieSound();
 			}		
 		}
+
+		// ---------2.大馬力歐的狀況----------------
+		if(marioArray.isBigMario && 
+			!marioArray.isDie && this.quickToDie  
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width 
+			&& marioArray.pos.y > this.pos.y -  marioArray.height){
+			{
+				this.speed.x = 4;
+				this.isRotating = true;
+				marioArray.speed.y = -6;
+				this.turtleDieSound();
+			}		
+		}
+
+
+
 
 		// ---------End烏龜會飛出去----------
 		
@@ -120,7 +174,9 @@ class Turtle{
 	
 		// -------馬力歐跳躍攻擊烏龜-----------
 
-		if(!marioArray.isDie && !this.quickToDie && marioArray.speed.y > 0 
+		// ------------------1.小馬力歐的狀況-------------
+
+		if(marioArray.isJump && !marioArray.isBigMario && !marioArray.isDie && !this.quickToDie && marioArray.speed.y > 0 
 			&& marioArray.pos.x + 16 > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + 16
 			&& marioArray.pos.y > this.pos.y - 16){
@@ -133,7 +189,18 @@ class Turtle{
 			}		
 		}
 
-	
+
+		// ---------------2.大馬力歐的狀況-------------
+		if(marioArray.isBigMario && !marioArray.isDie && !this.isDie && marioArray.speed.y > 0 
+			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width
+			&& marioArray.pos.y > this.pos.y - marioArray.height){
+			{
+				this.quickToDie = true;
+				marioArray.speed.y = -10;
+				this.turtleDieSound();
+			}		
+		}
 
 		// -------End 馬力歐跳躍攻擊烏龜-----------
 

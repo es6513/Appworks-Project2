@@ -32,7 +32,6 @@ class Goomba{
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
 		// console.log(this.speed.x);
-    
 		if(!this.isDie){
 			this.move();	
 		}	
@@ -42,8 +41,11 @@ class Goomba{
 	
 		// X軸的判定 用 width/2 比較好一點,
 
-		if(!marioArray.isDie 
-      && !this.isDie
+		//------1.小馬力歐的死亡-------
+		if(!marioArray.isInvincible 
+			&& !marioArray.isBigMario 
+			&& !marioArray.isDie 
+		  && !this.isDie
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -57,8 +59,25 @@ class Goomba{
 			marioArray.speed.y = -10;
 			marioArray.pos.y += marioArray.speed.y;
 		}
+
+
+		//------2.大馬力歐的死亡-------
+		if(marioArray.isBigMario 
+		  && !this.isDie
+			&& marioArray.pos.x + marioArray.width  > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height > this.pos.y
+			&& marioArray.pos.y < this.pos.y + this.height
+			&& !marioArray.isJump
+			&& marioArray.isOnGround	)
+		{
+			marioArray.isInvincible = true;
+			marioArray.isBigMario = false; 
+		}
+
+
 	
-	
+		//------end 大馬力歐的狀況-------
 
 		// -------End 馬力歐碰到壞香菇死掉-------
 
@@ -78,10 +97,32 @@ class Goomba{
 	
 		// -------馬力歐跳躍攻擊 壞香菇-----------
 
-		if(!marioArray.isDie && !this.isDie && marioArray.speed.y > 0 
-			&& marioArray.pos.x + 16 > this.pos.x 
-			&& marioArray.pos.x < this.pos.x + 16
-			&& marioArray.pos.y > this.pos.y - 16){
+
+		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
+		//	&& shape.pos.x < this.pos.x + this.width
+		//	&& shape.pos.y + shape.height > this.pos.y
+		//	&& shape.pos.y < this.pos.y + this.height
+		// console.log(this.speed.x);
+
+
+		// ------------------1.小馬力歐的狀況-------------
+		if(marioArray.isJump && !marioArray.isBigMario && !marioArray.isDie && !this.isDie && marioArray.speed.y > 0 
+			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width
+			&& marioArray.pos.y > this.pos.y - marioArray.height){
+			{
+				this.turtleDieSound();
+				this.isDie = true;
+				marioArray.speed.y = -4;
+			}		
+		}
+
+
+		// ------------------2.大馬力歐的狀況-------------
+		if(marioArray.isBigMario && !marioArray.isDie && !this.isDie && marioArray.speed.y > 0 
+			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width
+			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
 				this.turtleDieSound();
 				this.isDie = true;

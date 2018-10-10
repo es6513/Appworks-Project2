@@ -1,4 +1,4 @@
-import {drawScreen,drawBackground,loadMarioImage,drawObjects} from "../Js/drawImage.js";
+import {drawScreen,drawBackground,loadMarioImage,loadBigMarioImage,drawObjects} from "../Js/drawImage.js";
 import {loadMario,loadSky,loadGround,loadTube} from "../Js/loadSprite.js";
 import {loadJson} from "../Js/loadJson.js";
 import {Mario} from "../Js/ObjectJs/marioObject.js";
@@ -180,7 +180,6 @@ function createQuestionBrickArray(name) {
 Promise.all([
 	loadGround(), //產出 groundSprite, 用來傳進 mario object 處理馬力歐落地
 	loadJson("background"),
-	loadMarioImage("marioRedder"),
 	drawBackground("background"),
 	drawObjects("coin"),
 	createCoinArray("coin"),
@@ -205,12 +204,12 @@ Promise.all([
 	drawObjects("questionBrick"),
 	createQuestionBrickArray("questionBrick"),
 	loadJson("questionBrick"),
-	drawObjects("mario"),
+	loadBigMarioImage("marioRedder"),
+	loadMarioImage("marioRedder"),
 	createMarioArray("mario"),
 ]).then(([
 	groundSprite,
 	screen,
-	marioSpriteSet,
 	backgroundSprite,
 	coinSpriteSet,coinArray,
 	turtleSpriteSet,turtleArray,
@@ -221,7 +220,7 @@ Promise.all([
 	castleSprite,castleArray,castleJson,
 	brickSprite,brickArray,brickJson,
 	questionBrickSprite,questionBrickArray,questionBrickJson,
-	marioSprite,marioArray])=>{
+	BigMarioSpriteSet,marioSpriteSet,marioArray])=>{
 	
 	//--------------------遊戲控制流程-----------------------
 
@@ -276,7 +275,7 @@ Promise.all([
 	let myGameArea = {
 		canvas : document.createElement("canvas"),
 		start : function() {
-			this.canvas.width = 3000;
+			this.canvas.width = 4000;
 			this.canvas.height = 640;
 			this.context = this.canvas.getContext("2d");
 			document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -292,9 +291,8 @@ Promise.all([
 	};
 		
 	function restart() {
-		
 		myGameArea.stop();
-		// myGameArea.clear();
+		myGameArea.clear();
 		startGame();
 	}
 
@@ -330,6 +328,7 @@ Promise.all([
 		// } // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 		// ------------------end 根據不同螢幕解析度做控制----------------------
 		let context = myGameArea.context;
+		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 		for(let i = 0;i < marioArray.length;i += 1){
 			if(	marioArray[i].pos.x < 450){
 				context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
@@ -391,7 +390,7 @@ Promise.all([
 		}	
 
 		for(let j = 0;j < marioArray.length;j += 1){
-			marioArray[j].draw(context,marioSpriteSet,screen,tubeSpriteSet,flagArray);
+			marioArray[j].draw(context,!marioArray[j].isBigMario ? marioSpriteSet : BigMarioSpriteSet,screen,tubeSpriteSet,flagArray);
 			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson);
 		}	
 		
