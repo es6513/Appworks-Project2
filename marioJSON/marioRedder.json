@@ -1,6 +1,15 @@
 {
   "frames": [
     {
+      "name": "BigHead",
+      "ranges": [
+        448,
+        0,
+        16,
+        32
+      ]
+    },
+    {
       "name": "mario",
       "ranges": [
         96,
@@ -102,7 +111,7 @@
     {
       "name": "BrunRight-3",
       "ranges": [
-        176,
+        177,
         0,
         16,
         32
@@ -139,6 +148,105 @@
       "name": "Bpassed",
       "ranges": [
         257,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Bpassed2",
+      "ranges": [
+        272,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fmario",
+      "ranges": [
+        385,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "FrunRight-1",
+      "ranges": [
+        289,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "FrunRight-2",
+      "ranges": [
+        305,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "FrunRight-3",
+      "ranges": [
+        321,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fstop",
+      "ranges": [
+        337,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fjump",
+      "ranges": [
+        353,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fsquat",
+      "ranges": [
+        369,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fpassed",
+      "ranges": [
+        402,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fpassed2",
+      "ranges": [
+        416,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Flaunchfire",
+      "ranges": [
+        432,
         0,
         16,
         32

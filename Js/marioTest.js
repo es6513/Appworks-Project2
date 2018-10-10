@@ -390,7 +390,8 @@ Promise.all([
 		}	
 
 		for(let j = 0;j < marioArray.length;j += 1){
-			marioArray[j].draw(context,!marioArray[j].isBigMario ? marioSpriteSet : BigMarioSpriteSet,screen,tubeSpriteSet,flagArray);
+			
+			marioArray[j].draw(context,!marioArray[j].isBigMario && !marioArray[j].isFireMario ? marioSpriteSet : BigMarioSpriteSet,screen,tubeSpriteSet,flagArray);
 			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson);
 		}	
 		

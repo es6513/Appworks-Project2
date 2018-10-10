@@ -44,6 +44,7 @@ class Goomba{
 		//------1.小馬力歐的死亡-------
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario 
 			&& !marioArray.isDie 
 		  && !this.isDie
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
@@ -61,8 +62,9 @@ class Goomba{
 		}
 
 
-		//------2.大馬力歐的死亡-------
-		if(marioArray.isBigMario 
+		//------2.大馬力歐死亡變小馬力歐-------
+		if(!marioArray.isInvincible 
+			&& marioArray.isBigMario 
 		  && !this.isDie
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
@@ -71,9 +73,29 @@ class Goomba{
 			&& !marioArray.isJump
 			&& marioArray.isOnGround	)
 		{
+			marioArray.speed.y = -10;
 			marioArray.isInvincible = true;
 			marioArray.isBigMario = false; 
 		}
+
+
+		//------3.火馬力歐死亡變大馬力歐-------
+
+		if(marioArray.isFireMario 
+		  && !this.isDie
+			&& marioArray.pos.x + marioArray.width  > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height > this.pos.y
+			&& marioArray.pos.y < this.pos.y + this.height
+			&& !marioArray.isJump
+			&& marioArray.isOnGround	)
+		{
+			marioArray.speed.y = -10;
+			marioArray.isInvincible = true;
+			marioArray.isFireMario = false;
+			marioArray.isBigMario = true; 
+		}
+
 
 
 	

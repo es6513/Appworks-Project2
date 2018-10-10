@@ -50,6 +50,7 @@ class Turtle{
 		//------1.小馬力歐的死亡-------
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario 
 			&& !marioArray.isDie 
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
@@ -68,6 +69,7 @@ class Turtle{
 		}
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario 
 			&& !marioArray.isDie 
 			&& marioArray.pos.x + marioArray.width   > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
@@ -79,13 +81,14 @@ class Turtle{
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
 			marioArray.isDie = true;
-			marioArray.speed.y = -10;
+			marioArray.speed.y = -10;  
 			marioArray.pos.y += marioArray.speed.y;
 		}		
 
-		//------2.大馬力歐的死亡-------
+		//------2.大馬力歐死亡變小馬力歐-------
 
-		if(marioArray.isBigMario 
+		if(!marioArray.isInvincible 
+			&& marioArray.isBigMario 
 			&& !marioArray.isDie 
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
@@ -96,11 +99,13 @@ class Turtle{
 			&& this.isRotating 
 			&& this.quickToDie
 		){
+			marioArray.speed.y = -10; // BUG 暫時讓馬力歐彈跳起來代替無敵的閃爍動畫
 			marioArray.isInvincible = true;
 			marioArray.isBigMario = false; 
 		}
 
-		if(marioArray.isBigMario 
+		if(!marioArray.isInvincible 
+			&& marioArray.isBigMario 
 			&& !marioArray.isDie 
 			&& marioArray.pos.x + marioArray.width   > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
@@ -109,9 +114,47 @@ class Turtle{
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
 			&& !this.quickToDie ){
+			marioArray.speed.y = -10;
 			marioArray.isInvincible = true;
 			marioArray.isBigMario = false; 
 		}	
+
+		//------3.火馬力歐死亡變大馬力歐-------
+
+		if(!marioArray.isInvincible 
+			&& marioArray.isFireMario 
+			&& !marioArray.isDie 
+			&& marioArray.pos.x + marioArray.width  > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height > this.pos.y
+			&& marioArray.pos.y < this.pos.y + this.height
+			&& !marioArray.isJump
+			&& marioArray.isOnGround
+			&& this.isRotating 
+			&& this.quickToDie
+		){
+			marioArray.speed.y = -10;
+			marioArray.isInvincible = true;
+			marioArray.isFireMario = false;
+			marioArray.isBigMario = true; 
+		}
+
+		if(!marioArray.isInvincible 
+			&& marioArray.isFireMario
+			&& !marioArray.isDie 
+			&& marioArray.pos.x + marioArray.width   > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height > this.pos.y
+			&& marioArray.pos.y < this.pos.y + this.height
+			&& !marioArray.isJump
+			&& marioArray.isOnGround
+			&& !this.quickToDie ){
+			marioArray.speed.y = -10;
+			marioArray.isInvincible = true;
+			marioArray.isFireMario = false;
+			marioArray.isBigMario = true; 
+		}	
+
 
 		
 		
@@ -124,7 +167,7 @@ class Turtle{
 		}	
 
 		// ---------1.小馬力歐的狀況----------------
-		if(!marioArray.isBigMario && !marioArray.isDie && this.quickToDie  
+		if(!marioArray.isBigMario  && !marioArray.isDie && this.quickToDie  
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
@@ -149,6 +192,12 @@ class Turtle{
 				this.turtleDieSound();
 			}		
 		}
+
+
+		//----------3.火馬力歐的狀況---------------
+
+
+
 
 
 
@@ -177,9 +226,9 @@ class Turtle{
 		// ------------------1.小馬力歐的狀況-------------
 
 		if(marioArray.isJump && !marioArray.isBigMario && !marioArray.isDie && !this.quickToDie && marioArray.speed.y > 0 
-			&& marioArray.pos.x + 16 > this.pos.x 
-			&& marioArray.pos.x < this.pos.x + 16
-			&& marioArray.pos.y > this.pos.y - 16){
+			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width
+			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
 				this.quickToDie = true;
 				marioArray.speed.y = -10;

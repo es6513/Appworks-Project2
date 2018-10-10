@@ -14,8 +14,12 @@ class Mario{
 		this.direction = 0;
 		this.isRunning = false;
 		this.faceDirection = 1;
-		this.isBigMario = true;
-		this.isFireMario = false;
+		//--------控制不同型態的馬力歐------------
+
+		this.isBigMario = false;
+		this.isFireMario = true;
+
+		//----------控制不同型態的馬力歐---------
 		this.isInvincible = false;
 		this.isJump = false;
 		this.isSquat = false;
@@ -43,6 +47,12 @@ class Mario{
 			"BrunRight-2","BrunRight-2","BrunRight-2",
 			"BrunRight-3","BrunRight-3","BrunRight-3",
 			"Bmario"
+		];
+
+		this.FireFramesRunArray = ["FrunRight-1","FrunRight-1","FrunRight-1",
+			"FrunRight-2","FrunRight-2","FrunRight-2",
+			"FrunRight-3","FrunRight-3","FrunRight-3",
+			"Fmario"
 		];
 	}
 
@@ -200,7 +210,7 @@ class Mario{
 				this.isOnGround = false;
 				this.speed.y -= 10;  //起始跳躍速度，這個速度加上馬力歐的身高，剛好可以跳到最高的水管上面
 				this.speed.x = 4;	
-				if(!this.isBigMario){
+				if(!this.isBigMario && !this.isFireMario){
 					this.jumpSound();
 				}else{
 					this.BjumpSound();
@@ -387,7 +397,7 @@ class Mario{
 					this.onPoleBottom = true;
 				}
 
-				if(this.isBigMario && this.pos.y >= y + 128){
+				if(this.isBigMario && this.pos.y >= y + 128 || this.isFireMario && this.pos.y >= y + 128){
 					this.pos.y = y + 128;
 					this.onPoleBottom = true;
 				}
@@ -515,6 +525,20 @@ class Mario{
 		return"Bmario";
 	}
 
+	FireRunning(){
+		if(this.direction == 1){
+			this.frameIndex = ++this.frameIndex % 10;
+			return this.FireFramesRunArray[this.frameIndex];
+		}else if(this.direction == -1){
+			this.frameIndex = ++this.frameIndex % 10;
+			return this.FireFramesRunArray[this.frameIndex];
+		}else if(this.direction == 0 && this.walkToCastle){
+			this.frameIndex = ++this.frameIndex % 10;
+			return this.FireFramesRunArray[this.frameIndex];
+		}
+		return"Fmario";
+	}
+
 	//每張圖片的切割大小存在 mario.json,其中 runRight-2 跟 runRight-3 並沒有從16的倍數切(因為圖片會有點卡住所以選了一些特殊的切割點) 
 
 	draw(context,marioSprite,screen,tubeSprite){
@@ -530,11 +554,11 @@ class Mario{
 		// -------------------小馬力歐---------------------
 
 		if(!this.hide 
-			&& !this.isDie
-			&& !this.canPlayPassMusic 
-			&& !this.walkToCastle
-			&& !this.isBigMario
-			&& !this.isFireMario
+		&& !this.isDie
+		&& !this.canPlayPassMusic 
+		&& !this.walkToCastle
+		&& !this.isBigMario
+		&& !this.isFireMario
 		)
 		{
 			if(this.pos.x < 450 ){
@@ -651,6 +675,83 @@ class Mario{
 
 
 		// -----------------end of 大馬力歐----------------------
+
+
+		//----------------------火馬力歐------------------------
+		if(!this.hide 
+			&& !this.isDie
+			&& !this.canPlayPassMusic 
+			&& !this.walkToCastle
+			&& !this.isBigMario
+			&& this.isFireMario
+			&& !this.isSquat
+		)
+		{
+			if(this.pos.x < 450 ){
+				marioSprite.drawMarioSprite(!this.isJump ? this.FireRunning() : "Fjump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+				marioSprite.drawMarioSprite(!this.isJump ? this.FireRunning() : "Fjump",context,450,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 1800){
+				marioSprite.drawMarioSprite(!this.isJump ? this.FireRunning() : "Fjump",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}		
+		}
+
+		//-------------火馬力歐蹲下--------------
+		if(!this.hide 
+			&& !this.isDie
+			&& !this.canPlayPassMusic 
+			&& !this.walkToCastle
+			&& !this.isBigMario
+			&& this.isFireMario
+			&& this.isSquat
+		)
+		{
+			if(this.pos.x < 450 ){
+				marioSprite.drawMarioSprite( "Fsquat",context,this.pos.x,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+				marioSprite.drawMarioSprite( "Fsquat",context,450,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 1800){
+				marioSprite.drawMarioSprite("Fsquat",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}		
+		}
+		
+		//--------火馬力歐死亡圖片的 bug-----------
+
+
+		if(!this.hide 
+			&& this.isDie
+			&& !this.canPlayPassMusic 
+			&& !this.walkToCastle
+			&& !this.isBigMario
+			&& this.isFireMario){
+			if(this.pos.x < 450 ){
+				marioSprite.drawMarioSprite("Fsquat",context,this.pos.x,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+				marioSprite.drawMarioSprite( "Fsquat",context,450,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 1800){
+				marioSprite.drawMarioSprite("Fsquat",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}
+		}
+
+		if(!this.hide 
+			&& this.canPlayPassMusic 
+			&& !this.walkToCastle	
+			&& !this.isBigMario
+			&& this.isFireMario){
+			marioSprite.drawMarioSprite("Fpassed",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);	
+		}
+
+		if(!this.hide 
+			&& this.walkToCastle	
+			&& !this.isBigMario
+			&& this.isFireMario){
+			marioSprite.drawMarioSprite(this.FireRunning(),context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+		}
+
+		
+		//----------------------end 火馬力歐------------------------
+
+
 
 		// ------------------根據不同螢幕解析度做控制----------------------
 		// console.log(1920 - this.pos.x - 8);
