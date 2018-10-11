@@ -11,13 +11,15 @@ import {Flag} from "./ObjectJs/flagObject.js";
 import {Castle} from "./ObjectJs/castleObject.js";
 import {Brick} from "./ObjectJs/brickObject.js";
 import {QuestionBrick} from "./ObjectJs/questionBrickObject.js";
+import {Fireball} from "./ObjectJs/fireballObject.js";
+import {Flower} from "./ObjectJs/flowerObject.js";
+import {Mushroom} from "./ObjectJs/mushroomObject.js";
 
 let windowWidth = $(window).width();
 let windowHeight = $(window).height();
 // const canvas = document.getElementById("cvs");
 // const context = canvas.getContext("2d");
 let fps = 100;
-let backgroundDOM = document.getElementById("background");
 
 // window.onload = startGame;
 
@@ -170,6 +172,48 @@ function createQuestionBrickArray(name) {
 		});
 }
 
+function createFireballArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(fireballSprite=>{
+			let fireballArray = [];
+			// let fireball = new Fireball();
+			// fireballArray.push(fireball);
+			return fireballArray;
+		});
+}
+
+function createMushroomArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(mushroomSprite=>{
+			let mushroomArray = [];
+			mushroomSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let mushroom = new Mushroom();
+				mushroom.pos.set(x,y);
+				mushroomArray.push(mushroom);
+			});
+			return mushroomArray;
+		});
+}
+
+
+function createFlowerArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(flowerSprite=>{
+			let flowerArray = [];
+			flowerSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let flower = new Flower();
+				flower.pos.set(x,y);
+				flowerArray.push(flower);
+			});
+			return flowerArray;
+		});
+}
+
+
+
 //-------測試區---------
 
 // let mario = new Mario();
@@ -206,7 +250,16 @@ Promise.all([
 	loadJson("questionBrick"),
 	loadBigMarioImage("marioRedder"),
 	loadMarioImage("marioRedder"),
-	createMarioArray("mario"),
+	createMarioArray("marioRedder"),
+	drawObjects("fireball"),
+	createFireballArray("fireball"),
+	loadJson("fireball"),
+	drawObjects("mushroom"),
+	createMushroomArray("mushroom"),
+	loadJson("mushroom"),
+	drawObjects("flower"),
+	createFlowerArray("flower"),
+	loadJson("flower"),
 ]).then(([
 	groundSprite,
 	screen,
@@ -220,7 +273,10 @@ Promise.all([
 	castleSprite,castleArray,castleJson,
 	brickSprite,brickArray,brickJson,
 	questionBrickSprite,questionBrickArray,questionBrickJson,
-	BigMarioSpriteSet,marioSpriteSet,marioArray])=>{
+	BigMarioSpriteSet,marioSpriteSet,marioArray,
+	fireballSprite,fireballArray,fireballJson,
+	mushroomSprite,mushroomArray,mushroomJson,
+	flowerSprite,flowerArray,flowerJson,])=>{
 	
 	//--------------------遊戲控制流程-----------------------
 
@@ -235,6 +291,9 @@ Promise.all([
 		castleArray = [];
 		brickArray = [];
 		questionBrickArray = [];
+		fireballArray = [];
+		mushroomArray = [];
+		flowerArray = [];
 		Promise.all([
 			createCoinArray("coin"),
 			createTurtleArray("badTurtle"),
@@ -245,7 +304,10 @@ Promise.all([
 			createCastleArray("highCastle"),
 			createBrickArray("brick"),
 			createQuestionBrickArray("questionBrick"),
-			createMarioArray("mario")
+			createMarioArray("marioRedder"),
+			createFireballArray("fireball"),
+			createMushroomArray("mushroom"),
+			createFlowerArray("flower"),
 		]).then(([
 			coin,
 			turtle,
@@ -256,7 +318,10 @@ Promise.all([
 			castle,
 			brick,
 			questionBrick,
-			mario
+			mario,
+			fireball,
+			mushroom,
+			flower
 		])=>{
 			marioArray = mario;
 			coinArray = coin;
@@ -268,10 +333,14 @@ Promise.all([
 			castleArray = castle;
 			brickArray = brick;
 			questionBrickArray = questionBrick;
+			fireballArray = fireball;
+			mushroomArray = mushroom;
+			flowerArray = flower;
 		});
 		myGameArea.start();
 	}
-	
+	let counter = 0;
+
 	let myGameArea = {
 		canvas : document.createElement("canvas"),
 		start : function() {
@@ -280,7 +349,12 @@ Promise.all([
 			this.context = this.canvas.getContext("2d");
 			document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 			this.frameNo = 0;
-			this.interval = setInterval(animate, 20);
+			this.interval = setInterval(function(){
+				counter++;
+				let circle = counter / 100;
+				animate();
+			}, 20);
+			console.log(this.interval);
 		},
 		clear : function() {
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -354,15 +428,15 @@ Promise.all([
 			tubeArray[j].update(marioArray[0]);
 		}	
 				
-		for(let j = 0;j < turtleArray.length;j += 1){
-			turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
-			turtleArray[j].update(screen,tubeSpriteSet,turtleSpriteSet,tubeJson,marioArray[0]);
-		}	
+		// for(let j = 0;j < turtleArray.length;j += 1){
+		// 	turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
+		// 	turtleArray[j].update(screen,tubeSpriteSet,turtleSpriteSet,tubeJson,marioArray[0]);
+		// }	
 			
-		for(let j = 0;j < goombaArray.length;j += 1){
-			goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
-			goombaArray[j].update(tubeJson,turtleArray,marioArray[0]);
-		}
+		// for(let j = 0;j < goombaArray.length;j += 1){
+		// 	goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
+		// 	goombaArray[j].update(tubeJson,turtleArray,marioArray[0]);
+		// }
 
 		for(let j = 0;j < poleArray.length;j += 1){
 			poleArray[j].draw(context,poleSprite,marioArray[0]);
@@ -389,10 +463,21 @@ Promise.all([
 			questionBrickArray[j].update(marioArray[0]);
 		}	
 
+
+		for(let j = 0;j < flowerArray.length;j += 1){
+			flowerArray[j].draw(context,flowerSprite,marioArray[0]);
+			flowerArray[j].update(marioArray[0]);
+		}	
+
+		for(let j = 0;j < mushroomArray.length;j += 1){
+			mushroomArray[j].draw(context,mushroomSprite,marioArray[0]);
+			mushroomArray[j].update(marioArray[0]);
+		}	
+	
+
 		for(let j = 0;j < marioArray.length;j += 1){
-			
-			marioArray[j].draw(context,!marioArray[j].isBigMario && !marioArray[j].isFireMario ? marioSpriteSet : BigMarioSpriteSet,screen,tubeSpriteSet,flagArray);
-			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson);
+			marioArray[j].draw(context, marioSpriteSet,screen,tubeSpriteSet,fireballSprite);
+			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson,fireballArray);
 		}	
 		
 		

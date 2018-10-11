@@ -3,13 +3,15 @@ keys = {
 	left:false,
 	top:false,
 	right:false,
-	bottom:false
+	bottom:false,
+	space:false
 };
 
 let pressed;
 
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
+document.addEventListener("keypress", keypress);
 
 function keyup(e){
 	let code = e.keyCode;
@@ -22,6 +24,9 @@ function keyup(e){
 		keys.right = false;
 	}else if(code === 40){
 		keys.bottom = false;
+	}
+	else if(code === 32){
+		keys.space = false;
 	}
 }
 function keydown(e){
@@ -36,6 +41,17 @@ function keydown(e){
 	}else if(code === 40){
 		keys.bottom = true;
 	}
+	// else if(code === 16){
+	// 	keys.shift = true;
+	// }
 }
 
-export {pressed,keys,keyup,keydown};
+function keypress(e){
+	let code = e.keyCode;
+	pressed = true;
+	if(code === 32){
+		keys.space = true;
+	}
+}
+
+export {pressed,keys,keyup,keydown,keypress};

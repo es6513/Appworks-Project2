@@ -225,7 +225,7 @@ class Turtle{
 
 		// ------------------1.小馬力歐的狀況-------------
 
-		if(marioArray.isJump && !marioArray.isBigMario && !marioArray.isDie && !this.quickToDie && marioArray.speed.y > 0 
+		if( !marioArray.isBigMario && !marioArray.isDie && !this.quickToDie && marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
@@ -330,18 +330,18 @@ class Turtle{
 	draw(context,turtleSprite,marioArray){
 		if(marioArray.pos.x < 450 && !this.quickToDie){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1600 && !this.quickToDie){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && !this.quickToDie){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 1600 && !this.quickToDie){
-			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x  - 1150 ,this.pos.y,this.faceDirection < 0);
+		}else if(marioArray.pos.x >= 1800 && !this.quickToDie){
+			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x  - 1350 ,this.pos.y,this.faceDirection < 0);
 		}
 
 		if(marioArray.pos.x < 450 && this.quickToDie){
 			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1600 && this.quickToDie){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && this.quickToDie){
 			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 1600 && this.quickToDie){
-			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x  - 1150 ,this.pos.y,this.faceDirection < 0);
+		}else if(marioArray.pos.x >= 1800 && this.quickToDie){
+			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x  - 1350 ,this.pos.y,this.faceDirection < 0);
 		}	
 	}
 }

@@ -81,7 +81,8 @@ class Goomba{
 
 		//------3.火馬力歐死亡變大馬力歐-------
 
-		if(marioArray.isFireMario 
+		if(!marioArray.isInvincible 
+			&& marioArray.isFireMario 
 		  && !this.isDie
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
@@ -128,7 +129,7 @@ class Goomba{
 
 
 		// ------------------1.小馬力歐的狀況-------------
-		if(marioArray.isJump && !marioArray.isBigMario && !marioArray.isDie && !this.isDie && marioArray.speed.y > 0 
+		if( !marioArray.isBigMario && !marioArray.isDie && !this.isDie && marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
@@ -215,18 +216,18 @@ class Goomba{
 	draw(context,goombaSprite,marioArray){
 		if(marioArray.pos.x < 450 && !this.isDie && !this.isHide){
 			goombaSprite.drawSprite(this.running(),context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1600 && !this.isDie && !this.isHide){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && !this.isDie && !this.isHide){
 			goombaSprite.drawSprite(this.running(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 1600 && !	this.isDie && !this.isHide){
-			goombaSprite.drawSprite(this.running(),context,this.pos.x  - 1150 ,this.pos.y);
+		}else if(marioArray.pos.x >= 1800 && !	this.isDie && !this.isHide){
+			goombaSprite.drawSprite(this.running(),context,this.pos.x  - 1350 ,this.pos.y);
 		}
 
 		if(marioArray.pos.x < 450 && this.isDie && !this.isHide){
 			goombaSprite.drawSprite("goombaDie",context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1600 && 	this.isDie && !this.isHide){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && 	this.isDie && !this.isHide){
 			goombaSprite.drawSprite("goombaDie",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 1600 && 	this.isDie && !this.isHide){
-			goombaSprite.drawSprite("goombaDie",context,this.pos.x  - 1150 ,this.pos.y);
+		}else if(marioArray.pos.x >= 1800 && 	this.isDie && !this.isHide){
+			goombaSprite.drawSprite("goombaDie",context,this.pos.x  - 1350 ,this.pos.y);
 		}	
 	}
 }

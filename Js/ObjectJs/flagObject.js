@@ -6,7 +6,7 @@ class Flag{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);
 		this.speed = {
-			y:0.5
+			y:1
 		};
 		this.width = 16;
 		this.height = 16;

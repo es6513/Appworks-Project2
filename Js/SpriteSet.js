@@ -98,6 +98,16 @@ class Sprites {
 		context.drawImage(sprite,x,y);
 	}
 
+	drawTurtleSprite(name,context,x,y,reverse = false){
+		let sprite = this.tiles.get(name)[reverse ? 1 : 0];
+		context.drawImage(sprite,x,y);
+	}
+
+	drawFireBallSprite(name,context,x,y,reverse = false){
+		let sprite = this.tiles.get(name)[reverse ? 1 : 0];
+		context.drawImage(sprite,x,y);
+	}
+
 	// drawTile(name,context,x,y){
 		
 	// 	this.draw(name,context,x * this.width,y * this.height);  //將要畫的磚塊直接乘上原始寬度及高度，則畫出來的

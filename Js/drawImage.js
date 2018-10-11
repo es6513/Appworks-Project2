@@ -63,7 +63,7 @@ function loadMarioImage(name) {
 		.then(r=>r.json())
 		.then(marioSprite=> Promise.all([
 			marioSprite,
-			loadImage("../imgs/images/MariotSetRedderTest.png"),
+			loadImage("../imgs/images/MariotSetRedderTest4.png"),
 		]))
 		.then(([marioSprite,image])=>{
 			let marioSpriteSet = new Sprites(image,marioSprite.width,marioSprite.height);
@@ -83,7 +83,7 @@ function loadBigMarioImage(name) {
 		.then(r=>r.json())
 		.then(marioSprite=> Promise.all([
 			marioSprite,
-			loadImage("../imgs/images/MariotSetRedderTest3.png"),
+			loadImage("../imgs/images/MariotSetRedderTest4.png"),
 		]))
 		.then(([marioSprite,image])=>{
 			let marioSpriteSet = new Sprites(image,marioSprite.width,marioSprite.Bigheight);
