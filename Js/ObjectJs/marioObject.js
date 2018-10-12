@@ -21,7 +21,8 @@ class Mario{
 		this.isOnBrick = false;
 		this.isBottomBrick = false;
 
-
+		this.previousX;
+		this.prvioxusY;
 
 
 
@@ -30,7 +31,7 @@ class Mario{
 		//--------控制不同型態的馬力歐------------
 
 		this.changeToBig = false;
-		this.isBigMario = true;
+		this.isBigMario = false;
 		this.changeToFire = false;
 		this.isFireMario = false;
 		this.shot = false;
@@ -96,7 +97,7 @@ class Mario{
 		];
 	}
 
-	update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson){
+	update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson,brickArray){
 
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
@@ -197,7 +198,7 @@ class Mario{
 		} //這一段用 this.pos.y<192 暫時可以解決如果離障礙物已經是0的狀態不能跳起來移動 bug
 		//會有出現落地前 stopX還是 false的狀況，會造成若在空中按下左右鍵，可以穿越水管
 		
-		if(!this.isOnbrick && !this.canPlayPassMusic){
+		if(!this.canPlayPassMusic){
 			this.speed.y += 0.5;  //gravity
 			this.pos.y += this.speed.y; 
 		}
@@ -261,7 +262,8 @@ class Mario{
 					this.isJump = false;
 					this.onTube = false;
 					this.isOnGround = true;
-					this.pos.y = y1 * screen.height - this.height;
+					this.pos.y = y1 * screen.height - this.height; //落地
+					this.isBottomBrick = false;
 					this.speed.y = 0;
 				}
 				// this.speed.y += 0.5;
@@ -335,7 +337,6 @@ class Mario{
 				if(this.speed.y > 0 
 					&& this.pos.x + this.width > x
 					&& this.pos.x < x + tubeJson.width ){
-					console.log("hi");
 					if(this.pos.y >= y - this.height){
 						this.isJump = false;
 						this.isOnGround = false;
@@ -361,42 +362,63 @@ class Mario{
 
 		// ---------------控制磚塊障礙---------------
 
-
-		console.log(this.speed.y);
-		console.log(this.isOnBrickZone);
-
-		// if(!this.isDie && this.isRunning){
+		
+		if(!this.isDie  && !this.isBigMario && !this.isFireMario){
 			
-		// 	brickJson.Pos[0].ranges.forEach(([x,y])=>{
-		// 		//----------小馬力歐過水管-----------
-		// 		if(this.speed.y < 0 
-		// 			&& this.pos.y >= y
-		// 			&& this.pos.y <= y + 16
-		// 			&& this.pos.x + this.width > x
-		// 			&& this.pos.x < 1712
-		// 		){
-		// 			this.pos.y = y ;
-		// 			this.speed.y = 0;
-		// 			// this.speed.y += 0.5;
-		// 		}
+			brickJson.Pos[0].ranges.forEach(([x,y])=>{
+			
 
-		// 		// if(this.pos.x + 16 > 1728){
-		// 		// 	console.log("123");
-		// 		// 	this.speed.y += 0.5;
-		// 		// }
+				//*****************************/
 
-		// 		if(this.speed.y > 0 
-		// 			&& this.pos.y <= y
-		// 			&& this.pos.x + this.width > x
-		// 			&& this.pos.x < 1712
-		// 		){
-		// 			this.pos.y = y - 32;
-		// 			this.speed.y = 0;
-		// 			this.isOnBrick = true;
-		// 			this.isJump = false;
-		// 		}
-		// 	});
-		// }
+
+				// //----------小馬力歐過水管-----------
+				// if(this.speed.y < 0 
+				// 	&& this.pos.y >= y
+				// 	&& this.pos.y <= y + 16
+				// 	&& this.pos.x + this.width > x
+				// 	&& this.pos.x < 1712
+				// ){
+				// 	this.pos.y = y ;
+				// 	this.speed.y = 0;
+				// 	this.isBottomBrick = true;
+				// }
+
+			
+
+				// if(!this.isBottomBrick && this.speed.y > 0 
+				// 	&& this.pos.x + this.width > x
+				// 	&& this.pos.x < 1712
+				// ){
+				// 	console.log("2");
+				// 	if(this.pos.y >= y - 32){
+				// 		this.pos.y = y - 32;
+				// 		this.speed.y = 0;
+				// 		this.isOnBrick = true;
+				// 		this.isJump = false;
+				// 	}
+					
+				// }
+
+				
+				//******************************/
+
+				// if(this.pos.x + 16 > 1728){
+				// 	console.log("123");
+				// 	this.speed.y += 0.5;
+				// }
+				// if(this.speed.y > 0 
+				// 	&& this.pos.y <= y
+				// 	&& this.pos.x + this.width > x
+				// 	&& this.pos.x < 1696
+				// ){
+				// 	this.pos.y = y - 32;
+				// 	this.speed.y = 0;
+				// 	this.isOnBrick = true;
+				// 	this.isJump = false;
+				// }
+				
+			});
+		}
 
 		// console.log(this.pos.y);
 		// console.log(this.isOnBrickZone);
@@ -444,19 +466,22 @@ class Mario{
 
 		// 1. -----碰到旗桿後馬力歐下降-----
 
+		// -----bug 要測試一下拉旗子的動作-------
+
 		poleJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.pos.x + this.width >= x + 10 
-				&& this.pos.y <= y + 155 
+				&& this.pos.y <= y + poleJson.height - 16
 				&& !this.canPlayPassMusic)
 			{ 
 				this.direction = 0;
-				this.pos.x = x - this.width + 10  ;
+				this.pos.x = x - poleJson.width / 2;  //拉旗桿的時候馬力歐的X位置
 				this.passStage = true;
 			}
 
-			if(!this.onPoleBottom && !this.isJump && this.pos.x + this.width >= x){
+			if(!this.onPoleBottom && !this.isJump && this.pos.x + this.width >= x && this.pos.y >= 224){
 				this.pos.x = x - this.width;
-			}
+				console.log("12345");
+			}  //控制馬力歐在旗竿前停止前進
 
 			if(this.canPlayPassMusic && !this.onPoleBottom){
 				this.speed.y = 2;

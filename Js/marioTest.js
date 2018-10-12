@@ -462,7 +462,6 @@ Promise.all([
 			questionBrickArray[j].update(marioArray[0]);
 		}	
 
-
 		for(let j = 0;j < flowerArray.length;j += 1){
 			flowerArray[j].draw(context,flowerSprite,marioArray[0]);
 			flowerArray[j].update(marioArray[0]);
@@ -473,10 +472,9 @@ Promise.all([
 			mushroomArray[j].update(marioArray[0]);
 		}	
 	
-
 		for(let j = 0;j < marioArray.length;j += 1){
 			marioArray[j].draw(context, marioSpriteSet,screen,tubeSpriteSet,fireballSprite);
-			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson,fireballArray);
+			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson,brickArray);
 		}	
 		
 		

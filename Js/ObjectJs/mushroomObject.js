@@ -25,6 +25,7 @@ class Mushroom{
 			&& this.pos.y >=  marioArray.pos.y  
 		){		
 			this.show = false;
+			this.mushroomSound();
 			if(!marioArray.isBigMario && !marioArray.isFireMario){
 				marioArray.changeToBig = true;
 			}
@@ -35,7 +36,7 @@ class Mushroom{
 	}
 
 	mushroomSound(){
-		let mushroomSound = new Audio("/music/mario-mushroom-sound.wav");
+		let mushroomSound = new Audio("/music/maro-powerup-sound.wav");
 		mushroomSound.play();
 	}
 

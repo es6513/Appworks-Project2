@@ -21,13 +21,34 @@ class QuestionBrick{
 	
 	update(marioArray){
 		// X 軸判定要再調整一下
+		if(!marioArray.isBigMario && !marioArray.isFireMario){
+			if(marioArray.speed.y < 0 
+			&& marioArray.pos.y >= this.pos.y
+			&& marioArray.pos.y <= this.pos.y + 16
+			&& marioArray.pos.x + marioArray.width >= this.pos.x
+			&& marioArray.pos.x < this.pos.x + this.width
+			){
+				marioArray.pos.y = this.pos.y ;
+				this.goUp = true;
+				marioArray.speed.y = 0;
+				marioArray.isBottomBrick = true;
+			}
 
-		if(this.show && this.pos.x <= marioArray.pos.x + 8 
-			&& this.pos.x + 8 >=  marioArray.pos.x   
-			&& this.pos.y <= marioArray.pos.y + 16
-			&& this.pos.y >=  marioArray.pos.y  
 		
-		){		
+			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
+			&& marioArray.pos.x + marioArray.width > this.pos.x
+			&& marioArray.pos.x < this.pos.x + this.width
+			){
+				if(marioArray.pos.y >= this.pos.y - 32){
+					marioArray.pos.y = this.pos.y - 32;
+					marioArray.speed.y = 0;
+					marioArray.isOnBrick = true;
+					marioArray.isJump = false;
+				}
+			}
+		}
+
+		if(marioArray.isBigMario || marioArray.isFireMario){
 			
 		}
 		//16是金幣的寬度， EX : 160 < marioArray.pos < 176

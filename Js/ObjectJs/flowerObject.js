@@ -32,6 +32,7 @@ class Flower{
 			&& this.pos.y <= marioArray.pos.y + marioArray.height
 			&& this.pos.y >=  marioArray.pos.y  
 		){		
+			this.flowerSound();
 			this.show = false;
 			if(marioArray.isBigMario && !marioArray.isFireMario){
 				marioArray.changeToFire = true;
@@ -50,7 +51,7 @@ class Flower{
 	}
 
 	flowerSound(){
-		let flowerSound = new Audio();
+		let flowerSound = new Audio("/music/maro-powerup-sound.wav");
 		flowerSound.play();
 	}
 
