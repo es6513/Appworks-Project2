@@ -15,10 +15,22 @@ class Mario{
 		this.direction = 0;
 		this.isRunning = false;
 		this.faceDirection = 1;
+
+		// ----------控制撞到磚塊狀態----------
+
+		this.isOnBrick = false;
+		this.isBottomBrick = false;
+
+
+
+
+
+		// ----------控制撞到磚塊狀態----------
+
 		//--------控制不同型態的馬力歐------------
 
 		this.changeToBig = false;
-		this.isBigMario = false;
+		this.isBigMario = true;
 		this.changeToFire = false;
 		this.isFireMario = false;
 		this.shot = false;
@@ -185,7 +197,7 @@ class Mario{
 		} //這一段用 this.pos.y<192 暫時可以解決如果離障礙物已經是0的狀態不能跳起來移動 bug
 		//會有出現落地前 stopX還是 false的狀況，會造成若在空中按下左右鍵，可以穿越水管
 		
-		if(!this.canPlayPassMusic){
+		if(!this.isOnbrick && !this.canPlayPassMusic){
 			this.speed.y += 0.5;  //gravity
 			this.pos.y += this.speed.y; 
 		}
@@ -227,7 +239,6 @@ class Mario{
 				&& !this.shot
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
-
 				this.isJump = true;
 				this.isOnGround = false;
 				this.speed.y -= 10;  //起始跳躍速度，這個速度加上馬力歐的身高，剛好可以跳到最高的水管上面
@@ -348,17 +359,76 @@ class Mario{
 		// ------------------以上兩段----------------------
 
 
-
-
 		// ---------------控制磚塊障礙---------------
-		console.log(this.pos.y);
-		if(!this.isDie && this.isRunning){
-			brickJson.Pos[0].ranges.forEach(([x,y])=>{
-				if(this.pos.x + this.width >= x && this.pos.x <= x + brickJson.width){
-					this.isOnBrickZone = true;
-				}
-			});
-		}
+
+
+		console.log(this.speed.y);
+		console.log(this.isOnBrickZone);
+
+		// if(!this.isDie && this.isRunning){
+			
+		// 	brickJson.Pos[0].ranges.forEach(([x,y])=>{
+		// 		//----------小馬力歐過水管-----------
+		// 		if(this.speed.y < 0 
+		// 			&& this.pos.y >= y
+		// 			&& this.pos.y <= y + 16
+		// 			&& this.pos.x + this.width > x
+		// 			&& this.pos.x < 1712
+		// 		){
+		// 			this.pos.y = y ;
+		// 			this.speed.y = 0;
+		// 			// this.speed.y += 0.5;
+		// 		}
+
+		// 		// if(this.pos.x + 16 > 1728){
+		// 		// 	console.log("123");
+		// 		// 	this.speed.y += 0.5;
+		// 		// }
+
+		// 		if(this.speed.y > 0 
+		// 			&& this.pos.y <= y
+		// 			&& this.pos.x + this.width > x
+		// 			&& this.pos.x < 1712
+		// 		){
+		// 			this.pos.y = y - 32;
+		// 			this.speed.y = 0;
+		// 			this.isOnBrick = true;
+		// 			this.isJump = false;
+		// 		}
+		// 	});
+		// }
+
+		// console.log(this.pos.y);
+		// console.log(this.isOnBrickZone);
+		// if(!this.isDie && this.isRunning){
+		// 	brickJson.Pos[0].ranges.forEach(([x,y])=>{
+		// 		if(this.pos.x + this.width >= 1648 && this.pos.x <= 1712){
+		// 			this.isOnBrickZone = true;
+		// 		}else{
+		// 			this.isOnBrickZone = false;
+		// 		}
+
+		// 		//磚塊下面
+		// 		if(!this.isBottomBrick && this.speed.y < 0 && this.isOnBrickZone && this.pos.y < 224 ){
+		// 			console.log("2222");
+		// 			this.pos.y = 208;
+		// 			this.speed.y = 0;
+		// 			this.isBottomBrick = true;
+		// 			this.isOnBrick = false;
+		// 		}
+
+		// 		//磚塊上方
+		// 		if(!this.isOnBrick && this.speed.y > 0 && this.isOnBrickZone && this.pos.y == 172 ){
+		// 			console.log("1111");
+		// 			this.isOnBrick = true;
+		// 			this.isBottomBrick = false;
+		// 			this.isJump = false;
+		// 			this.pos.y = 176;
+		// 			this.speed.y = 0;
+		// 		}
+
+		// 	});
+		// }
 		
 		
 	
