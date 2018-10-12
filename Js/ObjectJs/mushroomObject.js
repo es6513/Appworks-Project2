@@ -23,10 +23,12 @@ class Mushroom{
 			&& this.pos.x + 12 >=  marioArray.pos.x   
 			&& this.pos.y <= marioArray.pos.y + marioArray.height
 			&& this.pos.y >=  marioArray.pos.y  
-		
 		){		
 			this.show = false;
-			marioArray.changeToBig = true;
+			if(!marioArray.isBigMario && !marioArray.isFireMario){
+				marioArray.changeToBig = true;
+			}
+			
 		}
 		//16是金幣的寬度， EX : 160 < marioArray.pos < 176
 		// 前兩行的 +8 +10 => 讓判定範圍更精準，並非真正碰撞

@@ -31,10 +31,14 @@ class Flower{
 			&& this.pos.x + 12 >=  marioArray.pos.x   
 			&& this.pos.y <= marioArray.pos.y + marioArray.height
 			&& this.pos.y >=  marioArray.pos.y  
-		
 		){		
 			this.show = false;
-
+			if(marioArray.isBigMario && !marioArray.isFireMario){
+				marioArray.changeToFire = true;
+			}else if(!marioArray.isBigMario && !marioArray.isFireMario){
+				marioArray.changeToBig = true;
+			}
+		
 		}
 		//16是寬度， EX : 160 < marioArray.pos < 176
 		// 前兩行的 +8 +12 => 讓判定範圍更精準，並非真正碰撞

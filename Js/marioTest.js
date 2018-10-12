@@ -354,7 +354,6 @@ Promise.all([
 				let circle = counter / 100;
 				animate();
 			}, 20);
-			console.log(this.interval);
 		},
 		clear : function() {
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
