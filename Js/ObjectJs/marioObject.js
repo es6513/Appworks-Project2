@@ -25,7 +25,6 @@ class Mario{
 		this.prvioxusY;
 
 
-
 		// ----------控制撞到磚塊狀態----------
 
 		//--------控制不同型態的馬力歐------------
@@ -33,7 +32,7 @@ class Mario{
 		this.changeToBig = false;
 		this.isBigMario = false;
 		this.changeToFire = false;
-		this.isFireMario = false;
+		this.isFireMario = true;
 		this.shot = false;
 		this.fireArray = new Array();
 
@@ -101,8 +100,6 @@ class Mario{
 
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
-	
-		
 	
 		// 用來控制大馬力歐變回小馬力歐的無敵狀態, bug: 閃爍
 	
@@ -226,8 +223,7 @@ class Mario{
 				this.isSquat = true;
 			}else{
 				this.isSquat = false;
-			}
-			
+			}			
 
 			//-----------END OF 控制蹲下---------------------
 
@@ -268,6 +264,7 @@ class Mario{
 				}
 				// this.speed.y += 0.5;
 			}else if(!this.isDie && this.pos.y >= y2 * screen.height + 96){
+				//---------------------------懸崖---------
 				// 用+96讓馬力歐掉下去一段距離才死掉，只是目前尚有按左右鍵會跑回來的 bug
 				this.speed.x = 0;
 				this.isDie = true;
@@ -420,39 +417,7 @@ class Mario{
 			});
 		}
 
-		// console.log(this.pos.y);
-		// console.log(this.isOnBrickZone);
-		// if(!this.isDie && this.isRunning){
-		// 	brickJson.Pos[0].ranges.forEach(([x,y])=>{
-		// 		if(this.pos.x + this.width >= 1648 && this.pos.x <= 1712){
-		// 			this.isOnBrickZone = true;
-		// 		}else{
-		// 			this.isOnBrickZone = false;
-		// 		}
-
-		// 		//磚塊下面
-		// 		if(!this.isBottomBrick && this.speed.y < 0 && this.isOnBrickZone && this.pos.y < 224 ){
-		// 			console.log("2222");
-		// 			this.pos.y = 208;
-		// 			this.speed.y = 0;
-		// 			this.isBottomBrick = true;
-		// 			this.isOnBrick = false;
-		// 		}
-
-		// 		//磚塊上方
-		// 		if(!this.isOnBrick && this.speed.y > 0 && this.isOnBrickZone && this.pos.y == 172 ){
-		// 			console.log("1111");
-		// 			this.isOnBrick = true;
-		// 			this.isBottomBrick = false;
-		// 			this.isJump = false;
-		// 			this.pos.y = 176;
-		// 			this.speed.y = 0;
-		// 		}
-
-		// 	});
-		// }
-		
-		
+	
 	
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
 		//	&& shape.pos.x < this.pos.x + this.width 右
@@ -480,7 +445,6 @@ class Mario{
 
 			if(!this.onPoleBottom && !this.isJump && this.pos.x + this.width >= x && this.pos.y >= 224){
 				this.pos.x = x - this.width;
-				console.log("12345");
 			}  //控制馬力歐在旗竿前停止前進
 
 			if(this.canPlayPassMusic && !this.onPoleBottom){
@@ -645,17 +609,10 @@ class Mario{
 
 	shoot(){
 		if(!this.shot){
-			let b = new Fireball();
-			this.fireArray.push(b);
+			let fire = new Fireball();
+			this.fireArray.push(fire);
 			this.shot = true; 
 		}
-	}
-
-	drawFireBall(fire){
-		for(let j = 0;j < fireballArray.length;j += 1){
-			fireballArray[j].draw(context,fireballSprite,marioArray[0]);
-			fireballArray[j].update(marioArray[0],screen);
-		}	
 	}
 
 	running(){
@@ -713,7 +670,7 @@ class Mario{
 
 	//每張圖片的切割大小存在 mario.json,其中 runRight-2 跟 runRight-3 並沒有從16的倍數切(因為圖片會有點卡住所以選了一些特殊的切割點) 
 
-	draw(context,marioSprite,screen,tubeSprite,fireballSprite){
+	draw(context,marioSprite,screen,fireballSprite,goombaArray,turtleArray){
 		// console.log(marioSprite.image);
 		//呼叫 SpriteSet 的 draw 方法
 		// console.log( windowWidth - mario.pos.x - 8);
@@ -725,9 +682,9 @@ class Mario{
 		// ----------將陣列中的火焰球清除---------
 		for(let j = 0;j < this.fireArray.length;j += 1){
 			this.fireArray[j].draw(context,fireballSprite,this);
-			this.fireArray[j].update(this,screen);
-			let b = this.fireArray[j];
-			if(b.show == false){
+			this.fireArray[j].update(this,screen,goombaArray,turtleArray);
+			let fire = this.fireArray[j];
+			if(fire.show == false){
 				this.fireArray.splice(j,1);
 				j--;
 			}

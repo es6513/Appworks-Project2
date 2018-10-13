@@ -39,9 +39,10 @@ class Brick{
 			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16
-				&& marioArray.pos.x + marioArray.width >= this.pos.x + 8   //+8 for big range application  bug
-				&& marioArray.pos.x < this.pos.x + this.width
+				&& marioArray.pos.x + marioArray.width >= this.pos.x  + 4  //判定的bug
+				&& marioArray.pos.x <= this.pos.x + this.width - 4
 			){
+				
 				marioArray.pos.y = this.pos.y ;
 				this.pos.y -= 4;
 				// this.pos.y += 2;
@@ -52,10 +53,9 @@ class Brick{
 	
 			
 			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
-				&& marioArray.pos.x + marioArray.width >= this.pos.x + 8
-				&& marioArray.pos.x < this.pos.x + this.width
+				&& marioArray.pos.x + marioArray.width > this.pos.x 
+				&& marioArray.pos.x < this.pos.x + this.width 
 			){
-				console.log("2");
 				if(marioArray.pos.y >= this.pos.y - 32){
 					marioArray.pos.y = this.pos.y - 32;
 					marioArray.speed.y = 0;
@@ -65,7 +65,35 @@ class Brick{
 			}
 		}    
 
-		if(marioArray.isisBigMario || marioArray.isFireMario){}
+		//---------------- 大馬力歐-----
+		if(marioArray.isBigMario || marioArray.isFireMario){
+			if(marioArray.speed.y < 0 
+				&& marioArray.pos.y >= this.pos.y
+				&& marioArray.pos.y <= this.pos.y + 16
+				&& marioArray.pos.x + marioArray.width > this.pos.x  + 4
+				&& marioArray.pos.x < this.pos.x + this.width - 4
+			){
+				marioArray.pos.y = this.pos.y + 16 ;
+				this.pos.y -= 4;
+				// this.pos.y += 2;
+				this.goUp = true;
+				marioArray.speed.y = 0;
+				marioArray.isBottomBrick = true;
+			}
+	
+			
+			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
+				&& marioArray.pos.x + marioArray.width > this.pos.x 
+				&& marioArray.pos.x < this.pos.x + this.width 
+			){
+				if(marioArray.pos.y >= this.pos.y - 32){
+					marioArray.pos.y = this.pos.y - 32;
+					marioArray.speed.y = 0;
+					marioArray.isOnBrick = true;
+					marioArray.isJump = false;
+				}
+			}
+		}
 
 	}
 

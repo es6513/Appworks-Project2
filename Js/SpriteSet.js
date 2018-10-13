@@ -98,10 +98,6 @@ class Sprites {
 		context.drawImage(sprite,x,y);
 	}
 
-	drawTurtleSprite(name,context,x,y,reverse = false){
-		let sprite = this.tiles.get(name)[reverse ? 1 : 0];
-		context.drawImage(sprite,x,y);
-	}
 
 	drawFireBallSprite(name,context,x,y,reverse = false){
 		let sprite = this.tiles.get(name)[reverse ? 1 : 0];

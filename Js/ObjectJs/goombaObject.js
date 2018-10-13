@@ -7,9 +7,12 @@ class Goomba{
 		this.pos = new PositionAndSpeed(0,0);
 		this.frameIndex = 0;
 		this.isDie  = false;
-		this.isHide = false;
+		this.hitByFire = false;
+		this.show = true;
+		this.falling = false;
 		this.speed = {
-			x:1
+			x:1,
+			y:2
 		};
 		this.width = 16;
 		this.height = 16;
@@ -26,12 +29,16 @@ class Goomba{
 		];
 	}
 	
-	update(tubeJson,turtleArray,marioArray){
+	update(tubeJson,turtleArray,marioArray,screen){
+		console.log(this.pos.x);
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
 		// console.log(this.speed.x);
+
+		// ------bug----- 已經消失的怪物需要清除掉(preffered) 或是讓她不能再移動，否則會有bug
+
 		if(!this.isDie){
 			this.move();	
 		}	
@@ -97,8 +104,6 @@ class Goomba{
 			marioArray.isBigMario = true; 
 		}
 
-
-
 	
 		//------end 大馬力歐的狀況-------
 
@@ -134,7 +139,7 @@ class Goomba{
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
-				this.turtleDieSound();
+				this.goombaDieSound();
 				this.isDie = true;
 				marioArray.speed.y = -4;
 			}		
@@ -147,14 +152,44 @@ class Goomba{
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
-				this.turtleDieSound();
+				this.goombaDieSound();
 				this.isDie = true;
 				marioArray.speed.y = -4;
 			}		
 		}
-	
-
+		
 		// -------End 馬力歐跳躍攻擊 壞香菇-----------
+
+
+		// -----------被火力歐的火球打到-----------------
+		if(this.hitByFire){
+			this.pos.y += this.speed.y;
+			this.speed.x = 0;
+		}
+
+		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+			if(!this.hitByFire && this.pos.y >= y1 * screen.height - this.height
+				&& this.pos.x + this.width > x1 * 16
+				&& this.pos.x < x2 * 16 + 16){
+				this.pos.y = y1 * screen.height - this.height;
+			}
+
+			if(	this.falling == true && this.pos.x + this.width == x1 * 16 ){
+				this.speed.x *= -1;
+			} //讓 goomba 掉下懸崖時會左右彈
+
+			if( this.pos.x > x2 * 16 + 16){
+				this.falling = true;
+				this.pos.y += this.speed.y;
+			}
+
+			if(this.pos.y >= y2 * screen.height + 176){
+				this.isDie = true;
+			}
+		});
+
+
+		// -----------end被火力歐的火球打到--------------
 
 		//--------旋轉中的烏龜打死壞香菇--------------
 
@@ -162,7 +197,7 @@ class Goomba{
 			if(!this.isDie && turtleArray[i].isRotating 
 				&& turtleArray[i].pos.x + 16 > this.pos.x 
 				&& turtleArray[i].pos.x < this.pos.x + 16){
-				this.turtleDieSound();
+				this.goombaDieSound();
 				this.isDie = true;
 			}
 		}
@@ -180,7 +215,7 @@ class Goomba{
 	
 		if(this.isDie && !this.clearTimeout){
 			timeoutId = setTimeout(() => {
-				this.isHide = true;	
+				this.show = false;	
 				this.clearTimeout = null;
 			}, 1500);
 			this.clearTimeout = timeoutId;
@@ -194,7 +229,7 @@ class Goomba{
 		this.pos.x += this.speed.x;
 	}
   
-	turtleDieSound(){
+	goombaDieSound(){
 		let dieSound = new Audio("/music/mario-kick-sound.wav");
 		dieSound.play();
 	}
@@ -214,21 +249,29 @@ class Goomba{
 	}
 
 	draw(context,goombaSprite,marioArray){
-		if(marioArray.pos.x < 450 && !this.isDie && !this.isHide){
+		if(marioArray.pos.x < 450 && !this.hitByFire && !this.isDie && this.show){
 			goombaSprite.drawSprite(this.running(),context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && !this.isDie && !this.isHide){
+		}else if(marioArray.pos.x >= 450 && !this.hitByFire && marioArray.pos.x < 1800 && !this.isDie && this.show){
 			goombaSprite.drawSprite(this.running(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 1800 && !	this.isDie && !this.isHide){
+		}else if(marioArray.pos.x >= 1800 && !this.hitByFire && !this.isDie && this.show){
 			goombaSprite.drawSprite(this.running(),context,this.pos.x  - 1350 ,this.pos.y);
 		}
 
-		if(marioArray.pos.x < 450 && this.isDie && !this.isHide){
+		if(marioArray.pos.x < 450 && !this.hitByFire && this.isDie && this.show){
 			goombaSprite.drawSprite("goombaDie",context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && 	this.isDie && !this.isHide){
+		}else if(marioArray.pos.x >= 450 && !this.hitByFire && marioArray.pos.x < 1800 && this.isDie && this.show){
 			goombaSprite.drawSprite("goombaDie",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 1800 && 	this.isDie && !this.isHide){
+		}else if(marioArray.pos.x >= 1800 && !this.hitByFire && this.isDie && this.show){
 			goombaSprite.drawSprite("goombaDie",context,this.pos.x  - 1350 ,this.pos.y);
 		}	
+
+		if(marioArray.pos.x < 450 && !this.isDie && this.hitByFire && this.show){
+			goombaSprite.drawSprite("goombaFireDie",context,this.pos.x,this.pos.y);
+		}else if(marioArray.pos.x >= 450 && !this.isDie && this.hitByFire && marioArray.pos.x < 1800  && this.show){
+			goombaSprite.drawSprite("goombaFireDie",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+		}else if(marioArray.pos.x >= 1800 && !this.isDie && this.hitByFire && this.show){
+			goombaSprite.drawSprite("goombaFireDie",context,this.pos.x  - 1350 ,this.pos.y);
+		}
 	}
 }
 

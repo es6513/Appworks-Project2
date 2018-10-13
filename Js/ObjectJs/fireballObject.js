@@ -23,7 +23,7 @@ class Fireball{
 
 	}
 	
-	update(marioArray,screen){
+	update(marioArray,screen,goombaArray,turtleArray){
 		this.faceDirection = marioArray.faceDirection;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
 		//	&& shape.pos.x < this.pos.x + this.width 右
@@ -33,6 +33,35 @@ class Fireball{
 		// 這裡用來控制當馬力歐發射火球的狀況。
 
 		// ------加速度的 bug----- 要讓火球的速度比馬力歐快才不會看起來很怪
+
+
+		//-----------------火球打死怪物-----------
+		for(let j = 0;j < goombaArray.length;j += 1){
+			if(this.pos.x + this.width > goombaArray[j].pos.x
+				&& this.pos.x < goombaArray[j].pos.x + goombaArray[j].width
+				&& this.pos.y + this.height > goombaArray[j].pos.y
+				&& this.pos.y < goombaArray[j].pos.y + goombaArray[j].height
+			){
+				goombaArray[j].hitByFire = true;
+				this.show = false;
+				return;
+			}
+		}
+
+		for(let j = 0;j < turtleArray.length;j += 1){
+			if(this.pos.x + this.width > turtleArray[j].pos.x
+				&& this.pos.x < turtleArray[j].pos.x + turtleArray[j].width
+				&& this.pos.y + this.height > turtleArray[j].pos.y
+				&& this.pos.y < turtleArray[j].pos.y + turtleArray[j].height
+			){
+				turtleArray[j].hitByFire = true;
+				this.show = false;
+				return;
+			}
+		}
+
+
+		//-------------end of 火球打死goomba-----------
 
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
 			if(this.pos.y == y1 * screen.height - this.height){

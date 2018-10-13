@@ -400,6 +400,8 @@ Promise.all([
 		// 	context.drawImage(backgroundSprite, 964 - 8,0,context.canvas.width,640,0,0,context.canvas.width,640);
 		// } // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 		// ------------------end 根據不同螢幕解析度做控制----------------------
+
+
 		let context = myGameArea.context;
 		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 		for(let i = 0;i < marioArray.length;i += 1){
@@ -427,15 +429,15 @@ Promise.all([
 			tubeArray[j].update(marioArray[0]);
 		}	
 				
-		// for(let j = 0;j < turtleArray.length;j += 1){
-		// 	turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
-		// 	turtleArray[j].update(screen,tubeSpriteSet,turtleSpriteSet,tubeJson,marioArray[0]);
-		// }	
+		for(let j = 0;j < turtleArray.length;j += 1){
+			turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
+			turtleArray[j].update(screen,tubeJson,marioArray[0]);
+		}	
 			
-		// for(let j = 0;j < goombaArray.length;j += 1){
-		// 	goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
-		// 	goombaArray[j].update(tubeJson,turtleArray,marioArray[0]);
-		// }
+		for(let j = 0;j < goombaArray.length;j += 1){
+			goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
+			goombaArray[j].update(tubeJson,turtleArray,marioArray[0],screen);
+		}
 
 		for(let j = 0;j < poleArray.length;j += 1){
 			poleArray[j].draw(context,poleSprite,marioArray[0]);
@@ -456,12 +458,7 @@ Promise.all([
 			brickArray[j].draw(context,brickSprite,marioArray[0]);
 			brickArray[j].update(marioArray[0]);
 		}	
-
-		for(let j = 0;j < questionBrickArray.length;j += 1){
-			questionBrickArray[j].draw(context,questionBrickSprite,marioArray[0]);
-			questionBrickArray[j].update(marioArray[0]);
-		}	
-
+	
 		for(let j = 0;j < flowerArray.length;j += 1){
 			flowerArray[j].draw(context,flowerSprite,marioArray[0]);
 			flowerArray[j].update(marioArray[0]);
@@ -469,11 +466,17 @@ Promise.all([
 
 		for(let j = 0;j < mushroomArray.length;j += 1){
 			mushroomArray[j].draw(context,mushroomSprite,marioArray[0]);
-			mushroomArray[j].update(marioArray[0]);
+			mushroomArray[j].update(marioArray[0],screen,questionBrickJson);
 		}	
+
+		for(let j = 0;j < questionBrickArray.length;j += 1){
+			questionBrickArray[j].draw(context,questionBrickSprite,marioArray[0]);
+			questionBrickArray[j].update(marioArray[0],mushroomArray);
+		}	
+
 	
 		for(let j = 0;j < marioArray.length;j += 1){
-			marioArray[j].draw(context, marioSpriteSet,screen,tubeSpriteSet,fireballSprite);
+			marioArray[j].draw(context, marioSpriteSet,screen,fireballSprite,goombaArray,turtleArray);
 			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson,brickArray);
 		}	
 		

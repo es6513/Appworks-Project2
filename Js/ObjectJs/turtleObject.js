@@ -7,6 +7,7 @@ class Turtle{
 		this.pos = new PositionAndSpeed(0,0);
 		this.frameIndex = 0;
 		this.quickToDie = false;
+		this.hitByFire = false;
 		this.speed = {
 			x:1
 		};
@@ -14,7 +15,7 @@ class Turtle{
 		this.height = 24;
 		this.isRotating = false;
 		this.clearTimeout;
-		this.previousX;
+		this.show = true;
 		this.direction = -1;
 		this.faceDirection = 1;
 		this.framesRun = [
@@ -28,7 +29,7 @@ class Turtle{
 		];
 	}
 	
-	update(screen,tubeSprite,turtleSpriteSet,tubeJson,marioArray){
+	update(screen,tubeJson,marioArray){
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
@@ -154,9 +155,7 @@ class Turtle{
 			marioArray.isFireMario = false;
 			marioArray.isBigMario = true; 
 		}	
-
-
-		
+	
 		
 
 		// End如果在馬力歐不是跳躍的情況下、並且烏龜不是旋轉狀態下，馬力歐掛掉
@@ -192,14 +191,6 @@ class Turtle{
 				this.turtleDieSound();
 			}		
 		}
-
-
-		//----------3.火馬力歐的狀況---------------
-
-
-
-
-
 
 
 		// ---------End烏龜會飛出去----------
@@ -253,6 +244,25 @@ class Turtle{
 
 		// -------End 馬力歐跳躍攻擊烏龜-----------
 
+		// -----------被火力歐的火球打到-----------------
+		if(this.hitByFire){
+			this.pos.y += 2;
+			this.speed.x = 0;
+		}
+	
+		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+			if(this.pos.y >= y2 * screen.height + 176){
+				this.show = false;
+			}
+
+		
+
+			
+		});	
+	
+		// -----------end被火力歐的火球打到--------------
+	
+
 		// ------------烏龜復活----------------
 
 		//每次都要去判斷 setTimeout 產生的排程是否已經存在，才不會重複執行排程
@@ -277,26 +287,6 @@ class Turtle{
 		// ------------End of 烏龜復活----------------
 		
 
-		// if(!this.die
-		// 	&& marioArray.pos.x + 16 > this.pos.x 
-		// 	&& marioArray.pos.x < this.pos.x + 16){
-		// 	this.quickToDie = false;
-		// }
-		// if(marioArray.isJump && marioArray.pos.y > this.pos.y - 16){
-		// 	this.die = true;
-		// 	marioArray.pos.y = this.pos.y - 16;
-		// 	console.log("hi");
-		// }
-		// if(this.pos.x <= marioArray.pos.x 
-		// 	&& this.pos.x + 16 >=  marioArray.pos.x   
-		// 	&& this.pos.y <= marioArray.pos.y + 16
-		// 	&& this.pos.y >=  marioArray.pos.y  
-		// 	//16是金幣的寬度， EX : 160<marioArray.pos
-		// )
-		// 	this.die = true;
-		// }
-
-		//+8 是馬力歐的寬度一半
 	}
 
 	turtleDieSound(){
@@ -328,21 +318,30 @@ class Turtle{
 	}
 
 	draw(context,turtleSprite,marioArray){
-		if(marioArray.pos.x < 450 && !this.quickToDie){
+		if(marioArray.pos.x < 450 && !this.quickToDie && this.show && !this.hitByFire){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && !this.quickToDie){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && !this.quickToDie && this.show && !this.hitByFire){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 1800 && !this.quickToDie){
+		}else if(marioArray.pos.x >= 1800 && !this.quickToDie && this.show && !this.hitByFire){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x  - 1350 ,this.pos.y,this.faceDirection < 0);
 		}
 
-		if(marioArray.pos.x < 450 && this.quickToDie){
+		if(marioArray.pos.x < 450 && this.quickToDie && this.show && !this.hitByFire){
 			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && this.quickToDie){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && this.quickToDie && this.show && !this.hitByFire){
 			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 1800 && this.quickToDie){
+		}else if(marioArray.pos.x >= 1800 && this.quickToDie && this.show && !this.hitByFire){
 			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x  - 1350 ,this.pos.y,this.faceDirection < 0);
 		}	
+
+		if(marioArray.pos.x < 450 && !this.isDie && this.hitByFire && this.show){
+			turtleSprite.drawTurtleSprite("turtleFireDie",context,this.pos.x,this.pos.y);
+		}else if(marioArray.pos.x >= 450 && !this.isDie && this.hitByFire && marioArray.pos.x < 1800  && this.show){
+			turtleSprite.drawTurtleSprite("turtleFireDie",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+		}else if(marioArray.pos.x >= 1800 && !this.isDie && this.hitByFire && this.show){
+			turtleSprite.drawTurtleSprite("turtleFireDie",context,this.pos.x  - 1350 ,this.pos.y);
+		}
+		
 	}
 }
 
