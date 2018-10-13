@@ -30,7 +30,6 @@ class Coin{
 		//	&& shape.pos.y + shape.height > this.pos.y 上
 		//	&& shape.pos.y < this.pos.y + this.height 下
 
-		
 		if(this.show && this.pos.x <= marioArray.pos.x + 8 
 			&& this.pos.x + 8 >=  marioArray.pos.x   
 			&& this.pos.y <= marioArray.pos.y + marioArray.height
@@ -58,10 +57,10 @@ class Coin{
 	
 		if(marioArray.pos.x < 450 && this.show){
 			coinSprite.drawSprite(this.flashing(),context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && this.show){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 2500 && this.show){
 			coinSprite.drawSprite(this.flashing(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 1800 && this.show){
-			coinSprite.drawSprite(this.flashing(),context,this.pos.x  - 1350 ,this.pos.y);
+		}else if(marioArray.pos.x >= 2500 && this.show){
+			coinSprite.drawSprite(this.flashing(),context,this.pos.x  - 2050 ,this.pos.y);
 		}
 	
 	}

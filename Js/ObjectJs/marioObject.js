@@ -97,7 +97,7 @@ class Mario{
 	}
 
 	update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson,brickArray){
-
+		console.log(this.pos.x);
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 	
@@ -697,10 +697,10 @@ class Mario{
 		{
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite(this.ChangeBig() ,context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+			}else if(this.pos.x >= 450 && this.pos.x < 2500){
 				marioSprite.drawMarioSprite(this.ChangeBig() ,context,450,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 1800){
-				marioSprite.drawMarioSprite( this.ChangeBig() ,context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 2500){
+				marioSprite.drawMarioSprite( this.ChangeBig() ,context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 			}		
 		}
 		
@@ -709,10 +709,10 @@ class Mario{
 		{
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite(this.ChangeFire() ,context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+			}else if(this.pos.x >= 450 && this.pos.x < 2500){
 				marioSprite.drawMarioSprite(this.ChangeFire() ,context,450,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 1800){
-				marioSprite.drawMarioSprite( this.ChangeFire() ,context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 2500){
+				marioSprite.drawMarioSprite( this.ChangeFire() ,context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 			}		
 		}
 		
@@ -738,10 +738,10 @@ class Mario{
 		{
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+			}else if(this.pos.x >= 450 && this.pos.x < 2500){
 				marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 1800){
-				marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 2500){
+				marioSprite.drawMarioSprite(!this.isJump ? this.running() : "jump",context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 			}		
 		}
 		
@@ -755,10 +755,10 @@ class Mario{
 			&& !this.changeToFire){
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite("die",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+			}else if(this.pos.x >= 450 && this.pos.x < 2500){
 				marioSprite.drawMarioSprite( "die",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 1800){
-				marioSprite.drawMarioSprite("die",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 2500){
+				marioSprite.drawMarioSprite("die",context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 			}
 		}
 
@@ -769,7 +769,7 @@ class Mario{
 			&& !this.isFireMario
 			&& !this.changeToBig
 			&& !this.changeToFire){
-			marioSprite.drawMarioSprite("passed",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);	
+			marioSprite.drawMarioSprite("passed",context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);	
 		}
 
 		if(!this.hide 
@@ -778,7 +778,7 @@ class Mario{
 			&& !this.isFireMario
 			&& !this.changeToBig
 			&& !this.changeToFire){
-			marioSprite.drawMarioSprite(this.running(),context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			marioSprite.drawMarioSprite(this.running(),context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 		}
 
 
@@ -797,10 +797,10 @@ class Mario{
 		{
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite(!this.isJump ? this.BigRunning() : "Bjump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+			}else if(this.pos.x >= 450 && this.pos.x < 2500){
 				marioSprite.drawMarioSprite(!this.isJump ? this.BigRunning() : "Bjump",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 1800){
-				marioSprite.drawMarioSprite(!this.isJump ? this.BigRunning() : "Bjump",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 2500){
+				marioSprite.drawMarioSprite(!this.isJump ? this.BigRunning() : "Bjump",context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 			}		
 		}
 
@@ -818,10 +818,10 @@ class Mario{
 		{
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite( "Bsquat",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+			}else if(this.pos.x >= 450 && this.pos.x < 2500){
 				marioSprite.drawMarioSprite( "Bsquat",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 1800){
-				marioSprite.drawMarioSprite("Bsquat",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 2500){
+				marioSprite.drawMarioSprite("Bsquat",context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 			}		
 		}
 		
@@ -838,10 +838,10 @@ class Mario{
 			&& !this.changeToFire){
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite("Bsquat",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+			}else if(this.pos.x >= 450 && this.pos.x < 2500){
 				marioSprite.drawMarioSprite( "Bsquat",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 1800){
-				marioSprite.drawMarioSprite("Bsquat",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 2500){
+				marioSprite.drawMarioSprite("Bsquat",context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 			}
 		}
 
@@ -852,7 +852,7 @@ class Mario{
 			&& !this.isFireMario
 			&& !this.changeToBig
 			&& !this.changeToFire){
-			marioSprite.drawMarioSprite("Bpassed",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);	
+			marioSprite.drawMarioSprite("Bpassed",context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);	
 		}
 
 		if(!this.hide 
@@ -861,7 +861,7 @@ class Mario{
 			&& !this.isFireMario
 			&& !this.changeToBig
 			&& !this.changeToFire){
-			marioSprite.drawMarioSprite(this.BigRunning(),context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			marioSprite.drawMarioSprite(this.BigRunning(),context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 		}
 
 
@@ -883,10 +883,10 @@ class Mario{
 		{
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite(!this.isJump ? this.FireRunning() : "Fjump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+			}else if(this.pos.x >= 450 && this.pos.x < 2500){
 				marioSprite.drawMarioSprite(!this.isJump ? this.FireRunning() : "Fjump",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 1800){
-				marioSprite.drawMarioSprite(!this.isJump ? this.FireRunning() : "Fjump",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 2500){
+				marioSprite.drawMarioSprite(!this.isJump ? this.FireRunning() : "Fjump",context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 			}		
 		}
 
@@ -904,10 +904,10 @@ class Mario{
 		{
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite( "Fsquat",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+			}else if(this.pos.x >= 450 && this.pos.x < 2500){
 				marioSprite.drawMarioSprite( "Fsquat",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 1800){
-				marioSprite.drawMarioSprite("Fsquat",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 2500){
+				marioSprite.drawMarioSprite("Fsquat",context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 			}		
 		}
 		
@@ -924,10 +924,10 @@ class Mario{
 			&& !this.changeToFire){
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite("Fsquat",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+			}else if(this.pos.x >= 450 && this.pos.x < 2500){
 				marioSprite.drawMarioSprite( "Fsquat",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 1800){
-				marioSprite.drawMarioSprite("Fsquat",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 2500){
+				marioSprite.drawMarioSprite("Fsquat",context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 			}
 		}
 
@@ -938,7 +938,7 @@ class Mario{
 			&& this.isFireMario
 			&& !this.changeToBig
 			&& !this.changeToFire){
-			marioSprite.drawMarioSprite("Fpassed",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);	
+			marioSprite.drawMarioSprite("Fpassed",context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);	
 		}
 
 		if(!this.hide 
@@ -947,7 +947,7 @@ class Mario{
 			&& this.isFireMario
 			&& !this.changeToBig
 			&& !this.changeToFire){
-			marioSprite.drawMarioSprite(this.FireRunning(),context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			marioSprite.drawMarioSprite(this.FireRunning(),context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 		}
 
 		if(!this.hide 
@@ -963,10 +963,10 @@ class Mario{
 		{
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite("Fshot",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 1800){
+			}else if(this.pos.x >= 450 && this.pos.x < 2500){
 				marioSprite.drawMarioSprite("Fshot",context,450,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 1800){
-				marioSprite.drawMarioSprite("Fshot",context,this.pos.x - 1350,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 2500){
+				marioSprite.drawMarioSprite("Fshot",context,this.pos.x - 2050,this.pos.y,this.faceDirection < 0);
 			}		
 		}
 		

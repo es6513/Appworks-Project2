@@ -17,10 +17,10 @@ class Castle{
 				
 		if(marioArray.pos.x < 450 ){
 			castleSprite.drawSprite("castle",context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 2500){
 			castleSprite.drawSprite("castle",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 1800 ){
-			castleSprite.drawSprite("castle",context,this.pos.x  - 1350 ,this.pos.y);
+		}else if(marioArray.pos.x >= 2500 ){
+			castleSprite.drawSprite("castle",context,this.pos.x  - 2050 ,this.pos.y);
 		}
 	
 	}

@@ -6,10 +6,12 @@ class Fireball{
 	constructor(){
 		this.pos = new PositionAndSpeed();
 		this.previousPos = new PositionAndSpeed();
+		this.previousLeftPos = new PositionAndSpeed();
 		this.speed = new PositionAndSpeed(8,2);
 		this.frameIndex = 0;
 		this.faceDirection = 1;
 		this.goRight = false;
+		this.goLeft = false;
 		this.direction = 0;
 		this.width = 8;
 		this.height = 8;
@@ -24,6 +26,8 @@ class Fireball{
 	}
 	
 	update(marioArray,screen,goombaArray,turtleArray){
+
+		console.log(this.pos.x);
 		this.faceDirection = marioArray.faceDirection;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
 		//	&& shape.pos.x < this.pos.x + this.width 右
@@ -36,6 +40,8 @@ class Fireball{
 
 
 		//-----------------火球打死怪物-----------
+
+		// 這邊有個 BUG 當有怪物的時候正常，沒怪物的時候因為怪物的陣列為空陣列，會導致這兩段程式碼無法判斷
 		for(let j = 0;j < goombaArray.length;j += 1){
 			if(this.pos.x + this.width > goombaArray[j].pos.x
 				&& this.pos.x < goombaArray[j].pos.x + goombaArray[j].width
@@ -80,33 +86,37 @@ class Fireball{
 			this.goRight = true;
 			this.show = true;
 		}
-
-
+		
 		// 左邊--------bug--------
 
 
-		if(!this.show && this.faceDirection == -1){
+		if(!this.show  && this.faceDirection == -1 && !this.goLeft){
 			this.pos.x = marioArray.pos.x ;
-			this.previousPos.x = this.pos.x;
+			this.previousLeftPos.x = this.pos.x;
 			this.pos.y = marioArray.pos.y + 8;
-			this.goRight = false;
+			this.goLeft = true;
 			this.show = true;
 		}
+
 
 		if(this.goRight){
 			this.pos.x += this.speed.x;
 		}
 
-		if(!this.goRight){
+		if(this.goLeft){
 			this.pos.x -= this.speed.x;
 		}
 
 		this.pos.y += this.speed.y;
 		
 		
-		if(this.pos.x > this.previousPos.x + 480
-			|| this.pos.x < this.previousPos.x - 480 ){
+		if(this.goRight && this.pos.x > this.previousPos.x + 480 ){
 			this.goRight = false;
+			this.show = false;
+		}
+
+		if(this.goLeft && this.pos.x < this.previousLeftPos.x - 480){
+			this.goLeft = false;
 			this.show = false;
 		}
 	
@@ -120,45 +130,45 @@ class Fireball{
 
 	draw(context,fireballSprite,marioArray){	
 		// 這邊要調數字 BUG
-		if(this.show && this.goRight ){
+		if(this.show && this.goRight && !this.goLeft){
 			if(this.pos.x < 450){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 2500 ){
+			}else if(this.pos.x >= 450 && this.pos.x < 3000 ){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x - marioArray.pos.x  + 450 ,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 2500 ){
+			}else if(this.pos.x >= 3000 ){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 2050 ,this.pos.y,this.faceDirection < 0);
 			}
 		}
 
-		if(this.show && this.goRight && marioArray.isRunning && this.faceDirection == 1){
+		if(this.show && this.goRight && !this.goLeft && marioArray.isRunning && this.faceDirection == 1){
 			if(this.pos.x < 450){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 2500 ){
+			}else if(this.pos.x >= 450 && this.pos.x < 3000 ){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.previousPos.x  + 450   ,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 2500 ){
+			}else if(this.pos.x >= 3000 ){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 2050 ,this.pos.y,this.faceDirection < 0);
 			}
 		}
 
-		if(this.show && !this.goRight ){
+		if(this.show && this.goLeft && !this.goRight ){
 			if(this.pos.x < 450){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 2500 ){
+			}else if(this.pos.x >= 450 && this.pos.x < 3000 ){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x - marioArray.pos.x  + 450 ,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 2500 ){
+			}else if(this.pos.x >= 3000 ){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 2050 ,this.pos.y,this.faceDirection < 0);
 			}
 		}
 
-		// if(this.show && !this.goRight){
-		// 	if(this.pos.x < 450){
-		// 		fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		// 	}else if(this.pos.x >= 450 && this.pos.x < 2500 ){
-		// 		fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x - this.previousPos.x - 16 + 450 ,this.pos.y,this.faceDirection < 0);
-		// 	}else if(this.pos.x >= 2500 ){
-		// 		fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 2050 ,this.pos.y,this.faceDirection < 0);
-		// 	}
-		// }
+		if(this.show && this.goLeft && !this.goRight  && marioArray.isRunning && this.faceDirection == -1){
+			if(this.pos.x < 450){
+				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 450 && this.pos.x < 3000 ){
+				fireballSprite.drawFireBallSprite(this.firing(),context,this.previousLeftPos.x  + 450 ,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 3000 ){
+				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 2050 ,this.pos.y,this.faceDirection < 0);
+			}
+		}
 	}
 }
 

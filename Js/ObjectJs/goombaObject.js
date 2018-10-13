@@ -30,7 +30,6 @@ class Goomba{
 	}
 	
 	update(tubeJson,turtleArray,marioArray,screen){
-		console.log(this.pos.x);
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
@@ -251,26 +250,26 @@ class Goomba{
 	draw(context,goombaSprite,marioArray){
 		if(marioArray.pos.x < 450 && !this.hitByFire && !this.isDie && this.show){
 			goombaSprite.drawSprite(this.running(),context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && !this.hitByFire && marioArray.pos.x < 1800 && !this.isDie && this.show){
+		}else if(marioArray.pos.x >= 450 && !this.hitByFire && marioArray.pos.x < 2500 && !this.isDie && this.show){
 			goombaSprite.drawSprite(this.running(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 1800 && !this.hitByFire && !this.isDie && this.show){
-			goombaSprite.drawSprite(this.running(),context,this.pos.x  - 1350 ,this.pos.y);
+		}else if(marioArray.pos.x >= 2500 && !this.hitByFire && !this.isDie && this.show){
+			goombaSprite.drawSprite(this.running(),context,this.pos.x  - 2050 ,this.pos.y);
 		}
 
 		if(marioArray.pos.x < 450 && !this.hitByFire && this.isDie && this.show){
 			goombaSprite.drawSprite("goombaDie",context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && !this.hitByFire && marioArray.pos.x < 1800 && this.isDie && this.show){
+		}else if(marioArray.pos.x >= 450 && !this.hitByFire && marioArray.pos.x < 2500 && this.isDie && this.show){
 			goombaSprite.drawSprite("goombaDie",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 1800 && !this.hitByFire && this.isDie && this.show){
-			goombaSprite.drawSprite("goombaDie",context,this.pos.x  - 1350 ,this.pos.y);
+		}else if(marioArray.pos.x >= 2500 && !this.hitByFire && this.isDie && this.show){
+			goombaSprite.drawSprite("goombaDie",context,this.pos.x  - 2050 ,this.pos.y);
 		}	
 
 		if(marioArray.pos.x < 450 && !this.isDie && this.hitByFire && this.show){
 			goombaSprite.drawSprite("goombaFireDie",context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && !this.isDie && this.hitByFire && marioArray.pos.x < 1800  && this.show){
+		}else if(marioArray.pos.x >= 450 && !this.isDie && this.hitByFire && marioArray.pos.x < 2500  && this.show){
 			goombaSprite.drawSprite("goombaFireDie",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 1800 && !this.isDie && this.hitByFire && this.show){
-			goombaSprite.drawSprite("goombaFireDie",context,this.pos.x  - 1350 ,this.pos.y);
+		}else if(marioArray.pos.x >= 2500 && !this.isDie && this.hitByFire && this.show){
+			goombaSprite.drawSprite("goombaFireDie",context,this.pos.x  - 2050 ,this.pos.y);
 		}
 	}
 }

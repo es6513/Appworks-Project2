@@ -5,7 +5,7 @@ import {PositionAndSpeed} from "../positionAndSpeed.js";
 class Mushroom{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);
-		this.speed = new PositionAndSpeed(2,1);
+		this.speed = new PositionAndSpeed(1,1);
 		this.frameIndex = 0;
 		this.width = 16;
 		this.height = 16;
@@ -21,7 +21,6 @@ class Mushroom{
 		//	&& shape.pos.x < this.pos.x + this.width 右
 		//	&& shape.pos.y + shape.height > this.pos.y 上
 		//	&& shape.pos.y < this.pos.y + this.height 下
-		console.log(this.speed.y);
 		if(!this.appear){
 			this.previousY = this.pos.y;
 			this.previousX = this.pos.x;
@@ -34,21 +33,32 @@ class Mushroom{
 		// }
 
 		questionBrickJson.Pos[0].ranges.forEach(([x,y])=>{
+			
+			//蘑菇被撞到後先往上移
 			if(this.appear && this.pos.y > y - questionBrickJson.height 
 				&& this.pos.x < this.previousX + questionBrickJson.width){
+				console.log("123");
 				this.pos.y -= this.speed.y;
 			}
-
+			//完全出現後往右邊移動
 			if(this.pos.y == y - questionBrickJson.height 
 				&& this.pos.x < x + questionBrickJson.width){
 				this.pos.x += this.speed.x;
 			}
-
+			//落地
 			if( this.pos.x == 	this.previousX + questionBrickJson.width){
 				this.pos.y += this.speed.y;
 			}
 		});
 
+		if( marioArray.pos.y >= this.pos.y 
+			&& marioArray.pos.y <= this.pos.y + 16
+			&& marioArray.pos.x + marioArray.width / 2 > this.pos.x   //判定的bug
+			&& marioArray.pos.x < this.pos.x + this.width ){
+			this.appear = true;
+		}
+
+		//-----------------香菇在地面上的移動-----------
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
 			if(this.pos.y >= y1 * screen.height - this.height
 				&& this.pos.x + this.width > x1 * 16
@@ -63,25 +73,24 @@ class Mushroom{
 			}
 			//-------------懸崖bug  掉下的速度要再調整------
 
-
 			if(this.pos.y >= y2 * screen.height + 176){
 				this.show = false;
 			}
-		
+
 		});
+
+		//--------------end of 香菇在地面上的移動-----------
 		
 		if(this.appear && this.show && this.pos.x <= marioArray.pos.x + 12 
 			&& this.pos.x + 12 >=  marioArray.pos.x   
 			&& this.pos.y <= marioArray.pos.y + marioArray.height
 			&& this.pos.y >=  marioArray.pos.y  
 		){	
-			this.appear = false;
 			this.show = false;
 			this.mushroomSound();
 			if(!marioArray.isBigMario && !marioArray.isFireMario){
 				marioArray.changeToBig = true;
 			}
-			
 		}
 		//16是金幣的寬度， EX : 160 < marioArray.pos < 176
 		// 前兩行的 +8 +10 => 讓判定範圍更精準，並非真正碰撞
@@ -101,10 +110,10 @@ class Mushroom{
 	
 		if(marioArray.pos.x < 450 && this.show){
 			mushroomSprite.drawSprite("mushroom",context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && this.show){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 2500 && this.show){
 			mushroomSprite.drawSprite("mushroom",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 1800 && this.show){
-			mushroomSprite.drawSprite("mushroom",context,this.pos.x  - 1350 ,this.pos.y);
+		}else if(marioArray.pos.x >= 2500 && this.show){
+			mushroomSprite.drawSprite("mushroom",context,this.pos.x  - 2050 ,this.pos.y);
 		}
 	
 	}

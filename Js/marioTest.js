@@ -3,6 +3,7 @@ import {loadMario,loadSky,loadGround,loadTube} from "../Js/loadSprite.js";
 import {loadJson} from "../Js/loadJson.js";
 import {Mario} from "../Js/ObjectJs/marioObject.js";
 import {Coin} from "../Js/ObjectJs/coinObject.js";
+import {Flycoin} from "../Js/ObjectJs/flycoinObject.js";
 import {Turtle} from "./ObjectJs/turtleObject.js";
 import {Tube} from "./ObjectJs/tubeObject.js";
 import {Goomba} from "./ObjectJs/goombaObject.js";
@@ -57,6 +58,21 @@ function createCoinArray(name) {
 				coinArray.push(coin);
 			});
 			return coinArray;
+		});
+}
+
+
+function createFlycoinArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(flycoinSprite=>{
+			let flycoinArray = [];
+			flycoinSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let flycoin = new Flycoin();
+				flycoin.pos.set(x,y);
+				flycoinArray.push(flycoin);
+			});
+			return flycoinArray;
 		});
 }
 
@@ -227,6 +243,8 @@ Promise.all([
 	drawBackground("background"),
 	drawObjects("coin"),
 	createCoinArray("coin"),
+	drawObjects("flycoin"),
+	createFlycoinArray("flycoin"),
 	drawObjects("badTurtle"),
 	createTurtleArray("badTurtle"),
 	drawObjects("tube"),
@@ -265,6 +283,7 @@ Promise.all([
 	screen,
 	backgroundSprite,
 	coinSpriteSet,coinArray,
+	flycoinSprite,flycoinArray,
 	turtleSpriteSet,turtleArray,
 	tubeSpriteSet,tubeArray,tubeJson,
 	goombaSpriteSet,goombaArray,
@@ -283,6 +302,8 @@ Promise.all([
 	function startGame() {
 		marioArray = [];
 		coinArray = [];
+		flycoinArray = [];  //  這邊常常忘記清空。
+		flagArray = [];
 		turtleArray = [];
 		tubeArray = [];
 		goombaArray = [];
@@ -296,6 +317,7 @@ Promise.all([
 		flowerArray = [];
 		Promise.all([
 			createCoinArray("coin"),
+			createFlycoinArray("flycoin"),
 			createTurtleArray("badTurtle"),
 			createTubeArray("tube"),
 			createGoombaArray("goomba"),
@@ -310,6 +332,7 @@ Promise.all([
 			createFlowerArray("flower"),
 		]).then(([
 			coin,
+			flycoin,
 			turtle,
 			tube,
 			goomba,
@@ -324,6 +347,7 @@ Promise.all([
 			flower
 		])=>{
 			marioArray = mario;
+			flycoinArray = flycoin;
 			coinArray = coin;
 			turtleArray = turtle;
 			tubeArray = tube;
@@ -339,6 +363,7 @@ Promise.all([
 		});
 		myGameArea.start();
 	}
+
 	let counter = 0;
 
 	let myGameArea = {
@@ -407,21 +432,40 @@ Promise.all([
 		for(let i = 0;i < marioArray.length;i += 1){
 			if(	marioArray[i].pos.x < 450){
 				context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			}else if(	marioArray[i].pos.x >= 450 && 	marioArray[i].pos.x < 1800) {
+			}else if(	marioArray[i].pos.x >= 450 && 	marioArray[i].pos.x < 2500) {
 				context.drawImage(backgroundSprite,	marioArray[i].pos.x - 450,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			}else if(	marioArray[i].pos.x >= 1800){
-				context.drawImage(backgroundSprite, 1350,0,context.canvas.width,640,0,0,context.canvas.width,640);
+			}else if(	marioArray[i].pos.x >= 2500){
+				context.drawImage(backgroundSprite, 2050,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 			if(marioArray[i].isDie && marioArray[i].pos.y > 3600){
 				restart();
 			}
 		}		
 
-	
-		
 		for(let j = 0;j < coinArray.length;j += 1){
 			coinArray[j].draw(context,coinSpriteSet,marioArray[0]);
 			coinArray[j].update(marioArray[0]);
+			let coin = coinArray[j];
+			if(coin.show == false){
+				coinArray.splice(j,1);
+				j--;
+			}	
+			if(coinArray.length == 0){
+				break;
+			}
+		}
+
+		for(let j = 0;j < flycoinArray.length;j += 1){
+			flycoinArray[j].draw(context,flycoinSprite,marioArray[0]);
+			flycoinArray[j].update(marioArray[0],questionBrickJson);
+			let flycoin = flycoinArray[j];
+			// if(flycoin.show == false){
+			// 	flycoinArray.splice(j,1);
+			// 	j--;
+			// }	
+			// if(flycoinArray.length == 0){
+			// 	break;
+			// }
 		}
 
 		for(let j = 0;j < tubeArray.length;j += 1){
@@ -432,11 +476,27 @@ Promise.all([
 		for(let j = 0;j < turtleArray.length;j += 1){
 			turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
 			turtleArray[j].update(screen,tubeJson,marioArray[0]);
+			let turtle = turtleArray[j];
+			if(turtle.isDie == true){
+				turtleArray.splice(j,1);
+				j--;
+			}
+			if(turtleArray.length == 0){
+				break;
+			}
 		}	
 			
 		for(let j = 0;j < goombaArray.length;j += 1){
 			goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
 			goombaArray[j].update(tubeJson,turtleArray,marioArray[0],screen);
+			let goomba = goombaArray[j];
+			if(goomba.isDie == true){
+				goombaArray.splice(j,1);
+				j--;
+			}
+			if(goombaArray.length == 0){
+				break;
+			}
 		}
 
 		for(let j = 0;j < poleArray.length;j += 1){
@@ -467,6 +527,14 @@ Promise.all([
 		for(let j = 0;j < mushroomArray.length;j += 1){
 			mushroomArray[j].draw(context,mushroomSprite,marioArray[0]);
 			mushroomArray[j].update(marioArray[0],screen,questionBrickJson);
+			let mushroom = mushroomArray[j];
+			if(mushroom.show == false){
+				mushroomArray.splice(j,1);
+				j--;
+			}
+			if(mushroomArray.length == 0){
+				break;
+			}
 		}	
 
 		for(let j = 0;j < questionBrickArray.length;j += 1){
@@ -474,7 +542,6 @@ Promise.all([
 			questionBrickArray[j].update(marioArray[0],mushroomArray);
 		}	
 
-	
 		for(let j = 0;j < marioArray.length;j += 1){
 			marioArray[j].draw(context, marioSpriteSet,screen,fireballSprite,goombaArray,turtleArray);
 			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson,brickArray);

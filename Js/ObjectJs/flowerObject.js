@@ -59,10 +59,10 @@ class Flower{
 	
 		if(marioArray.pos.x < 450 && this.show){
 			flowerSprite.drawSprite(this.flashing(),context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 1800 && this.show){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 2500 && this.show){
 			flowerSprite.drawSprite(this.flashing(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 1800 && this.show){
-			flowerSprite.drawSprite(this.flashing(),context,this.pos.x  - 1350 ,this.pos.y);
+		}else if(marioArray.pos.x >= 2500 && this.show){
+			flowerSprite.drawSprite(this.flashing(),context,this.pos.x  - 2050 ,this.pos.y);
 		}
 	
 	}
