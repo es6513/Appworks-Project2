@@ -57,10 +57,10 @@ class Coin{
 	
 		if(marioArray.pos.x < 450 && this.show){
 			coinSprite.drawSprite(this.flashing(),context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 2500 && this.show){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 && this.show){
 			coinSprite.drawSprite(this.flashing(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 2500 && this.show){
-			coinSprite.drawSprite(this.flashing(),context,this.pos.x  - 2050 ,this.pos.y);
+		}else if(marioArray.pos.x >= 5000 && this.show){
+			coinSprite.drawSprite(this.flashing(),context,this.pos.x  - 4550 ,this.pos.y);
 		}
 	
 	}

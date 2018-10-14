@@ -14,7 +14,8 @@ class Brick{
 		this.goUp = false;
 	}
 	
-	update(marioArray){
+	update(marioArray,brickJson){
+
 		if(!this.goUp){
 			this.previousY = this.pos.y;
 		}
@@ -35,15 +36,15 @@ class Brick{
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-		// -------------下方----------------
-		if(!marioArray.isBigMario && !marioArray.isFireMario){
+		if( !marioArray.isBigMario && !marioArray.isFireMario){
+
+			// -------------下方----------------
 			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16
-				&& marioArray.pos.x + marioArray.width / 2 >= this.pos.x   //判定的bug
-				&& marioArray.pos.x <= this.pos.x + this.width 
+				&& marioArray.pos.x + marioArray.width / 2  >= this.pos.x   //判定的bug
+				&& marioArray.pos.x <= this.pos.x + this.width / 2
 			){
-				
 				marioArray.pos.y = this.pos.y ;
 				this.pos.y -= 4;
 				// this.pos.y += 2;
@@ -51,6 +52,7 @@ class Brick{
 				marioArray.speed.y = 0;
 				marioArray.isBottomBrick = true;
 			}
+			
 	
 			// -------------上方----------------
 			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
@@ -72,8 +74,8 @@ class Brick{
 			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16
-				&& marioArray.pos.x + marioArray.width / 2 >= this.pos.x
-				&& marioArray.pos.x <= this.pos.x + this.width / 2
+				&& marioArray.pos.x + marioArray.width > this.pos.x
+				&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				marioArray.pos.y = this.pos.y + 16 ;
 				this.pos.y -= 4;
@@ -108,10 +110,10 @@ class Brick{
 	
 		if(marioArray.pos.x < 450 ){
 			brickSprite.drawSprite("brick",context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 2500 ){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 ){
 			brickSprite.drawSprite("brick",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 2500 ){
-			brickSprite.drawSprite("brick",context,this.pos.x  - 2050 ,this.pos.y);
+		}else if(marioArray.pos.x >= 5000 ){
+			brickSprite.drawSprite("brick",context,this.pos.x  - 4550 ,this.pos.y);
 		}
 	
 	}

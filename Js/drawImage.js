@@ -110,7 +110,7 @@ function drawBackground(name) {
 		]))
 		.then(([screen,skySprite,groundSprite,tubeSprite,cloudSprite])=>{	
 			let backgroundSprite = document.createElement("canvas");
-			backgroundSprite.width = 6000;
+			backgroundSprite.width = 8000;
 			backgroundSprite.height = 640;
 			drawScreen(screen.backgrounds[0],backgroundSprite.getContext("2d"),skySprite);
 			drawScreen(screen.backgrounds[1],backgroundSprite.getContext("2d"),groundSprite);

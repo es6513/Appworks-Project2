@@ -1,7 +1,7 @@
 {
   "frames": [
     {
-      "name": "questionBrick-1",
+      "name": "mushroomBrick-1",
       "ranges": [
         0,
         0,
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "name": "questionBrick-2",
+      "name": "mushroomBrick-2",
       "ranges": [
         16,
         0,
@@ -19,7 +19,7 @@
       ]
     },
     {
-      "name": "questionBrick-3",
+      "name": "mushroomBrick-3",
       "ranges": [
         32,
         0,
@@ -28,7 +28,7 @@
       ]
     },
     {
-      "name": "uselessBrick",
+      "name": "uselessMushroomBrick",
       "ranges": [
         48,
         0,
@@ -39,18 +39,10 @@
   ],
   "Pos": [
     {
-      "tile": "questionBrick",
+      "tile": "mushroomBrick",
       "ranges": [
         [
           1120,
-          192
-        ],
-        [
-          1152,
-          192
-        ],
-        [
-          1600,
           192
         ]
       ]

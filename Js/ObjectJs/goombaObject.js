@@ -17,8 +17,8 @@ class Goomba{
 		this.width = 16;
 		this.height = 16;
 		this.clearTimeout;
-		this.direction = 1;
-		this.faceDirection = 1;
+		this.direction = -1;
+		this.faceDirection = -1;
 		this.framesRun = [
 			"goombaRun-1","goombaRun-1","goombaRun-1","goombaRun-1",
 			"goombaRun-1","goombaRun-1","goombaRun-1","goombaRun-1",
@@ -30,6 +30,7 @@ class Goomba{
 	}
 	
 	update(tubeJson,turtleArray,marioArray,screen){
+		this.faceDirection = this.direction;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
@@ -37,7 +38,6 @@ class Goomba{
 		// console.log(this.speed.x);
 
 		// ------bug----- 已經消失的怪物需要清除掉(preffered) 或是讓她不能再移動，否則會有bug
-
 		if(!this.isDie){
 			this.move();	
 		}	
@@ -173,18 +173,34 @@ class Goomba{
 				this.pos.y = y1 * screen.height - this.height;
 			}
 
-			if(	this.falling == true && this.pos.x + this.width == x1 * 16 ){
+			if(this.faceDirection == 1 &&	this.falling == true && this.pos.x + this.width == x1 * 16 ){
 				this.speed.x *= -1;
 			} //讓 goomba 掉下懸崖時會左右彈
+
+			if(this.faceDirection == -1 &&	this.falling == true && this.pos.x + this.width == x1 * 16 - 32 ){
+				this.speed.x *= -1;
+			} 
 
 			if( this.pos.x > x2 * 16 + 16){
 				this.falling = true;
 				this.pos.y += this.speed.y;
 			}
 
-			if(this.pos.y >= y2 * screen.height + 176){
+			
+			if( this.faceDirection == 1 && this.pos.x > x2 * 16 + 16){
+				this.falling = true;
+				this.pos.y += this.speed.y;
+			}
+			if( this.faceDirection == -1 && this.pos.x < x1 * 16 - 16 ){
+				this.falling = true;
+				this.pos.y += this.speed.y;
+			}
+
+			//超越畫面上一定距離就死掉並清除陣列
+			if(this.pos.y >= y2 * screen.height + 176 || this.pos.x >= 6000){
 				this.isDie = true;
 			}
+			
 		});
 
 
@@ -225,7 +241,7 @@ class Goomba{
 	}
 
 	move(){
-		this.pos.x += this.speed.x;
+		this.pos.x -= this.speed.x;
 	}
   
 	goombaDieSound(){
@@ -250,26 +266,26 @@ class Goomba{
 	draw(context,goombaSprite,marioArray){
 		if(marioArray.pos.x < 450 && !this.hitByFire && !this.isDie && this.show){
 			goombaSprite.drawSprite(this.running(),context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && !this.hitByFire && marioArray.pos.x < 2500 && !this.isDie && this.show){
+		}else if(marioArray.pos.x >= 450 && !this.hitByFire && marioArray.pos.x < 5000 && !this.isDie && this.show){
 			goombaSprite.drawSprite(this.running(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 2500 && !this.hitByFire && !this.isDie && this.show){
-			goombaSprite.drawSprite(this.running(),context,this.pos.x  - 2050 ,this.pos.y);
+		}else if(marioArray.pos.x >= 5000 && !this.hitByFire && !this.isDie && this.show){
+			goombaSprite.drawSprite(this.running(),context,this.pos.x  - 4550 ,this.pos.y);
 		}
 
 		if(marioArray.pos.x < 450 && !this.hitByFire && this.isDie && this.show){
 			goombaSprite.drawSprite("goombaDie",context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && !this.hitByFire && marioArray.pos.x < 2500 && this.isDie && this.show){
+		}else if(marioArray.pos.x >= 450 && !this.hitByFire && marioArray.pos.x < 5000 && this.isDie && this.show){
 			goombaSprite.drawSprite("goombaDie",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 2500 && !this.hitByFire && this.isDie && this.show){
-			goombaSprite.drawSprite("goombaDie",context,this.pos.x  - 2050 ,this.pos.y);
+		}else if(marioArray.pos.x >= 5000 && !this.hitByFire && this.isDie && this.show){
+			goombaSprite.drawSprite("goombaDie",context,this.pos.x  - 4550 ,this.pos.y);
 		}	
 
 		if(marioArray.pos.x < 450 && !this.isDie && this.hitByFire && this.show){
 			goombaSprite.drawSprite("goombaFireDie",context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && !this.isDie && this.hitByFire && marioArray.pos.x < 2500  && this.show){
+		}else if(marioArray.pos.x >= 450 && !this.isDie && this.hitByFire && marioArray.pos.x < 5000  && this.show){
 			goombaSprite.drawSprite("goombaFireDie",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 2500 && !this.isDie && this.hitByFire && this.show){
-			goombaSprite.drawSprite("goombaFireDie",context,this.pos.x  - 2050 ,this.pos.y);
+		}else if(marioArray.pos.x >= 5000 && !this.isDie && this.hitByFire && this.show){
+			goombaSprite.drawSprite("goombaFireDie",context,this.pos.x  - 4550 ,this.pos.y);
 		}
 	}
 }

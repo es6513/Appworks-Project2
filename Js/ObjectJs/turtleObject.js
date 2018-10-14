@@ -17,9 +17,10 @@ class Turtle{
 		this.isRotating = false;
 		this.clearTimeout;
 		this.show = true;
+		this.falling = false;
 		this.isDie = false;
-		this.direction = 1;
-		this.faceDirection = 1;
+		this.direction = -1;
+		this.faceDirection = -1;
 		this.framesRun = [
 			"turtleRun-1","turtleRun-1","turtleRun-1","turtleRun-1",
 			"turtleRun-1","turtleRun-1","turtleRun-1","turtleRun-1",
@@ -32,7 +33,6 @@ class Turtle{
 	}
 	
 	update(screen,tubeJson,marioArray){
-		console.log(this.isDie);
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
@@ -260,18 +260,32 @@ class Turtle{
 				this.pos.y = y1 * screen.height - this.height;
 			}
 
-			if(	this.falling == true && this.pos.x + this.width == x1 * 16 ){
+			if(this.faceDirection == 1 &&	this.falling == true && this.pos.x + this.width == x1 * 16 ){
 				this.speed.x *= -1;
 			} //讓 turtle 掉下懸崖時會左右彈
 
-			if( this.pos.x > x2 * 16 + 16){
+			if(this.faceDirection == -1 &&	this.falling == true && this.pos.x + this.width == x1 * 16 - 32 ){
+				this.speed.x *= -1;
+			} 
+
+			if(this.faceDirection == -1 &&	this.falling == true && this.pos.x + this.width == x1 * 16  ){
+				this.speed.x *= -1;
+			} 
+
+			if( this.faceDirection == 1 && this.pos.x > x2 * 16 + 16){
+				this.falling = true;
+				this.pos.y += this.speed.y;
+			}
+			if( this.faceDirection == -1 && this.pos.x < x1 * 16 - 16 ){
 				this.falling = true;
 				this.pos.y += this.speed.y;
 			}
 
-			if(this.pos.y >= y2 * screen.height + 176){
+			if(this.pos.y >= y2 * screen.height + 176 || this.pos.x >= 6000){
 				this.isDie = true;
 			}
+
+		
 		});
 	
 		// -----------end被火力歐的火球打到--------------
@@ -310,7 +324,7 @@ class Turtle{
 
 
 	move(){
-		this.pos.x += this.speed.x;
+		this.pos.x -= this.speed.x;
 	}
 
 	rotate(){
@@ -334,26 +348,26 @@ class Turtle{
 	draw(context,turtleSprite,marioArray){
 		if(marioArray.pos.x < 450 && !this.quickToDie && this.show && !this.hitByFire){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 2500 && !this.quickToDie && this.show && !this.hitByFire){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 && !this.quickToDie && this.show && !this.hitByFire){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 2500 && !this.quickToDie && this.show && !this.hitByFire){
-			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x  - 2050 ,this.pos.y,this.faceDirection < 0);
+		}else if(marioArray.pos.x >= 5000 && !this.quickToDie && this.show && !this.hitByFire){
+			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
 		}
 
 		if(marioArray.pos.x < 450 && this.quickToDie && this.show && !this.hitByFire){
 			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 2500 && this.quickToDie && this.show && !this.hitByFire){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 && this.quickToDie && this.show && !this.hitByFire){
 			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 2500 && this.quickToDie && this.show && !this.hitByFire){
-			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x  - 2050 ,this.pos.y,this.faceDirection < 0);
+		}else if(marioArray.pos.x >= 5000 && this.quickToDie && this.show && !this.hitByFire){
+			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
 		}	
 
 		if(marioArray.pos.x < 450 && !this.isDie && this.hitByFire && this.show){
 			turtleSprite.drawTurtleSprite("turtleFireDie",context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && !this.isDie && this.hitByFire && marioArray.pos.x < 2500  && this.show){
+		}else if(marioArray.pos.x >= 450 && !this.isDie && this.hitByFire && marioArray.pos.x < 5000  && this.show){
 			turtleSprite.drawTurtleSprite("turtleFireDie",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 2500 && !this.isDie && this.hitByFire && this.show){
-			turtleSprite.drawTurtleSprite("turtleFireDie",context,this.pos.x  - 2050 ,this.pos.y);
+		}else if(marioArray.pos.x >= 5000 && !this.isDie && this.hitByFire && this.show){
+			turtleSprite.drawTurtleSprite("turtleFireDie",context,this.pos.x  - 4550 ,this.pos.y);
 		}
 		
 	}

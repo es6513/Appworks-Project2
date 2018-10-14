@@ -188,6 +188,21 @@ function createQuestionBrickArray(name) {
 		});
 }
 
+function createFlowerBrickArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(questionBrickSprite=>{
+			let flowerBrickArray = [];
+			questionBrickSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let flowerBrick = new QuestionBrick();
+				flowerBrick.pos.set(x,y);
+				flowerBrickArray.push(flowerBrick);
+			});
+			return flowerBrickArray;
+		});
+}
+
+
 function createFireballArray(name) {
 	return fetch(`/marioJSON/${name}.json`)
 		.then(r =>r.json())
@@ -369,7 +384,7 @@ Promise.all([
 	let myGameArea = {
 		canvas : document.createElement("canvas"),
 		start : function() {
-			this.canvas.width = 4000;
+			this.canvas.width = 8000;
 			this.canvas.height = 640;
 			this.context = this.canvas.getContext("2d");
 			document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -432,10 +447,10 @@ Promise.all([
 		for(let i = 0;i < marioArray.length;i += 1){
 			if(	marioArray[i].pos.x < 450){
 				context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			}else if(	marioArray[i].pos.x >= 450 && 	marioArray[i].pos.x < 2500) {
+			}else if(	marioArray[i].pos.x >= 450 && 	marioArray[i].pos.x < 5000) {
 				context.drawImage(backgroundSprite,	marioArray[i].pos.x - 450,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			}else if(	marioArray[i].pos.x >= 2500){
-				context.drawImage(backgroundSprite, 2050,0,context.canvas.width,640,0,0,context.canvas.width,640);
+			}else if(	marioArray[i].pos.x >= 5000){
+				context.drawImage(backgroundSprite, 4550,0,context.canvas.width,640,0,0,context.canvas.width,640);
 			} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 			if(marioArray[i].isDie && marioArray[i].pos.y > 3600){
 				restart();
@@ -459,7 +474,7 @@ Promise.all([
 			flycoinArray[j].draw(context,flycoinSprite,marioArray[0]);
 			flycoinArray[j].update(marioArray[0],questionBrickJson);
 			let flycoin = flycoinArray[j];
-			// if(flycoin.show == false){
+			// if(flycoin.isVanished == true){
 			// 	flycoinArray.splice(j,1);
 			// 	j--;
 			// }	
@@ -468,36 +483,41 @@ Promise.all([
 			// }
 		}
 
+	
 		for(let j = 0;j < tubeArray.length;j += 1){
 			tubeArray[j].draw(context,tubeSpriteSet,marioArray[0]);
 			tubeArray[j].update(marioArray[0]);
 		}	
-				
-		for(let j = 0;j < turtleArray.length;j += 1){
-			turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
-			turtleArray[j].update(screen,tubeJson,marioArray[0]);
-			let turtle = turtleArray[j];
-			if(turtle.isDie == true){
-				turtleArray.splice(j,1);
-				j--;
-			}
-			if(turtleArray.length == 0){
-				break;
-			}
-		}	
+		// --------------------怪物區---------------------
+		// for(let j = 0;j < turtleArray.length;j += 1){
+		// 	turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
+		// 	turtleArray[j].update(screen,tubeJson,marioArray[0]);
+		// 	let turtle = turtleArray[j];
+		// 	if(turtle.isDie == true){
+		// 		turtleArray.splice(j,1);
+		// 		j--;
+		// 	}
+		// 	if(turtleArray.length == 0){
+		// 		break;
+		// 	}
+		// }	
+
+	
 			
-		for(let j = 0;j < goombaArray.length;j += 1){
-			goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
-			goombaArray[j].update(tubeJson,turtleArray,marioArray[0],screen);
-			let goomba = goombaArray[j];
-			if(goomba.isDie == true){
-				goombaArray.splice(j,1);
-				j--;
-			}
-			if(goombaArray.length == 0){
-				break;
-			}
-		}
+		// for(let j = 0;j < goombaArray.length;j += 1){
+		// 	goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
+		// 	goombaArray[j].update(tubeJson,turtleArray,marioArray[0],screen);
+		// 	let goomba = goombaArray[j];
+		// 	if(goomba.isDie == true){
+		// 		goombaArray.splice(j,1);
+		// 		j--;
+		// 	}
+		// 	if(goombaArray.length == 0){
+		// 		break;
+		// 	}
+		// }
+
+		// --------------end 怪物區---------------------
 
 		for(let j = 0;j < poleArray.length;j += 1){
 			poleArray[j].draw(context,poleSprite,marioArray[0]);
@@ -516,7 +536,7 @@ Promise.all([
 
 		for(let j = 0;j < brickArray.length;j += 1){
 			brickArray[j].draw(context,brickSprite,marioArray[0]);
-			brickArray[j].update(marioArray[0]);
+			brickArray[j].update(marioArray[0],brickJson);
 		}	
 	
 		for(let j = 0;j < flowerArray.length;j += 1){
@@ -524,22 +544,22 @@ Promise.all([
 			flowerArray[j].update(marioArray[0]);
 		}	
 
-		for(let j = 0;j < mushroomArray.length;j += 1){
-			mushroomArray[j].draw(context,mushroomSprite,marioArray[0]);
-			mushroomArray[j].update(marioArray[0],screen,questionBrickJson);
-			let mushroom = mushroomArray[j];
-			if(mushroom.show == false){
-				mushroomArray.splice(j,1);
-				j--;
-			}
-			if(mushroomArray.length == 0){
-				break;
-			}
-		}	
+		// for(let j = 0;j < mushroomArray.length;j += 1){
+		// 	mushroomArray[j].draw(context,mushroomSprite,marioArray[0]);
+		// 	mushroomArray[j].update(marioArray[0],screen,questionBrickJson);
+		// 	let mushroom = mushroomArray[j];
+		// 	if(mushroom.show == false){
+		// 		mushroomArray.splice(j,1);
+		// 		j--;
+		// 	}
+		// 	if(mushroomArray.length == 0){
+		// 		break;
+		// 	}
+		// }	
 
 		for(let j = 0;j < questionBrickArray.length;j += 1){
 			questionBrickArray[j].draw(context,questionBrickSprite,marioArray[0]);
-			questionBrickArray[j].update(marioArray[0],mushroomArray);
+			questionBrickArray[j].update(marioArray[0],flycoinArray,questionBrickArray);
 		}	
 
 		for(let j = 0;j < marioArray.length;j += 1){
@@ -548,9 +568,7 @@ Promise.all([
 		}	
 		
 		
-		// marioSprite.draw("marioStand",context,mario.pos.x,mario.pos.y);
-		// mario.update(screen,tubeJson,poleJson,castleJson,flagArray);
-		// mario.draw(context,marioSpriteSet,screen,tubeSpriteSet,flagArray); //傳進去 marioObject
+
 
 		// if(mario.pos.x > 40){
 		// 	backgroundMusic.play();

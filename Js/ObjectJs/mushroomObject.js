@@ -53,8 +53,8 @@ class Mushroom{
 
 		if( marioArray.pos.y >= this.pos.y 
 			&& marioArray.pos.y <= this.pos.y + 16
-			&& marioArray.pos.x + marioArray.width / 2 > this.pos.x   //判定的bug
-			&& marioArray.pos.x < this.pos.x + this.width ){
+			&& marioArray.pos.x + marioArray.width / 2 >= this.pos.x   //判定的bug
+			&& marioArray.pos.x <= this.pos.x + this.width / 2 ){
 			this.appear = true;
 		}
 
@@ -110,10 +110,10 @@ class Mushroom{
 	
 		if(marioArray.pos.x < 450 && this.show){
 			mushroomSprite.drawSprite("mushroom",context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 2500 && this.show){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 && this.show){
 			mushroomSprite.drawSprite("mushroom",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 2500 && this.show){
-			mushroomSprite.drawSprite("mushroom",context,this.pos.x  - 2050 ,this.pos.y);
+		}else if(marioArray.pos.x >= 5000 && this.show){
+			mushroomSprite.drawSprite("mushroom",context,this.pos.x  - 4550 ,this.pos.y);
 		}
 	
 	}

@@ -26,8 +26,6 @@ class Fireball{
 	}
 	
 	update(marioArray,screen,goombaArray,turtleArray){
-
-		console.log(this.pos.x);
 		this.faceDirection = marioArray.faceDirection;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
 		//	&& shape.pos.x < this.pos.x + this.width 右
@@ -129,46 +127,48 @@ class Fireball{
 
 
 	draw(context,fireballSprite,marioArray){	
-		// 這邊要調數字 BUG
-		if(this.show && this.goRight && !this.goLeft){
+		// 這邊要調數字 BUG  往左邊發射的話，會重複在畫面上畫
+		if(this.show && this.goRight && !this.goLeft ){
 			if(this.pos.x < 450){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 3000 ){
+			}else if(this.pos.x >= 450 && this.pos.x < 5000 ){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x - marioArray.pos.x  + 450 ,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 3000 ){
-				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 2050 ,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 5000 ){
+				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
 			}
 		}
 
-		if(this.show && this.goRight && !this.goLeft && marioArray.isRunning && this.faceDirection == 1){
-			if(this.pos.x < 450){
-				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 3000 ){
-				fireballSprite.drawFireBallSprite(this.firing(),context,this.previousPos.x  + 450   ,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 3000 ){
-				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 2050 ,this.pos.y,this.faceDirection < 0);
-			}
-		}
+		// if(this.show && this.goRight && !this.goLeft && marioArray.isRunning && this.faceDirection == 1){
+		// 	if(this.pos.x < 450){
+		// 		fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
+		// 	}else if(this.pos.x >= 450 && this.pos.x < 5000 ){
 
-		if(this.show && this.goLeft && !this.goRight ){
+		// 		fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x - marioArray.pos.x  + 450   ,this.pos.y,this.faceDirection < 0);
+		// 	}else if(this.pos.x >= 5000 ){
+		// 		fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
+		// 	}
+		// }
+
+		if(this.show && this.goLeft && !this.goRight  ){
 			if(this.pos.x < 450){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 3000 ){
+			}else if(this.pos.x >= 450 && this.pos.x < 5000 ){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x - marioArray.pos.x  + 450 ,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 3000 ){
-				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 2050 ,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 5000 ){
+				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
 			}
 		}
 
-		if(this.show && this.goLeft && !this.goRight  && marioArray.isRunning && this.faceDirection == -1){
-			if(this.pos.x < 450){
-				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 3000 ){
-				fireballSprite.drawFireBallSprite(this.firing(),context,this.previousLeftPos.x  + 450 ,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 3000 ){
-				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 2050 ,this.pos.y,this.faceDirection < 0);
-			}
-		}
+		// if(this.show && this.goLeft && !this.goRight  && marioArray.isRunning && this.faceDirection == -1){
+		// 	if(this.pos.x < 450){
+		// 		fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
+		// 	}else if(this.pos.x >= 450 && this.pos.x < 5000 ){
+
+		// 		fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x - marioArray.pos.x  + 450 ,this.pos.y,this.faceDirection < 0);
+		// 	}else if(this.pos.x >= 5000 ){
+		// 		fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
+		// 	}
+		// }
 	}
 }
 
