@@ -39,6 +39,16 @@ function loadClouds() {
 }
 
 
+
+function loadDecorations(width,height,name,imageUrl) {
+	return loadImage(`../imgs/images/background/${imageUrl}.png`)
+		.then(Image=>{
+			let Sprite = new Sprites(Image,width,height);
+			Sprite.getTileImage(name,0,0,width,height);  
+			return Sprite;
+		});
+}
+
 function loadTube() {
 	return loadImage("../imgs/images/tube.png")
 		.then(tubeImage=>{
@@ -48,4 +58,4 @@ function loadTube() {
 		});
 }
 
-export {loadMario,loadSky,loadGround,loadTube,loadClouds};
+export {loadMario,loadSky,loadGround,loadTube,loadClouds,loadDecorations};

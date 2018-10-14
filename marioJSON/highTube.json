@@ -1,7 +1,7 @@
 {
   "frames": [
     {
-      "name": "tube",
+      "name": "highTube",
       "ranges": [
         0,
         0,
@@ -12,7 +12,7 @@
   ],
   "Pos": [
     {
-      "tile": "tube",
+      "tile": "highTube",
       "ranges": [
         [
           360,

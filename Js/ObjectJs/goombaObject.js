@@ -29,7 +29,7 @@ class Goomba{
 		];
 	}
 	
-	update(tubeJson,turtleArray,marioArray,screen){
+	update(tubeJson,turtleArray,marioArray,screen,oddBrickJson){
 		this.faceDirection = this.direction;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
@@ -52,7 +52,8 @@ class Goomba{
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
 			&& !marioArray.isDie 
-		  && !this.isDie
+			&& !this.isDie
+			&& !this.hitByFire
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -71,7 +72,8 @@ class Goomba{
 		//------2.大馬力歐死亡變小馬力歐-------
 		if(!marioArray.isInvincible 
 			&& marioArray.isBigMario 
-		  && !this.isDie
+			&& !this.isDie
+			&& !this.hitByFire
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -89,7 +91,8 @@ class Goomba{
 
 		if(!marioArray.isInvincible 
 			&& marioArray.isFireMario 
-		  && !this.isDie
+			&& !this.isDie
+			&& !this.hitByFire
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -110,6 +113,9 @@ class Goomba{
 
 		
 		// -------壞香菇與障礙物之間的碰撞-------
+
+
+		// ----------------Case 1: tube ---------------------
 		tubeJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.pos.x +  this.width > x  
 				&& this.pos.x  < x + tubeJson.width )
@@ -118,6 +124,20 @@ class Goomba{
 				this.direction *= -1;
 			}
 		});
+
+		// ----------------Case 2: oddBrick ---------------------
+
+		oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{
+
+			if(this.pos.x +  this.width > x 
+				&& this.pos.x  < x + oddBrickJson.width )
+			{	
+				this.speed.x *= -1;
+				this.direction *= -1;
+			}
+	
+		});
+		
 
 		// -------End 壞香菇與障礙物之間的碰撞-------
 
@@ -164,7 +184,9 @@ class Goomba{
 		if(this.hitByFire){
 			this.pos.y += this.speed.y;
 			this.speed.x = 0;
-		}
+		}  //  hitByFire 的狀態轉換在 fireballObject 檔案裡
+
+
 
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
 			if(!this.hitByFire && this.pos.y >= y1 * screen.height - this.height
@@ -173,31 +195,45 @@ class Goomba{
 				this.pos.y = y1 * screen.height - this.height;
 			}
 
-			if(this.faceDirection == 1 &&	this.falling == true && this.pos.x + this.width == x1 * 16 ){
+			if(this.faceDirection == 1 
+				&&	this.falling == true 
+				&& this.pos.x + this.width == x1 * 16 ){
 				this.speed.x *= -1;
 			} //讓 goomba 掉下懸崖時會左右彈
 
-			if(this.faceDirection == -1 &&	this.falling == true && this.pos.x + this.width == x1 * 16 - 32 ){
+			if(this.faceDirection == -1 
+				&&	this.falling == true
+				 && this.pos.x + this.width == x1 * 16 - 32 ){
 				this.speed.x *= -1;
 			} 
 
-			if( this.pos.x > x2 * 16 + 16){
+			if( this.faceDirection == 1 
+				&& this.pos.x > x2 * 16 + 16){
 				this.falling = true;
 				this.pos.y += this.speed.y;
 			}
 
+			if(this.faceDirection == -1 
+				&&	this.falling == true 
+				&& this.pos.x + this.width == x1 * 16  ){
+				this.speed.x *= -1;
+			} 
+
+			// if( this.pos.x > x2 * 16 + 16){
+			// 	this.falling = true;
+			// 	this.pos.y += this.speed.y;
+			// }			
+		
 			
-			if( this.faceDirection == 1 && this.pos.x > x2 * 16 + 16){
-				this.falling = true;
-				this.pos.y += this.speed.y;
-			}
-			if( this.faceDirection == -1 && this.pos.x < x1 * 16 - 16 ){
+			if( this.faceDirection == -1 
+				&& this.pos.x < x1 * 16 - 16 ){
 				this.falling = true;
 				this.pos.y += this.speed.y;
 			}
 
 			//超越畫面上一定距離就死掉並清除陣列
-			if(this.pos.y >= y2 * screen.height + 176 || this.pos.x >= 6000){
+			if(this.pos.y >= y2 * screen.height + 176 
+				|| this.pos.x >= 6000){
 				this.isDie = true;
 			}
 			

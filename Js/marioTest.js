@@ -6,6 +6,7 @@ import {Coin} from "../Js/ObjectJs/coinObject.js";
 import {Flycoin} from "../Js/ObjectJs/flycoinObject.js";
 import {Turtle} from "./ObjectJs/turtleObject.js";
 import {Tube} from "./ObjectJs/tubeObject.js";
+import {OddBrick} from "./ObjectJs/oddBrickObject.js";
 import {Goomba} from "./ObjectJs/goombaObject.js";
 import {Pole} from "./ObjectJs/poleObject.js";
 import {Flag} from "./ObjectJs/flagObject.js";
@@ -89,6 +90,20 @@ function createTubeArray(name) {
 				tubeArray.push(tube);
 			});
 			return tubeArray;
+		});
+}
+
+function createOddBrickArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(oddBrickSprite=>{
+			let oddBrickArray = [];
+			oddBrickSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let oddBrick = new OddBrick();
+				oddBrick.pos.set(x,y);
+				oddBrickArray.push(oddBrick);
+			});
+			return oddBrickArray;
 		});
 }
 
@@ -283,6 +298,9 @@ Promise.all([
 	drawObjects("tube"),
 	createTubeArray("tube"),
 	loadJson("tube"),
+	drawObjects("oddBrick"),
+	createOddBrickArray("oddBrick"),
+	loadJson("oddBrick"),
 	drawObjects("goomba"),
 	createGoombaArray("goomba"),
 
@@ -332,7 +350,8 @@ Promise.all([
 	coinSpriteSet,coinArray,
 	flycoinSprite,flycoinArray,
 	turtleSpriteSet,turtleArray,
-	tubeSpriteSet,tubeArray,tubeJson,
+	tubeSprite,tubeArray,tubeJson,
+	oddBrickSprite,oddBrickArray,oddBrickJson,
 	goombaSpriteSet,goombaArray,
 	poleSprite,poleArray,poleJson,
 	flagSprite,flagArray,
@@ -347,16 +366,15 @@ Promise.all([
 	flowerSprite,flowerArray,flowerJson])=>{
 	
 	//--------------------遊戲控制流程-----------------------
-	console.log(flowerSprite);
-	console.log(flowerArray);
-	console.log(flowerJson);
+
 	function startGame() {
 		marioArray = [];
 		coinArray = [];
 		flycoinArray = [];  //  這邊常常忘記清空。
-		flagArray = [];
 		turtleArray = [];
+		flagArray = [];
 		tubeArray = [];
+		oddBrickArray = [];
 		goombaArray = [];
 		poleArray = [];
 		flagArray = [];
@@ -375,6 +393,7 @@ Promise.all([
 			createFlycoinArray("flycoin"),
 			createTurtleArray("badTurtle"),
 			createTubeArray("tube"),
+			createOddBrickArray("oddBrick"),
 			createGoombaArray("goomba"),
 			createPoleArray("pole"),
 			createFlagArray("flag"),
@@ -392,6 +411,7 @@ Promise.all([
 			flycoin,
 			turtle,
 			tube,
+			oddBrick,
 			goomba,
 			pole,
 			flag,
@@ -409,6 +429,7 @@ Promise.all([
 			coinArray = coin;
 			turtleArray = turtle;
 			tubeArray = tube;
+			oddBrickArray = oddBrick;
 			goombaArray = goomba;
 			poleArray = pole;
 			flagArray = flag;
@@ -509,7 +530,7 @@ Promise.all([
 			flycoinArray[j].draw(context,flycoinSprite,marioArray[0]);
 			flycoinArray[j].update(marioArray[0],questionBrickJson);
 			let flycoin = flycoinArray[j];
-			// if(flycoin.show == false){
+			// if(flycoin.isVanished == true){
 			// 	flycoinArray.splice(j,1);
 			// 	j--;
 			// }	
@@ -518,39 +539,57 @@ Promise.all([
 			// }
 		}
 
+
+
+		// ---------------障礙區-----------------
 	
 		for(let j = 0;j < tubeArray.length;j += 1){
-			tubeArray[j].draw(context,tubeSpriteSet,marioArray[0]);
+			tubeArray[j].draw(context,tubeSprite,marioArray[0]);
 			tubeArray[j].update(marioArray[0]);
 		}	
+
+
+		for(let j = 0;j < oddBrickArray.length;j += 1){
+			oddBrickArray[j].draw(context,oddBrickSprite,marioArray[0]);
+			oddBrickArray[j].update();
+		}	
+
+
+		// ---------------end of 障礙區-----------------
+
+
+
+
+
+
 		// --------------------怪物區---------------------
-		// for(let j = 0;j < turtleArray.length;j += 1){
-		// 	turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
-		// 	turtleArray[j].update(screen,tubeJson,marioArray[0]);
-		// 	let turtle = turtleArray[j];
-		// 	if(turtle.isDie == true){
-		// 		turtleArray.splice(j,1);
-		// 		j--;
-		// 	}
-		// 	if(turtleArray.length == 0){
-		// 		break;
-		// 	}
-		// }	
+		for(let j = 0;j < turtleArray.length;j += 1){
+			turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
+			turtleArray[j].update(screen,tubeJson,marioArray[0],oddBrickJson);
+			let turtle = turtleArray[j];
+			if(turtle.isDie == true){
+				turtleArray.splice(j,1);
+				j--;
+			}
+			if(turtleArray.length == 0){
+				break;
+			}
+		}	
 
 	
 			
-		// for(let j = 0;j < goombaArray.length;j += 1){
-		// 	goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
-		// 	goombaArray[j].update(tubeJson,turtleArray,marioArray[0],screen);
-		// 	let goomba = goombaArray[j];
-		// 	if(goomba.isDie == true){
-		// 		goombaArray.splice(j,1);
-		// 		j--;
-		// 	}
-		// 	if(goombaArray.length == 0){
-		// 		break;
-		// 	}
-		// }
+		for(let j = 0;j < goombaArray.length;j += 1){
+			goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
+			goombaArray[j].update(tubeJson,turtleArray,marioArray[0],screen,oddBrickJson);
+			let goomba = goombaArray[j];
+			if(goomba.show == false){
+				goombaArray.splice(j,1);
+				j--;
+			}
+			if(goombaArray.length == 0){
+				break;
+			}
+		}
 
 		// --------------end 怪物區---------------------
 
@@ -618,12 +657,9 @@ Promise.all([
 
 		for(let j = 0;j < marioArray.length;j += 1){
 			marioArray[j].draw(context, marioSpriteSet,screen,fireballSprite,goombaArray,turtleArray);
-			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,questionBrickJson,brickArray);
+			marioArray[j].update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,oddBrickJson);
 		}	
 		
-		
-
-
 		// if(mario.pos.x > 40){
 		// 	backgroundMusic.play();
 		// }   

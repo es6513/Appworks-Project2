@@ -44,7 +44,6 @@ class QuestionBrick{
 				if(!this.isUseLess){
 					this.coinBrickSound();
 				}
-			
 				this.isUseLess = true;
 				marioArray.pos.y = this.pos.y ;
 				marioArray.speed.y = 0;

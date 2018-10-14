@@ -32,7 +32,7 @@ class Turtle{
 		];
 	}
 	
-	update(screen,tubeJson,marioArray){
+	update(screen,tubeJson,marioArray,oddBrickJson){
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
@@ -62,6 +62,7 @@ class Turtle{
 			&& marioArray.pos.y < this.pos.y + this.height
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
+			&& !this.hitByFire
 			&& this.isRotating 
 			&& this.quickToDie
 		){
@@ -81,6 +82,7 @@ class Turtle{
 			&& marioArray.pos.y < this.pos.y + this.height
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
+			&& !this.hitByFire
 			&& !this.quickToDie ){
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
@@ -100,6 +102,7 @@ class Turtle{
 			&& marioArray.pos.y < this.pos.y + this.height
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
+			&& !this.hitByFire
 			&& this.isRotating 
 			&& this.quickToDie
 		){
@@ -117,6 +120,7 @@ class Turtle{
 			&& marioArray.pos.y < this.pos.y + this.height
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
+			&& !this.hitByFire
 			&& !this.quickToDie ){
 			marioArray.speed.y = -10;
 			marioArray.isInvincible = true;
@@ -134,6 +138,7 @@ class Turtle{
 			&& marioArray.pos.y < this.pos.y + this.height
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
+			&& !this.hitByFire
 			&& this.isRotating 
 			&& this.quickToDie
 		){
@@ -152,6 +157,7 @@ class Turtle{
 			&& marioArray.pos.y < this.pos.y + this.height
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
+			&& !this.hitByFire
 			&& !this.quickToDie ){
 			marioArray.speed.y = -10;
 			marioArray.isInvincible = true;
@@ -199,6 +205,8 @@ class Turtle{
 		// ---------End烏龜會飛出去----------
 		
 		// -------烏龜與障礙物之間的碰撞-------
+
+		// ----------------Case 1: tube ---------------------
 		tubeJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.pos.x +  this.width > x  
 				&& this.pos.x  < x + tubeJson.width )
@@ -211,6 +219,20 @@ class Turtle{
 				}
 			}
 		});
+
+
+		// ----------------Case 2: oddBrick ---------------------
+
+		oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  this.width > x 
+						&& this.pos.x  < x + oddBrickJson.width )
+			{	
+				this.speed.x *= -1;
+				this.direction *= -1;
+			}
+			
+		});
+				
 
 		// -------End 烏龜與障礙物之間的碰撞-------
 
@@ -251,37 +273,50 @@ class Turtle{
 		if(this.hitByFire){
 			this.pos.y += this.speed.y;
 			this.speed.x = 0;
-		}
+		}//  hitByFire 的狀態轉換在 fireballObject 檔案裡
 	
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
-			if(!this.hitByFire && this.pos.y >= y1 * screen.height - this.height
+			if(!this.hitByFire
+				&& this.pos.y >= y1 * screen.height - this.height
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
 				this.pos.y = y1 * screen.height - this.height;
 			}
 
-			if(this.faceDirection == 1 &&	this.falling == true && this.pos.x + this.width == x1 * 16 ){
+			if(this.faceDirection == 1 
+				&&	this.falling == true 
+				&& this.pos.x + this.width == x1 * 16 ){
 				this.speed.x *= -1;
 			} //讓 turtle 掉下懸崖時會左右彈
 
-			if(this.faceDirection == -1 &&	this.falling == true && this.pos.x + this.width == x1 * 16 - 32 ){
+			if(this.faceDirection == -1 
+				&&	this.falling == true 
+				&& this.pos.x + this.width == x1 * 16 - 32 ){
 				this.speed.x *= -1;
 			} 
 
-			if(this.faceDirection == -1 &&	this.falling == true && this.pos.x + this.width == x1 * 16  ){
-				this.speed.x *= -1;
-			} 
-
-			if( this.faceDirection == 1 && this.pos.x > x2 * 16 + 16){
-				this.falling = true;
-				this.pos.y += this.speed.y;
-			}
-			if( this.faceDirection == -1 && this.pos.x < x1 * 16 - 16 ){
+			if( this.faceDirection == 1 
+				&& this.pos.x > x2 * 16 + 16){
 				this.falling = true;
 				this.pos.y += this.speed.y;
 			}
 
-			if(this.pos.y >= y2 * screen.height + 176 || this.pos.x >= 6000){
+			if(this.faceDirection == -1 
+				&&	this.falling == true 
+				&& this.pos.x + this.width == x1 * 16  ){
+				this.speed.x *= -1;
+			} 
+
+			
+			if( this.faceDirection == -1 
+				&& this.pos.x < x1 * 16 - 16 ){
+				this.falling = true;
+				this.pos.y += this.speed.y;
+			}
+
+
+			if(this.pos.y >= y2 * screen.height + 176 
+				|| this.pos.x >= 6000){
 				this.isDie = true;
 			}
 

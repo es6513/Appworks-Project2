@@ -1,5 +1,5 @@
 import {Sprites} from "../Js/SpriteSet.js";
-import {loadSky, loadGround,loadTube,loadClouds } from "../Js/loadSprite.js";
+import {loadSky, loadGround,loadTube,loadClouds,loadDecorations } from "../Js/loadSprite.js";
 
 // 用來畫不會動背景的部分
 function  drawScreen(background,context,sprites) {
@@ -33,6 +33,16 @@ function  drawTubes(background,context,sprites) {
 }
 
 function  drawClouds(background,context,sprites) {
+	background.ranges.forEach(([x1,x2,y1,y2]) => {
+		for(let x = x1  ; x <= x2 ; x += 1){
+			for(let y = y1 ; y <= y2 ; y += 1){
+				sprites.drawTile(background.tile,context,x,y);
+			}
+		}
+	});
+}
+
+function  drawDecorations(background,context,sprites) {
 	background.ranges.forEach(([x1,x2,y1,y2]) => {
 		for(let x = x1  ; x <= x2 ; x += 1){
 			for(let y = y1 ; y <= y2 ; y += 1){
@@ -105,17 +115,28 @@ function drawBackground(name) {
 			screen,
 			loadSky(),
 			loadGround(),
-			loadTube(),
-			loadClouds()
+			loadClouds(),
+			loadDecorations(32,16,"smallGrass","smallGrass3216"),
+			loadDecorations(48,16,"mediumGrass","mediumGrass4816"),
+			loadDecorations(64,16,"bigGrass","bigGrass6416"),
+			loadDecorations(48,32,"smallMountain","smallMountain4832"),
+			loadDecorations(80,48,"bigMountain","bigMountain8048"),
 		]))
-		.then(([screen,skySprite,groundSprite,tubeSprite,cloudSprite])=>{	
+		.then(([screen,skySprite,groundSprite,cloudSprite,
+			smallGrassSprite,mediumGrassSprite,bigGrassSprite,
+			smallMountainSprite,bigMountainSprite
+		])=>{	
 			let backgroundSprite = document.createElement("canvas");
 			backgroundSprite.width = 8000;
 			backgroundSprite.height = 640;
 			drawScreen(screen.backgrounds[0],backgroundSprite.getContext("2d"),skySprite);
 			drawScreen(screen.backgrounds[1],backgroundSprite.getContext("2d"),groundSprite);
-			// drawTubes(screen.tubes[0],backgroundSprite.getContext("2d"),tubeSprite);
 			drawClouds(screen.clouds[0],backgroundSprite.getContext("2d"),cloudSprite);
+			drawDecorations(screen.smallGrass[0],backgroundSprite.getContext("2d"),smallGrassSprite);
+			drawDecorations(screen.mediumGrass[0],backgroundSprite.getContext("2d"),mediumGrassSprite);
+			drawDecorations(screen.bigGrass[0],backgroundSprite.getContext("2d"),bigGrassSprite);
+			drawDecorations(screen.smallMountain[0],backgroundSprite.getContext("2d"),smallMountainSprite);
+			drawDecorations(screen.bigMountain[0],backgroundSprite.getContext("2d"),bigMountainSprite);
 			return backgroundSprite;
 		});
 	;

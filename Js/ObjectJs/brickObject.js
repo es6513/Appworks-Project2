@@ -26,6 +26,7 @@ class Brick{
 			if(!this.clearTimeout){
 				timeoutId = setTimeout(() => {
 					this.pos.y += 4;
+					this.goUp = false;
 					this.clearTimeout = null;
 				},100);
 				this.clearTimeout = timeoutId;
@@ -47,7 +48,7 @@ class Brick{
 			){
 				marioArray.pos.y = this.pos.y ;
 				this.pos.y -= 4;
-				// this.pos.y += 2;
+				this.bumpkSound();
 				this.goUp = true;
 				marioArray.speed.y = 0;
 				marioArray.isBottomBrick = true;
@@ -101,9 +102,9 @@ class Brick{
 
 	}
 
-	brickSound(){
-		let brickSound = new Audio("/music/mario-coin-sound.wav");
-		brickSound.play();
+	bumpkSound(){
+		let bumpkSound = new Audio("/music/mario-bump-sound.wav");
+		bumpkSound.play();
 	}
 
 	draw(context,brickSprite,marioArray){

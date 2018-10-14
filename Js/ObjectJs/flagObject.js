@@ -6,7 +6,7 @@ class Flag{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);
 		this.speed = {
-			y:1
+			y:2
 		};
 		this.width = 16;
 		this.height = 16;
@@ -18,7 +18,7 @@ class Flag{
 			this.moveDown();
 		}
 		poleJson.Pos[0].ranges.forEach(([x,y])=>{
-			if( this.pos.y  == y + poleJson.height - 16 - this.height)
+			if( this.pos.y  >= y + poleJson.height - 16 - this.height)
 			{ 
 				this.pos.y =  y + poleJson.height - 16 - this.height;
 				this.isOnBottom = true;

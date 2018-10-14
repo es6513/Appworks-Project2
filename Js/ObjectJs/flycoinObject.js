@@ -50,7 +50,6 @@ class Flycoin{
 
 	}
 
-
 	flashing(){
 		this.frameIndex = ++this.frameIndex % 36 ;
 		return this.framesRun[this.frameIndex];
