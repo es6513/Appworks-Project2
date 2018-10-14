@@ -1,16 +1,15 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-// import {marioArray} from "../marioArrayTest.js";
 
 
 class Flower{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);
+		this.speed = new PositionAndSpeed(0,1);
 		this.frameIndex = 0;
 		this.width = 16;
 		this.height = 16;
 		this.show = true;
-
-
+		this.appear = false;
 		this.framesRun = [
 			"flower-1","flower-1","flower-1","flower-1","flower-1","flower-1","flower-1","flower-1","flower-1","flower-1","flower-1","flower-1",
 			"flower-2","flower-2","flower-2","flower-2","flower-2","flower-2","flower-2","flower-2","flower-2","flower-2","flower-2","flower-2",
@@ -26,23 +25,31 @@ class Flower{
 		//	&& shape.pos.y + shape.height > this.pos.y 上
 		//	&& shape.pos.y < this.pos.y + this.height 下
 
-		
-		if(this.show && this.pos.x <= marioArray.pos.x + 12
-			&& this.pos.x + 12 >=  marioArray.pos.x   
-			&& this.pos.y <= marioArray.pos.y + marioArray.height
-			&& this.pos.y >=  marioArray.pos.y  
+		if(!this.appear){
+			this.previousY = this.pos.y;
+			this.previousX = this.pos.x;
+		}		
+
+		// 花被撞到後先往上移
+		if(this.appear && this.pos.y > this.previousY - this.height
+			&& this.pos.x < this.previousX + this.width){
+			this.pos.y -= this.speed.y;
+		}
+
+		if(this.appear 
+			&& this.pos.x < marioArray.pos.x + marioArray.width
+			&& this.pos.x + this.width >  marioArray.pos.x   
+			&& this.pos.y < marioArray.pos.y + marioArray.height
+			&& this.pos.y >  marioArray.pos.y  
 		){		
-			this.flowerSound();
 			this.show = false;
+			this.flowerPowerSound();
 			if(marioArray.isBigMario && !marioArray.isFireMario){
 				marioArray.changeToFire = true;
 			}else if(!marioArray.isBigMario && !marioArray.isFireMario){
 				marioArray.changeToBig = true;
 			}
-		
 		}
-		//16是寬度， EX : 160 < marioArray.pos < 176
-		// 前兩行的 +8 +12 => 讓判定範圍更精準，並非真正碰撞
 	}
 
 	flashing(){
@@ -50,7 +57,7 @@ class Flower{
 		return this.framesRun[this.frameIndex];
 	}
 
-	flowerSound(){
+	flowerPowerSound(){
 		let flowerSound = new Audio("/music/maro-powerup-sound.wav");
 		flowerSound.play();
 	}

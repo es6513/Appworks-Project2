@@ -1,7 +1,7 @@
 {
   "frames": [
     {
-      "name": "mushroomBrick-1",
+      "name": "flowerBrick-1",
       "ranges": [
         0,
         0,
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "name": "mushroomBrick-2",
+      "name": "flowerBrick-2",
       "ranges": [
         16,
         0,
@@ -19,7 +19,7 @@
       ]
     },
     {
-      "name": "mushroomBrick-3",
+      "name": "flowerBrick-3",
       "ranges": [
         32,
         0,
@@ -28,7 +28,7 @@
       ]
     },
     {
-      "name": "uselessMushroomBrick",
+      "name": "uselessFlowerBrick",
       "ranges": [
         48,
         0,
@@ -39,10 +39,10 @@
   ],
   "Pos": [
     {
-      "tile": "mushroomBrick",
+      "tile": "flowerBrick",
       "ranges": [
         [
-          2000,
+          2160,
           192
         ]
       ]

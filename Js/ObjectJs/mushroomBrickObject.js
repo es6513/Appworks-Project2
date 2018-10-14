@@ -19,10 +19,18 @@ class MushroomBrick{
 		];
 	}
 	
-	update(marioArray,mushroomArray){
+	update(marioArray,mushroomArray,mushroomBrickArray){
 		// X 軸判定要再調整一下
 		//---------------小馬力歐-----------------
 		// -------------下方----------------
+		if(mushroomArray.length != 0){
+			for(let j = 0;j < mushroomBrickArray.length;j += 1){
+				if(mushroomBrickArray[j].isUseLess == true){
+					mushroomArray[j].appear = true;
+				}
+			}
+		}
+	
 		if(!marioArray.isBigMario && !marioArray.isFireMario){
 			if(marioArray.speed.y < 0 
 			&& marioArray.pos.y >= this.pos.y
@@ -30,7 +38,9 @@ class MushroomBrick{
 			&& marioArray.pos.x + marioArray.width / 2 >= this.pos.x   
 			&& marioArray.pos.x <= this.pos.x + this.width / 2
 			){
-				// mushroomArray[1].appear = true;
+				if(!this.isUseLess){
+					this.mushroomAppearSound();
+				}
 				this.isUseLess = true;
 				marioArray.pos.y = this.pos.y ;
 				marioArray.speed.y = 0;
@@ -61,7 +71,9 @@ class MushroomBrick{
 				//判定的bug 用 width/2可以較精確判定(還是會有穿越的情形)
 				&& marioArray.pos.x <= this.pos.x + this.width / 2
 			){
-				// mushroomArray[1].appear = true;
+				if(!this.isUseLess){
+					this.mushroomAppearSound();
+				}
 				this.isUseLess = true;
 				marioArray.pos.y = this.pos.y + 16 ;
 				marioArray.speed.y = 0;

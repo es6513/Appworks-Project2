@@ -1,8 +1,7 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-// import {marioArray} from "../marioArrayTest.js";
 
 
-class QuestionBrick{
+class FlowerBrick{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);
 		this.frameIndex = 0;
@@ -10,45 +9,42 @@ class QuestionBrick{
 		this.height = 16;
 		this.isUseLess = false;
 		this.framesRun = [
-			"questionBrick-1","questionBrick-1","questionBrick-1","questionBrick-1","questionBrick-1","questionBrick-1",
-			"questionBrick-1","questionBrick-1","questionBrick-1","questionBrick-1","questionBrick-1","questionBrick-1",
-			"questionBrick-2","questionBrick-2","questionBrick-2","questionBrick-2","questionBrick-2","questionBrick-2",
-			"questionBrick-2","questionBrick-2","questionBrick-2","questionBrick-2","questionBrick-2","questionBrick-2",
-			"questionBrick-3","questionBrick-3","questionBrick-3","questionBrick-3","questionBrick-3","questionBrick-3",
-			"questionBrick-3","questionBrick-3","questionBrick-3","questionBrick-3","questionBrick-3","questionBrick-3"
+			"flowerBrick-1","flowerBrick-1","flowerBrick-1","flowerBrick-1","flowerBrick-1","flowerBrick-1",
+			"flowerBrick-1","flowerBrick-1","flowerBrick-1","flowerBrick-1","flowerBrick-1","flowerBrick-1",
+			"flowerBrick-2","flowerBrick-2","flowerBrick-2","flowerBrick-2","flowerBrick-2","flowerBrick-2",
+			"flowerBrick-2","flowerBrick-2","flowerBrick-2","flowerBrick-2","flowerBrick-2","flowerBrick-2",
+			"flowerBrick-3","flowerBrick-3","flowerBrick-3","flowerBrick-3","flowerBrick-3","flowerBrick-3",
+			"flowerBrick-3","flowerBrick-3","flowerBrick-3","flowerBrick-3","flowerBrick-3","flowerBrick-3"
 		];
 	}
 	
-	update(marioArray,flycoinArray,questionBrickArray){
-
+	update(marioArray,flowerArray,flowerBrickArray){
 		// X 軸判定要再調整一下
 		//---------------小馬力歐-----------------
 		// -------------下方----------------
-
-		if(flycoinArray.length != 0){
-			for(let j = 0;j < questionBrickArray.length;j += 1){
-				if(questionBrickArray[j].isUseLess == true){
-					flycoinArray[j].show = true;
+		if(flowerArray.length != 0){
+			for(let j = 0;j < flowerBrickArray.length;j += 1){
+				if(flowerBrickArray[j].isUseLess == true){
+					flowerArray[j].appear = true;
 				}
 			}
 		}
-		
-
+	
 		if(!marioArray.isBigMario && !marioArray.isFireMario){
 			if(marioArray.speed.y < 0 
 			&& marioArray.pos.y >= this.pos.y
 			&& marioArray.pos.y <= this.pos.y + 16
-			&& marioArray.pos.x + marioArray.width / 2  >= this.pos.x 
+			&& marioArray.pos.x + marioArray.width / 2 >= this.pos.x   
 			&& marioArray.pos.x <= this.pos.x + this.width / 2
 			){
 				if(!this.isUseLess){
-					this.coinBrickSound();
+					this.flowerAppearSound();
 				}
-			
 				this.isUseLess = true;
 				marioArray.pos.y = this.pos.y ;
 				marioArray.speed.y = 0;
 				marioArray.isBottomBrick = true;
+				
 			}
 
 			// -------------上方----------------
@@ -71,12 +67,12 @@ class QuestionBrick{
 			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16
-				&& marioArray.pos.x + marioArray.width > this.pos.x 
+				&& marioArray.pos.x + marioArray.width / 2 >= this.pos.x 
 				//判定的bug 用 width/2可以較精確判定(還是會有穿越的情形)
 				&& marioArray.pos.x <= this.pos.x + this.width / 2
 			){
 				if(!this.isUseLess){
-					this.coinBrickSound();
+					this.flowerAppearSound();
 				}
 				this.isUseLess = true;
 				marioArray.pos.y = this.pos.y + 16 ;
@@ -105,31 +101,29 @@ class QuestionBrick{
 		return this.framesRun[this.frameIndex];
 	}
 
-	coinBrickSound(){
-		let brickSound = new Audio("/music/mario-coin-sound.wav");
-		brickSound.play();
+	flowerAppearSound(){
+		let mushroomAppearSound = new Audio("/music/mario-powerup-appears.wav");
+		mushroomAppearSound.play();
 	}
 
-
-
-	draw(context,questionBrickSprite,marioArray){
+	draw(context,flowerBrickSprite,marioArray){
 		if(!this.isUseLess){
 			if(marioArray.pos.x < 450){
-				questionBrickSprite.drawSprite(this.flashing(),context,this.pos.x,this.pos.y);
+				flowerBrickSprite.drawSprite(this.flashing(),context,this.pos.x,this.pos.y);
 			}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 ){
-				questionBrickSprite.drawSprite(this.flashing(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+				flowerBrickSprite.drawSprite(this.flashing(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
 			}else if(marioArray.pos.x >= 5000 ){
-				questionBrickSprite.drawSprite(this.flashing(),context,this.pos.x  - 4550 ,this.pos.y);
+				flowerBrickSprite.drawSprite(this.flashing(),context,this.pos.x  - 4550 ,this.pos.y);
 			}
 		}
 
 		if(this.isUseLess){
 			if(marioArray.pos.x < 450){
-				questionBrickSprite.drawSprite("uselessBrick",context,this.pos.x,this.pos.y);
+				flowerBrickSprite.drawSprite("uselessFlowerBrick",context,this.pos.x,this.pos.y);
 			}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 ){
-				questionBrickSprite.drawSprite("uselessBrick",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+				flowerBrickSprite.drawSprite("uselessFlowerBrick",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
 			}else if(marioArray.pos.x >= 5000 ){
-				questionBrickSprite.drawSprite("uselessBrick",context,this.pos.x  - 4550 ,this.pos.y);
+				flowerBrickSprite.drawSprite("uselessFlowerBrick",context,this.pos.x  - 4550 ,this.pos.y);
 			}
 		}
 		
@@ -137,4 +131,4 @@ class QuestionBrick{
 	}
 }
 
-export {QuestionBrick};
+export {FlowerBrick};

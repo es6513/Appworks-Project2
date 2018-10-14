@@ -30,12 +30,10 @@ class Flycoin{
 
 		// bug  金幣的速度與設定的不一致， EX: 設定1會變3 、設定2會變4，暫時先用大於小於的方式來做判定消失
 
-
 		if(!this.show){
 			this.previousY = this.pos.y;
 			this.previousX = this.pos.x;
 		}		
-		console.log(this.pos.y);
 		// console.log(this.previousY - this.width * 4);
 		if(this.pos.y == this.previousY - this.width * 6){
 			this.speed.y *= -1;
@@ -51,7 +49,6 @@ class Flycoin{
 		}
 
 	}
-
 
 
 	flashing(){

@@ -12,6 +12,8 @@ import {Flag} from "./ObjectJs/flagObject.js";
 import {Castle} from "./ObjectJs/castleObject.js";
 import {Brick} from "./ObjectJs/brickObject.js";
 import {QuestionBrick} from "./ObjectJs/questionBrickObject.js";
+import {MushroomBrick} from "./ObjectJs/mushroomBrickObject.js";
+import {FlowerBrick} from "./ObjectJs/flowerBrickObject.js";
 import {Fireball} from "./ObjectJs/fireballObject.js";
 import {Flower} from "./ObjectJs/flowerObject.js";
 import {Mushroom} from "./ObjectJs/mushroomObject.js";
@@ -188,13 +190,27 @@ function createQuestionBrickArray(name) {
 		});
 }
 
+function createMushroomBrickArray(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(mushroomBrickSprite=>{
+			let mushroomBrickArray = [];
+			mushroomBrickSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let mushroomBrick = new MushroomBrick();
+				mushroomBrick.pos.set(x,y);
+				mushroomBrickArray.push(mushroomBrick);
+			});
+			return mushroomBrickArray;
+		});
+}
+
 function createFlowerBrickArray(name) {
 	return fetch(`/marioJSON/${name}.json`)
 		.then(r =>r.json())
-		.then(questionBrickSprite=>{
+		.then(flowerBrickSprite=>{
 			let flowerBrickArray = [];
-			questionBrickSprite.Pos[0].ranges.forEach(([x,y])=>{
-				let flowerBrick = new QuestionBrick();
+			flowerBrickSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let flowerBrick = new FlowerBrick();
 				flowerBrick.pos.set(x,y);
 				flowerBrickArray.push(flowerBrick);
 			});
@@ -260,6 +276,8 @@ Promise.all([
 	createCoinArray("coin"),
 	drawObjects("flycoin"),
 	createFlycoinArray("flycoin"),
+
+
 	drawObjects("badTurtle"),
 	createTurtleArray("badTurtle"),
 	drawObjects("tube"),
@@ -267,6 +285,8 @@ Promise.all([
 	loadJson("tube"),
 	drawObjects("goomba"),
 	createGoombaArray("goomba"),
+
+
 	drawObjects("pole"),
 	createPoleArray("pole"),
 	loadJson("pole"),
@@ -275,18 +295,30 @@ Promise.all([
 	drawObjects("highCastle"),
 	createCastleArray("highCastle"),
 	loadJson("highCastle"),
+
+
 	drawObjects("brick"),
 	createBrickArray("brick"),
 	loadJson("brick"),
 	drawObjects("questionBrick"),
 	createQuestionBrickArray("questionBrick"),
 	loadJson("questionBrick"),
+	drawObjects("mushroomBrick"),
+	createQuestionBrickArray("mushroomBrick"),
+	loadJson("mushroomBrick"),
+	drawObjects("flowerBrick"),
+	createFlowerBrickArray("flowerBrick"),  //這邊複製貼上的話，常常會忘記改函示名稱
+	loadJson("flowerBrick"),
+
+
 	loadBigMarioImage("marioRedder"),
 	loadMarioImage("marioRedder"),
 	createMarioArray("marioRedder"),
 	drawObjects("fireball"),
 	createFireballArray("fireball"),
 	loadJson("fireball"),
+
+
 	drawObjects("mushroom"),
 	createMushroomArray("mushroom"),
 	loadJson("mushroom"),
@@ -307,13 +339,17 @@ Promise.all([
 	castleSprite,castleArray,castleJson,
 	brickSprite,brickArray,brickJson,
 	questionBrickSprite,questionBrickArray,questionBrickJson,
+	mushroomBrickSprite,mushroomBrickArray,mushroomBrickJson,
+	flowerBrickSprite,flowerBrickArray,flowerBrickJson,
 	BigMarioSpriteSet,marioSpriteSet,marioArray,
 	fireballSprite,fireballArray,fireballJson,
 	mushroomSprite,mushroomArray,mushroomJson,
-	flowerSprite,flowerArray,flowerJson,])=>{
+	flowerSprite,flowerArray,flowerJson])=>{
 	
 	//--------------------遊戲控制流程-----------------------
-
+	console.log(flowerSprite);
+	console.log(flowerArray);
+	console.log(flowerJson);
 	function startGame() {
 		marioArray = [];
 		coinArray = [];
@@ -327,10 +363,14 @@ Promise.all([
 		castleArray = [];
 		brickArray = [];
 		questionBrickArray = [];
+		mushroomBrickArray = [];
+		flowerBrickArray = [];
+		flowerArray = [];
 		fireballArray = [];
 		mushroomArray = [];
 		flowerArray = [];
 		Promise.all([
+			createMarioArray("marioRedder"),
 			createCoinArray("coin"),
 			createFlycoinArray("flycoin"),
 			createTurtleArray("badTurtle"),
@@ -341,11 +381,13 @@ Promise.all([
 			createCastleArray("highCastle"),
 			createBrickArray("brick"),
 			createQuestionBrickArray("questionBrick"),
-			createMarioArray("marioRedder"),
+			createMushroomBrickArray("mushroomBrick"),		
+			createFlowerBrickArray("flowerBrick"),	
 			createFireballArray("fireball"),
 			createMushroomArray("mushroom"),
 			createFlowerArray("flower"),
 		]).then(([
+			mario,
 			coin,
 			flycoin,
 			turtle,
@@ -356,7 +398,8 @@ Promise.all([
 			castle,
 			brick,
 			questionBrick,
-			mario,
+			mushroomBrick,
+			flowerBrick,
 			fireball,
 			mushroom,
 			flower
@@ -372,6 +415,8 @@ Promise.all([
 			castleArray = castle;
 			brickArray = brick;
 			questionBrickArray = questionBrick;
+			mushroomBrickArray = mushroomBrick;
+			flowerBrickArray = flowerBrick;
 			fireballArray = fireball;
 			mushroomArray = mushroom;
 			flowerArray = flower;
@@ -431,16 +476,6 @@ Promise.all([
 
 		// requestAnimationFrame(animate);
 
-		// ------------------根據不同螢幕解析度做控制----------------------
-		// if(mario.pos.x < windowWidth / 2 - 8){
-		// 	context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
-		// }else if(mario.pos.x >= windowWidth / 2 - 8  && mario.pos.x < 956 + windowWidth / 2) {
-		// 	context.drawImage(backgroundSprite,mario.pos.x - windowWidth / 2 + 8 ,0,context.canvas.width,640,0,0,context.canvas.width,640);
-		// }else if(mario.pos.x >= (1920 - 8 + windowWidth) / 2){
-		// 	context.drawImage(backgroundSprite, 964 - 8,0,context.canvas.width,640,0,0,context.canvas.width,640);
-		// } // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
-		// ------------------end 根據不同螢幕解析度做控制----------------------
-
 
 		let context = myGameArea.context;
 		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
@@ -474,7 +509,7 @@ Promise.all([
 			flycoinArray[j].draw(context,flycoinSprite,marioArray[0]);
 			flycoinArray[j].update(marioArray[0],questionBrickJson);
 			let flycoin = flycoinArray[j];
-			// if(flycoin.isVanished == true){
+			// if(flycoin.show == false){
 			// 	flycoinArray.splice(j,1);
 			// 	j--;
 			// }	
@@ -542,20 +577,39 @@ Promise.all([
 		for(let j = 0;j < flowerArray.length;j += 1){
 			flowerArray[j].draw(context,flowerSprite,marioArray[0]);
 			flowerArray[j].update(marioArray[0]);
+			let flower = flowerArray[j];
+			if(flower.show == false){
+				flowerArray.splice(j,1);
+				j--;
+			}
+			if(flowerArray.length == 0){
+				break;
+			}  
 		}	
 
-		// for(let j = 0;j < mushroomArray.length;j += 1){
-		// 	mushroomArray[j].draw(context,mushroomSprite,marioArray[0]);
-		// 	mushroomArray[j].update(marioArray[0],screen,questionBrickJson);
-		// 	let mushroom = mushroomArray[j];
-		// 	if(mushroom.show == false){
-		// 		mushroomArray.splice(j,1);
-		// 		j--;
-		// 	}
-		// 	if(mushroomArray.length == 0){
-		// 		break;
-		// 	}
-		// }	
+		for(let j = 0;j < mushroomArray.length;j += 1){
+			mushroomArray[j].draw(context,mushroomSprite,marioArray[0]);
+			mushroomArray[j].update(marioArray[0],screen);
+			let mushroom = mushroomArray[j];
+			if(mushroom.show == false){
+				mushroomArray.splice(j,1);
+				j--;
+			}
+			if(mushroomArray.length == 0){
+				break;
+			} 
+		}	
+
+		for(let j = 0;j < mushroomBrickArray.length;j += 1){
+			mushroomBrickArray[j].draw(context,mushroomBrickSprite,marioArray[0]);
+			mushroomBrickArray[j].update(marioArray[0],mushroomArray,mushroomBrickArray);
+		}	
+
+		for(let j = 0;j < flowerBrickArray.length;j += 1){
+			flowerBrickArray[j].draw(context,flowerBrickSprite,marioArray[0]);
+			flowerBrickArray[j].update(marioArray[0],flowerArray,flowerBrickArray);
+		}	
+
 
 		for(let j = 0;j < questionBrickArray.length;j += 1){
 			questionBrickArray[j].draw(context,questionBrickSprite,marioArray[0]);
