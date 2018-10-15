@@ -1,0 +1,53 @@
+{
+  "frames": [
+    {
+      "name": "flowerBrick-1",
+      "ranges": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "flowerBrick-2",
+      "ranges": [
+        16,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "flowerBrick-3",
+      "ranges": [
+        32,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "uselessFlowerBrick",
+      "ranges": [
+        48,
+        0,
+        16,
+        16
+      ]
+    }
+  ],
+  "Pos": [
+    {
+      "tile": "flowerBrick",
+      "ranges": [
+        [
+          2160,
+          192
+        ]
+      ]
+    }
+  ],
+  "width": 16,
+  "height": 16
+}

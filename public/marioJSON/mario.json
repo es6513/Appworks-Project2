@@ -1,0 +1,90 @@
+{
+  "frames": [
+    {
+      "name": "mario",
+      "ranges": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "runRight-1",
+      "ranges": [
+        16,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "runRight-2",
+      "ranges": [
+        32,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "runRight-3",
+      "ranges": [
+        48,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "stop",
+      "ranges": [
+        64,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "jump",
+      "ranges": [
+        80,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "die",
+      "ranges": [
+        96,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "passed",
+      "ranges": [
+        112,
+        0,
+        16,
+        16
+      ]
+    }
+  ],
+  "Pos": [
+    {
+      "tile": "mario",
+      "ranges": [
+        [
+          1648,
+          176
+        ]
+      ]
+    }
+  ],
+  "width": 16,
+  "height": 16,
+  "Bigheight": 32
+}
