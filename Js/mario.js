@@ -29,7 +29,7 @@ let tubeImage = new Image();
 undergroundImage.src = "../imgs/images/underground.png";
 skyImage.src = "../imgs/images/sky.png";
 
-tubeImage.src = "../imgs/images/tube.png";
+tubeImage.src = "../imgs/images/lowTube.png";
 
 let backgroundMusic = new Audio("../music/TitleBGM.mp3");
 

@@ -53,8 +53,38 @@
         16,
         16
       ]
+    },
+    {
+      "name": "die",
+      "ranges": [
+        96,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "passed",
+      "ranges": [
+        112,
+        0,
+        16,
+        16
+      ]
+    }
+  ],
+  "Pos": [
+    {
+      "tile": "mario",
+      "ranges": [
+        [
+          1648,
+          176
+        ]
+      ]
     }
   ],
   "width": 16,
-  "height": 16
+  "height": 16,
+  "Bigheight": 32
 }
