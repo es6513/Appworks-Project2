@@ -68,7 +68,7 @@ class Fireball{
 		//-------------end of 火球打死goomba-----------
 
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
-			if(this.pos.y == y1 * screen.height - this.height){
+			if(this.pos.y >= y1 * screen.height - this.height){
 				this.speed.y *= -1;
 			}
 			if(this.pos.y <= 232 ){
@@ -76,6 +76,9 @@ class Fireball{
 			}
 
 		});
+
+
+
 
 		if(!this.show  && this.faceDirection == 1 && !this.goRight){
 			this.pos.x = marioArray.pos.x ;

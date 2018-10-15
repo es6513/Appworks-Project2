@@ -32,7 +32,7 @@ class Mario{
 		this.changeToBig = false;
 		this.isBigMario = false;
 		this.changeToFire = false;
-		this.isFireMario = false;
+		this.isFireMario = true;
 		this.shot = false;
 		this.fireArray = new Array();
 
