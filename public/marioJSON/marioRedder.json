@@ -1,0 +1,270 @@
+{
+  "frames": [
+    {
+      "name": "BigHead",
+      "ranges": [
+        448,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "mario",
+      "ranges": [
+        96,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "runRight-1",
+      "ranges": [
+        0,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "runRight-2",
+      "ranges": [
+        16,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "runRight-3",
+      "ranges": [
+        32,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "stop",
+      "ranges": [
+        48,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "jump",
+      "ranges": [
+        64,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "die",
+      "ranges": [
+        80,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "passed",
+      "ranges": [
+        128,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Bmario",
+      "ranges": [
+        241,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "BrunRight-1",
+      "ranges": [
+        144,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "BrunRight-2",
+      "ranges": [
+        160,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "BrunRight-3",
+      "ranges": [
+        177,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Bstop",
+      "ranges": [
+        193,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Bjump",
+      "ranges": [
+        209,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Bsquat",
+      "ranges": [
+        225,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Bpassed",
+      "ranges": [
+        257,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Bpassed2",
+      "ranges": [
+        272,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fmario",
+      "ranges": [
+        385,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "FrunRight-1",
+      "ranges": [
+        289,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "FrunRight-2",
+      "ranges": [
+        305,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "FrunRight-3",
+      "ranges": [
+        321,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fstop",
+      "ranges": [
+        337,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fjump",
+      "ranges": [
+        353,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fsquat",
+      "ranges": [
+        369,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fpassed",
+      "ranges": [
+        402,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fpassed2",
+      "ranges": [
+        416,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "Fshot",
+      "ranges": [
+        432,
+        0,
+        16,
+        32
+      ]
+    }
+  ],
+  "Pos": [
+    {
+      "tile": "mario",
+      "ranges": [
+        [
+          0,
+          224
+        ]
+      ]
+    }
+  ],
+  "width": 16,
+  "height": 32,
+  "Bigheight": 32
+}

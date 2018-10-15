@@ -1,0 +1,26 @@
+{
+  "frames": [
+    {
+      "name": "mushroom",
+      "ranges": [
+        0,
+        0,
+        16,
+        16
+      ]
+    }
+  ],
+  "Pos": [
+    {
+      "tile": "mushroom",
+      "ranges": [
+        [
+          2000,
+          192
+        ]
+      ]
+    }
+  ],
+  "width": 16,
+  "height": 16
+}
