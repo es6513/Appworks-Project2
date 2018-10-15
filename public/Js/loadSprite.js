@@ -3,7 +3,7 @@ import {Sprites} from "../Js/SpriteSet.js";
 
 
 function loadMario() {
-	return loadImage("../public/imgs/images/MarioRunRightSet.png")
+	return loadImage("../imgs/images/MarioRunRightSet.png")
 		.then(marioStandImage=>{
 			let marioStandSprite = new Sprites(marioStandImage,80,16);
 			marioStandSprite.getImage("marioStand",0,0);
@@ -12,7 +12,7 @@ function loadMario() {
 }// 一開始只畫一個馬力歐的時候用的
 
 function loadSky() {
-	return loadImage("../public/imgs/images/sky.png")
+	return loadImage("../imgs/images/sky.png")
 		.then(skyImage=>{
 			let skySprite = new Sprites(skyImage,16,16);
 			skySprite.getTileImage("sky",0,0,16,16);
@@ -21,7 +21,7 @@ function loadSky() {
 }
 
 function loadGround() {
-	return loadImage("../public/imgs/images/underground.png")
+	return loadImage("../imgs/images/underground.png")
 		.then(groundImage=>{
 			let groundSprite = new Sprites(groundImage,16,16);
 			groundSprite.getTileImage("ground",0,0,16,16);
@@ -30,7 +30,7 @@ function loadGround() {
 }
 
 function loadClouds() {
-	return loadImage("../public/imgs/images/smileCloud3224.png")
+	return loadImage("../imgs/images/smileCloud3224.png")
 		.then(cloudImage=>{
 			let cloudSprite = new Sprites(cloudImage,32,24);
 			cloudSprite.getTileImage("cloud",0,0,32,24);  
@@ -41,7 +41,7 @@ function loadClouds() {
 
 
 function loadDecorations(width,height,name,imageUrl) {
-	return loadImage(`../public/imgs/images/background/${imageUrl}.png`)
+	return loadImage(`../imgs/images/background/${imageUrl}.png`)
 		.then(Image=>{
 			let Sprite = new Sprites(Image,width,height);
 			Sprite.getTileImage(name,0,0,width,height);  
@@ -50,7 +50,7 @@ function loadDecorations(width,height,name,imageUrl) {
 }
 
 function loadTube() {
-	return loadImage("../public/imgs/images/tube.png")
+	return loadImage("../imgs/images/tube.png")
 		.then(tubeImage=>{
 			let tubeSprite = new Sprites(tubeImage,32,32);
 			tubeSprite.getImage("tube",0,0,32,32);

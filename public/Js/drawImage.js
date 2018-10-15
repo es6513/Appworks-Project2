@@ -53,11 +53,11 @@ function  drawDecorations(background,context,sprites) {
 }
 
 function drawObjects(name) {
-	return fetch(`/public/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(Sprite=> Promise.all([
 			Sprite,
-			loadImage(`../public/imgs/images/${name}.png`),
+			loadImage(`../imgs/images/${name}.png`),
 		]))
 		.then(([Sprite,SpriteImage])=>{
 			let SpriteSet = new Sprites(SpriteImage,Sprite.width,Sprite.height);
@@ -69,11 +69,11 @@ function drawObjects(name) {
 }
 
 function loadMarioImage(name) {
-	return fetch(`/public/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r=>r.json())
 		.then(marioSprite=> Promise.all([
 			marioSprite,
-			loadImage("../public/imgs/images/MariotSetRedderTest4.png"),
+			loadImage("../imgs/images/MariotSetRedderTest4.png"),
 		]))
 		.then(([marioSprite,image])=>{
 			let marioSpriteSet = new Sprites(image,marioSprite.width,marioSprite.height);
@@ -89,7 +89,7 @@ function loadMarioImage(name) {
 }
 
 function loadBigMarioImage(name) {
-	return fetch(`/public/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r=>r.json())
 		.then(marioSprite=> Promise.all([
 			marioSprite,
@@ -109,7 +109,7 @@ function loadBigMarioImage(name) {
 }
 
 function drawBackground(name) {
-	return fetch(`/public/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(screen=> Promise.all([
 			screen,
