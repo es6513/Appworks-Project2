@@ -4,20 +4,20 @@ import {loadJson} from "../Js/loadJson.js";
 import {Mario} from "../Js/ObjectJs/marioObject.js";
 import {Coin} from "../Js/ObjectJs/coinObject.js";
 import {Flycoin} from "../Js/ObjectJs/flycoinObject.js";
-import {Turtle} from "./ObjectJs/turtleObject.js";
-import {Tube} from "./ObjectJs/tubeObject.js";
-import {OddBrick} from "./ObjectJs/oddBrickObject.js";
-import {Goomba} from "./ObjectJs/goombaObject.js";
-import {Pole} from "./ObjectJs/poleObject.js";
-import {Flag} from "./ObjectJs/flagObject.js";
-import {Castle} from "./ObjectJs/castleObject.js";
-import {Brick} from "./ObjectJs/brickObject.js";
-import {QuestionBrick} from "./ObjectJs/questionBrickObject.js";
-import {MushroomBrick} from "./ObjectJs/mushroomBrickObject.js";
-import {FlowerBrick} from "./ObjectJs/flowerBrickObject.js";
-import {Fireball} from "./ObjectJs/fireballObject.js";
-import {Flower} from "./ObjectJs/flowerObject.js";
-import {Mushroom} from "./ObjectJs/mushroomObject.js";
+import {Turtle} from "../Js/ObjectJs/turtleObject.js";
+import {Tube} from "../Js/ObjectJs/tubeObject.js";
+import {OddBrick} from "../Js/ObjectJs/oddBrickObject.js";
+import {Goomba} from "../Js/ObjectJs/goombaObject.js";
+import {Pole} from "../Js/ObjectJs/poleObject.js";
+import {Flag} from "../Js/ObjectJs/flagObject.js";
+import {Castle} from "../Js/ObjectJs/castleObject.js";
+import {Brick} from "../Js/ObjectJs/brickObject.js";
+import {QuestionBrick} from "../Js/ObjectJs/questionBrickObject.js";
+import {MushroomBrick} from "../Js/ObjectJs/mushroomBrickObject.js";
+import {FlowerBrick} from "../Js/ObjectJs/flowerBrickObject.js";
+import {Fireball} from "../Js/ObjectJs/fireballObject.js";
+import {Flower} from "../Js/ObjectJs/flowerObject.js";
+import {Mushroom} from "../Js/ObjectJs/mushroomObject.js";
 
 let windowWidth = $(window).width();
 let windowHeight = $(window).height();
@@ -36,7 +36,7 @@ let backgroundMusic = new Audio("../music/TitleBGM.mp3");
 //-----測試區---------
 
 function createMarioArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(marioSprite=>{
 			let marioArray = [];
@@ -51,7 +51,7 @@ function createMarioArray(name) {
 }
 
 function createCoinArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(coinsSprite=>{
 			let coinArray = [];
@@ -66,7 +66,7 @@ function createCoinArray(name) {
 
 
 function createFlycoinArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(flycoinSprite=>{
 			let flycoinArray = [];
@@ -80,7 +80,7 @@ function createFlycoinArray(name) {
 }
 
 function createTubeArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(tubeSprite=>{
 			let tubeArray = [];
@@ -94,7 +94,7 @@ function createTubeArray(name) {
 }
 
 function createOddBrickArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(oddBrickSprite=>{
 			let oddBrickArray = [];
@@ -108,7 +108,7 @@ function createOddBrickArray(name) {
 }
 
 function createTurtleArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(turtleSprite=>{
 			let turtleArray = [];
@@ -122,7 +122,7 @@ function createTurtleArray(name) {
 }
 
 function createGoombaArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(goombaSprite=>{
 			let goombaArray = [];
@@ -136,7 +136,7 @@ function createGoombaArray(name) {
 }
 
 function createPoleArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(poleSprite=>{
 			let poleArray = [];
@@ -150,7 +150,7 @@ function createPoleArray(name) {
 }
 
 function createFlagArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(flagSprite=>{
 			let flagArray = [];
@@ -164,7 +164,7 @@ function createFlagArray(name) {
 }
 
 function createCastleArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(castleSprite=>{
 			let castleArray = [];
@@ -178,7 +178,7 @@ function createCastleArray(name) {
 }
 
 function createBrickArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(brickSprite=>{
 			let brickArray = [];
@@ -192,7 +192,7 @@ function createBrickArray(name) {
 }
 
 function createQuestionBrickArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(questionBrickSprite=>{
 			let questionBrickArray = [];
@@ -206,7 +206,7 @@ function createQuestionBrickArray(name) {
 }
 
 function createMushroomBrickArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(mushroomBrickSprite=>{
 			let mushroomBrickArray = [];
@@ -220,7 +220,7 @@ function createMushroomBrickArray(name) {
 }
 
 function createFlowerBrickArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(flowerBrickSprite=>{
 			let flowerBrickArray = [];
@@ -235,7 +235,7 @@ function createFlowerBrickArray(name) {
 
 
 function createFireballArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(fireballSprite=>{
 			let fireballArray = [];
@@ -246,7 +246,7 @@ function createFireballArray(name) {
 }
 
 function createMushroomArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(mushroomSprite=>{
 			let mushroomArray = [];
@@ -261,7 +261,7 @@ function createMushroomArray(name) {
 
 
 function createFlowerArray(name) {
-	return fetch(`/marioJSON/${name}.json`)
+	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(flowerSprite=>{
 			let flowerArray = [];
