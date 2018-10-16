@@ -29,10 +29,15 @@ class Mario{
 
 		//--------控制不同型態的馬力歐------------
 
+		this.backToSmall = false;
 		this.changeToBig = false;
 		this.isBigMario = false;
+
+		this.backToBig = false;
 		this.changeToFire = false;
 		this.isFireMario = true;
+
+
 		this.shot = false;
 		this.fireArray = new Array();
 
@@ -42,10 +47,12 @@ class Mario{
 		this.isSquat = false;
 		this.onTube = false;
 		this.stopX = false;
+		this.willDie = false;
 		this.isDie = false;
 		this.isOnGround = false;
 		this.isOnBrickZone = false;
 		this.passStage = false;
+		this.falling = false;
 		this.canPlayPassMusic = false;
 		this.onPoleBottom = false;
 		this.walkToCastle = false;
@@ -53,6 +60,9 @@ class Mario{
 		this.clearTimeout;
 		this.clearTimeout2;
 		this.clearTimeout3;
+		this.clearTimeout4;
+		this.clearTimeout5;
+		this.clearTimeout6;
 		this.controlSpeedFactor; 
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 		this.frameIndex = 0;
@@ -63,15 +73,14 @@ class Mario{
 		];
 
 		this.BacktoSmallFramesRunArray = [
-			"Bmario","Bmario","Bmario",
-			"Bmario","Bmario","Bmario",
-			"Bmario","Bmario","Bmario",	
-			"BigHead","BigHead","BigHead",
-			"BigHead","BigHead","BigHead",
-			"BigHead","BigHead","BigHead",
-			"mario","mario","mario",
-			"mario","mario","mario",
-			"mario","mario","mario"
+			"BigOpacity","BigOpacity","BigOpacity",
+			"BigOpacity","BigOpacity","BigOpacity",
+			"BigOpacity","BigOpacity","BigOpacity",	
+			"BigOpacity","BigOpacity","BigOpacity",	
+			"SmallOpacity","SmallOpacity","SmallOpacity",
+			"SmallOpacity","SmallOpacity","SmallOpacity",
+			"SmallOpacity","SmallOpacity","SmallOpacity",
+			"SmallOpacity","SmallOpacity","SmallOpacity"
 		];
 
 		this.ChangeBigFramesRunArray = [
@@ -103,12 +112,14 @@ class Mario{
 
 		
 		this.BacktoBigFramesRunArray = [
-			"Fmario",	"Fmario",	"Fmario",
-			"Fmario",	"Fmario",	"Fmario",
-			"Fmario",	"Fmario",	"Fmario",
-			"Bmario","Bmario","Bmario",
-			"Bmario","Bmario","Bmario",
-			"Bmario","Bmario","Bmario",
+			"FireOpacity","FireOpacity","FireOpacity",
+			"FireOpacity","FireOpacity","FireOpacity",
+			"FireOpacity","FireOpacity","FireOpacity",
+			"FireOpacity","FireOpacity","FireOpacity",
+			"BigOpacity","BigOpacity","BigOpacity",
+			"BigOpacity","BigOpacity","BigOpacity",
+			"BigOpacity","BigOpacity","BigOpacity",	
+			"BigOpacity","BigOpacity","BigOpacity",	
 		];
 
 		this.FireFramesRunArray = ["FrunRight-1","FrunRight-1","FrunRight-1",
@@ -121,18 +132,43 @@ class Mario{
 	update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,oddBrickJson){
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
-		// 用來控制大馬力歐變回小馬力歐的無敵狀態, bug: 閃爍
-	
+		console.log(this.falling);
+		if(keys.zbutton){
+			this.pos.x += 1;
+		}
+
+		// ---------無敵以及死亡的處理---------
 		let timeoutId;
-	
+
+
+		// ------------1.無敵----------------
 		if(this.isInvincible && !this.clearTimeout){
 			timeoutId = setTimeout(() => {
 				this.isInvincible = false;	
 				this.clearTimeout = null;
-			}, 5000);
+			}, 1000);
 			this.clearTimeout = timeoutId;
 		}	
-		
+
+
+		// ------------2.死亡----------------
+
+		let timeoutId6;
+	
+		if(this.willDie && !this.clearTimeout6){
+			timeoutId = setTimeout(() => {
+				this.willDie = false;
+				this.isDie = true;	
+				this.clearTimeout = null;
+			}, 1000);
+			this.clearTimeout6 = timeoutId6;
+		}	
+
+		// if(this.isDie ){
+		// 	this.speed.y = -4;
+		// }
+
+
 
 		// End 用來控制大馬力歐變回小馬力歐的無敵狀態
 
@@ -151,8 +187,14 @@ class Mario{
 		// -------控制馬力歐移動-----
 
 		// 過關後用passStage轉換成true，讓玩家不再能透過按鍵控制馬力歐
-		if(!keys.space && !this.canPlayPassMusic && 
-			!this.isDie 
+		if(!this.backToBig 
+			&& !this.backToSmall 
+			&& !this.changeToBig
+			&& !this.changeToFire
+			&& !this.willDie
+			&& !keys.space 
+			&& !this.canPlayPassMusic 
+			&& !this.isDie 
 			&& this.pos.x + this.speed.x <= 5000
 			&& this.pos.x > 0
 			&& !this.isSquat
@@ -199,7 +241,8 @@ class Mario{
 
 		// ------End of 控制馬力歐移動-----
 
-	 	// --------跳躍的設定 ---------------
+		 // --------跳躍的設定 ---------------
+		 
 		// if(!this.isDie && keys.top && this.isJump == false){
 		// 	this.isJump = true;
 		// 	this.isOnGround = false;
@@ -210,13 +253,11 @@ class Mario{
 
 		//上面這段程式碼現在移到下方，在有地面的情況下才可跳躍。
 
-		
-		
+				
 		if(!this.canPlayPassMusic){
 			this.speed.y += 0.5;  //gravity
 			this.pos.y += this.speed.y; 
-		}
-		
+		}		
 		
 		
 
@@ -226,17 +267,10 @@ class Mario{
 
 		// -------控制馬力歐落地時參數回復原狀---------
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
-			// if(!this.isDie && this.pos.y >= y1 * screen.height - this.height){
-			// 	this.isJump = false;
-			// 	this.isOnGround = true;
-			// 	this.pos.y =  y1 * screen.height - this.height;
-			// 	this.speed.y = 0;
-			// }	
-			
-			
+
 			//--------------控制蹲下 --------------------
 
-			if(keys.bottom && !this.isJump && !keys.space){
+			if(keys.bottom && !this.isJump && !keys.space ){
 				this.isSquat = true;
 			}else{
 				this.isSquat = false;
@@ -245,8 +279,15 @@ class Mario{
 			//-----------END OF 控制蹲下---------------------
 
 
+		 // --------跳躍的設定 ---------------
+
 			if(!this.canPlayPassMusic 
+				&& !this.backToBig 
+				&& !this.backToSmall 
+				&& !this.changeToBig
+				&& !this.changeToFire
 				&& !this.isDie 
+				&& !this.willDie
 				&& keys.top 
 				&& !this.isJump
 				&& !this.isSquat
@@ -257,24 +298,25 @@ class Mario{
 				this.isOnGround = false;
 				this.speed.y -= 10;  //起始跳躍速度，這個速度加上馬力歐的身高，剛好可以跳到最高的水管上面
 				this.speed.x = 4;	
-
 				if( !this.isBigMario && !this.isFireMario){
 					this.jumpSound();
 				}else{
 					this.BjumpSound();
-
 				}
-			
-			
 			}		
+
+			// -------------end of 跳躍的設定---------------
 
 			//移到這裡(上方)，在有地面的情況下才可跳躍。
 
-			if(!this.isDie && this.speed.y > 0 && this.pos.x + this.width > x1 * 16
+			if(!this.isDie 
+				&& this.speed.y > 0 
+				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16)
 			{
 				if(this.pos.y >= y1 * screen.height - this.height)
 				{
+					this.falling = false;
 					this.isJump = false;
 					this.onTube = false;
 					this.isOnGround = true;
@@ -297,8 +339,7 @@ class Mario{
 
 		// -------End   控制馬力歐落地時參數回復原狀---------
 
-	
-	
+		
 		
 		// ---------------控制水管障礙---------------
 		//10/12 調整了讀取圖片高度的大小為32，這邊會出現有時候可以穿過水管的 BUG
@@ -318,7 +359,7 @@ class Mario{
 				
 				//----------小馬力歐過水管-----------
 				if( this.pos.x + this.width == x
-					&& this.pos.y >= y - 32 )
+					&& this.pos.y >= y - tubeJson.height )
 				{ //從左側碰到水管
 					this.pos.x = x - this.width ;
 					this.stopX = true;
@@ -329,7 +370,7 @@ class Mario{
 					}
 				}
 				else if(this.pos.x == x + tubeJson.width
-					&& this.pos.y >= y - 32 )
+					&& this.pos.y >= y - tubeJson.height )
 				{	// 從右側碰到水管
 					
 					this.pos.x = x + tubeJson.width ;
@@ -341,8 +382,8 @@ class Mario{
 						this.stopX = false;
 					}
 				}
-				else if(this.pos.y < y - 32 && keys.left 
-					|| this.pos.y < y - 32 && keys.right){
+				else if(this.pos.y < y - tubeJson.height && keys.left 
+					|| this.pos.y < y - tubeJson.height && keys.right){
 					this.stopX = false;
 				}
 
@@ -381,7 +422,7 @@ class Mario{
 			oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{	
 				//----------小馬力歐-----------
 				if( this.pos.x + this.width == x
-					&& this.pos.y + this.height / 2 >= y - 16 )
+					&& this.pos.y + this.height / 2 >= y - oddBrickJson.height )
 				{ //從左側碰到
 					this.pos.x = x - this.width ;
 					this.stopX = true;
@@ -390,7 +431,7 @@ class Mario{
 					}
 				}
 				else if(this.pos.x == x + oddBrickJson.width
-					&& this.pos.y + this.height / 2  >= y - 16 )
+					&& this.pos.y + this.height / 2  >= y - oddBrickJson.height )
 				{	// 從右側碰到
 					this.pos.x = x + oddBrickJson.width ;
 					this.stopX = true;
@@ -539,6 +580,30 @@ class Mario{
 			}, 1000);
 			this.clearTimeout3 = timeoutId3;
 		}	
+
+		let timeoutId4;
+	
+		if(this.backToSmall && !this.clearTimeout4){
+			timeoutId4 = setTimeout(() => {
+				this.backToSmall = false;	
+				this.isBigMario = false;
+				this.clearTimeout4 = null;
+			}, 1000);
+			this.clearTimeout4 = timeoutId4;
+		}	
+		
+
+		let timeoutId5;
+	
+		if(this.backToBig && !this.clearTimeout5){
+			timeoutId5 = setTimeout(() => {
+				this.backToBig = false;	
+				this.isFireMario = false;
+				this.clearTimeout5 = null;
+				this.isBigMario = true;
+			}, 1000);
+			this.clearTimeout5 = timeoutId5;
+		}	
 		
 		
 		// ---------------end of狀態改變--------------
@@ -546,7 +611,7 @@ class Mario{
 
 		
 		//-------------發射火球-----------------
-
+	
 
 		if(this.isFireMario && keys.space && !keys.bottom){
 			this.shoot();
@@ -555,7 +620,7 @@ class Mario{
 				this.shot = false;
 			}
 		}
-			
+		
 			
 
 		//-------------End of 發射火球-----------------
@@ -638,6 +703,13 @@ class Mario{
 		return this.ChangeBigFramesRunArray[this.frameIndex];
 	}
 
+	BackToSmall(){
+		this.frameIndex = ++this.frameIndex % 24;
+		return this.BacktoSmallFramesRunArray[this.frameIndex];
+	}
+
+
+
 	BigRunning(){
 		if(this.direction == 1){
 			this.frameIndex = ++this.frameIndex % 10;
@@ -656,6 +728,13 @@ class Mario{
 		this.frameIndex = ++this.frameIndex % 18;
 		return this.ChangeFireFramesRunArray[this.frameIndex];
 	}
+
+	
+	BackToBig(){
+		this.frameIndex = ++this.frameIndex % 24;
+		return this.BacktoBigFramesRunArray[this.frameIndex];
+	}
+
 
 
 	FireRunning(){
@@ -697,6 +776,8 @@ class Mario{
 		// ----------end of 將陣列中的火焰球清除---------
 		
 		//--------------馬力歐狀態切換-------------------
+
+
 		if(this.changeToBig)
 		{
 			if(this.pos.x < 450 ){
@@ -705,6 +786,18 @@ class Mario{
 				marioSprite.drawMarioSprite(this.ChangeBig() ,context,450,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 5000){
 				marioSprite.drawMarioSprite( this.ChangeBig() ,context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);
+			}		
+		}
+
+				
+		if(this.backToSmall)
+		{
+			if(this.pos.x < 450 ){
+				marioSprite.drawMarioSprite(this.BackToSmall() ,context,this.pos.x,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 450 && this.pos.x < 5000){
+				marioSprite.drawMarioSprite(this.BackToSmall() ,context,450,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 5000){
+				marioSprite.drawMarioSprite( this.BackToSmall() ,context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);
 			}		
 		}
 		
@@ -720,6 +813,19 @@ class Mario{
 				marioSprite.drawMarioSprite( this.ChangeFire() ,context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);
 			}		
 		}
+
+						
+		if(this.backToBig)
+		{
+			if(this.pos.x < 450 ){
+				marioSprite.drawMarioSprite(this.BackToBig() ,context,this.pos.x,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 450 && this.pos.x < 5000){
+				marioSprite.drawMarioSprite(this.BackToBig() ,context,450,this.pos.y,this.faceDirection < 0);
+			}else if(this.pos.x >= 5000){
+				marioSprite.drawMarioSprite( this.BackToBig() ,context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);
+			}		
+		}
+		
 		
 
 		//--------------end of 馬力歐狀態切換-------------------
@@ -730,11 +836,14 @@ class Mario{
 
 		if(!this.hide 
 		&& !this.isDie
+		&& !this.willDie
 		&& !this.canPlayPassMusic 
 		&& !this.walkToCastle
 		&& !this.isBigMario
 		&& !this.isFireMario
 		&& !this.changeToBig
+		&& !this.backToSmall
+		&& !this.backToBig
 		&& !this.changeToFire
 		)
 		{
@@ -749,12 +858,14 @@ class Mario{
 		}
 		
 		if(!this.hide 
-			&& this.isDie
+			&& (this.willDie || this.isDie)
 			&& !this.canPlayPassMusic 
 			&& !this.walkToCastle
 			&& !this.isBigMario
 			&& !this.isFireMario
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire){
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite("die",context,this.pos.x,this.pos.y,this.faceDirection < 0);
@@ -771,6 +882,8 @@ class Mario{
 			&& !this.isBigMario
 			&& !this.isFireMario
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire){
 			marioSprite.drawMarioSprite("passed",context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);	
 		}
@@ -780,6 +893,8 @@ class Mario{
 			&& !this.isBigMario
 			&& !this.isFireMario
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire){
 			marioSprite.drawMarioSprite(this.running(),context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);
 		}
@@ -795,13 +910,14 @@ class Mario{
 			&& !this.isFireMario
 			&& !this.isSquat
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire
 		)
 		{
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite(!this.isJump ? this.BigRunning() : "Bjump",context,this.pos.x,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 450 && this.pos.x < 5000){
-				console.log("1236");
 				marioSprite.drawMarioSprite(!this.isJump ? this.BigRunning() : "Bjump",context,450,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 5000){
 				marioSprite.drawMarioSprite(!this.isJump ? this.BigRunning() : "Bjump",context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);
@@ -817,13 +933,14 @@ class Mario{
 			&& !this.isFireMario
 			&& this.isSquat
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire
 		)
 		{
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite( "Bsquat",context,this.pos.x,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 450 && this.pos.x < 5000){
-				console.log("1236");
 				marioSprite.drawMarioSprite( "Bsquat",context,450,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 5000){
 				marioSprite.drawMarioSprite("Bsquat",context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);
@@ -840,11 +957,12 @@ class Mario{
 			&& this.isBigMario
 			&& !this.isFireMario
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire){
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite("Bsquat",context,this.pos.x,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 450 && this.pos.x < 5000){
-				console.log("1236");
 				marioSprite.drawMarioSprite( "Bsquat",context,450,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 5000){
 				marioSprite.drawMarioSprite("Bsquat",context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);
@@ -857,6 +975,8 @@ class Mario{
 			&& this.isBigMario
 			&& !this.isFireMario
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire){
 			marioSprite.drawMarioSprite("Bpassed",context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);	
 		}
@@ -866,6 +986,8 @@ class Mario{
 			&& this.isBigMario
 			&& !this.isFireMario
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire){
 			marioSprite.drawMarioSprite(this.BigRunning(),context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);
 		}
@@ -884,6 +1006,8 @@ class Mario{
 			&& !this.isSquat
 			&& !this.shot
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire
 		)
 		{
@@ -905,13 +1029,14 @@ class Mario{
 			&& this.isFireMario
 			&& this.isSquat
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire
 		)
 		{
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite( "Fsquat",context,this.pos.x,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 450 && this.pos.x < 5000){
-				console.log("1236");
 				marioSprite.drawMarioSprite( "Fsquat",context,450,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 5000){
 				marioSprite.drawMarioSprite("Fsquat",context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);
@@ -928,11 +1053,12 @@ class Mario{
 			&& !this.isBigMario
 			&& this.isFireMario
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire){
 			if(this.pos.x < 450 ){
 				marioSprite.drawMarioSprite("Fsquat",context,this.pos.x,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 450 && this.pos.x < 5000){
-				console.log("1236");
 				marioSprite.drawMarioSprite( "Fsquat",context,450,this.pos.y,this.faceDirection < 0);
 			}else if(this.pos.x >= 5000){
 				marioSprite.drawMarioSprite("Fsquat",context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);
@@ -945,8 +1071,9 @@ class Mario{
 			&& !this.isBigMario
 			&& this.isFireMario
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire){
-			console.log("1236");
 			marioSprite.drawMarioSprite("Fpassed",context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);	
 		}
 
@@ -955,6 +1082,8 @@ class Mario{
 			&& !this.isBigMario
 			&& this.isFireMario
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire){
 			marioSprite.drawMarioSprite(this.FireRunning(),context,this.pos.x - 4550,this.pos.y,this.faceDirection < 0);
 		}
@@ -967,6 +1096,8 @@ class Mario{
 			&& this.isFireMario
 			&& this.shot
 			&& !this.changeToBig
+			&& !this.backToSmall
+			&& !this.backToBig
 			&& !this.changeToFire
 		)
 		{
