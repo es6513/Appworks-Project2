@@ -40,7 +40,7 @@ class Brick{
 		if( !marioArray.isBigMario && !marioArray.isFireMario){
 
 			// -------------下方----------------
-			if(marioArray.speed.y < 0 
+			if(!this.goup && marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16
 				&& marioArray.pos.x + marioArray.width / 2  >= this.pos.x   //判定的bug
@@ -54,7 +54,7 @@ class Brick{
 				marioArray.isBottomBrick = true;
 			}
 			
-	
+
 			// -------------上方----------------
 			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
 				&& marioArray.pos.x + marioArray.width  > this.pos.x 

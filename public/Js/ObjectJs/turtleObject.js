@@ -28,7 +28,6 @@ class Turtle{
 			"turtleRun-2","turtleRun-2","turtleRun-2","turtleRun-2",
 			"turtleRun-2","turtleRun-2","turtleRun-2","turtleRun-2",
 			"turtleRun-2","turtleRun-2"
-
 		];
 	}
 	
@@ -106,9 +105,9 @@ class Turtle{
 			&& this.isRotating 
 			&& this.quickToDie
 		){
-			marioArray.speed.y = -10; // BUG 暫時讓馬力歐彈跳起來代替無敵的閃爍動畫
+			this.marioPipeSound();
 			marioArray.isInvincible = true;
-			marioArray.isBigMario = false; 
+			marioArray.backToSmall = true;  
 		}
 
 		if(!marioArray.isInvincible 
@@ -122,9 +121,9 @@ class Turtle{
 			&& marioArray.isOnGround
 			&& !this.hitByFire
 			&& !this.quickToDie ){
-			marioArray.speed.y = -10;
+			this.marioPipeSound();
 			marioArray.isInvincible = true;
-			marioArray.isBigMario = false; 
+			marioArray.backToSmall = true;  
 		}	
 
 		//------3.火馬力歐死亡變大馬力歐-------
@@ -142,10 +141,9 @@ class Turtle{
 			&& this.isRotating 
 			&& this.quickToDie
 		){
-			marioArray.speed.y = -10;
+			this.marioPipeSound();
 			marioArray.isInvincible = true;
-			marioArray.isFireMario = false;
-			marioArray.isBigMario = true; 
+			marioArray.backToBig = true; 
 		}
 
 		if(!marioArray.isInvincible 
@@ -159,10 +157,9 @@ class Turtle{
 			&& marioArray.isOnGround
 			&& !this.hitByFire
 			&& !this.quickToDie ){
-			marioArray.speed.y = -10;
+			this.marioPipeSound();
 			marioArray.isInvincible = true;
-			marioArray.isFireMario = false;
-			marioArray.isBigMario = true; 
+			marioArray.backToBig = true; 
 		}	
 	
 		
@@ -357,6 +354,11 @@ class Turtle{
 		dieSound.play();
 	}
 
+	
+	marioPipeSound(){
+		let marioPipeSound = new 	Audio("/music/mario-pipe-sound.wav");
+		marioPipeSound.play();
+	}
 
 	move(){
 		this.pos.x -= this.speed.x;

@@ -1,7 +1,7 @@
 {
   "frames": [
     {
-      "name": "flag",
+      "name": "sky",
       "ranges": [
         0,
         0,
@@ -12,11 +12,13 @@
   ],
   "Pos": [
     {
-      "tile": "flag",
+      "tile": "sky",
       "ranges": [
         [
-          5050,
-          96
+          0,
+          10,
+          0,
+          10
         ]
       ]
     }

@@ -35,7 +35,7 @@ class Mario{
 
 		this.backToBig = false;
 		this.changeToFire = false;
-		this.isFireMario = true;
+		this.isFireMario = false;
 
 
 		this.shot = false;
@@ -132,16 +132,28 @@ class Mario{
 	update(screen,tubeJson,poleJson,castleJson,flagArray,brickJson,oddBrickJson){
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
-		console.log(this.falling);
-		if(keys.zbutton){
-			this.pos.x += 1;
+	
+		if(!this.isDie && this.isRunning){
+			brickJson.Pos[0].ranges.forEach(([x,y])=>{
+				if(this.isJump && this.pos.x + this.width >= x 
+				){
+					console.log("123");
+				}
+			});
 		}
 
-		// ---------無敵以及死亡的處理---------
-		let timeoutId;
 
+
+
+
+
+
+		// ---------無敵以及死亡的處理---------
+	
 
 		// ------------1.無敵----------------
+
+		let timeoutId;
 		if(this.isInvincible && !this.clearTimeout){
 			timeoutId = setTimeout(() => {
 				this.isInvincible = false;	
@@ -192,10 +204,11 @@ class Mario{
 			&& !this.changeToBig
 			&& !this.changeToFire
 			&& !this.willDie
+			&& !this.falling
 			&& !keys.space 
 			&& !this.canPlayPassMusic 
 			&& !this.isDie 
-			&& this.pos.x + this.speed.x <= 5000
+			&& this.pos.x + this.speed.x <= 6000
 			&& this.pos.x > 0
 			&& !this.isSquat
 		)
@@ -205,8 +218,9 @@ class Mario{
 				// 這邊判斷式必須要寫兩個，一個是按右鍵，一個是沒按左鍵，這樣才能避免兩個按鍵產生衝突，並且完全獨立開
 				if(this.stopX){
 					this.stopX = false;
-				}		
+				}	
 				this.moveRight();
+									
 				this.faceDirection = this.direction;
 			}
 			if(keys.left && !keys.right && !this.stopX){
@@ -224,14 +238,14 @@ class Mario{
 				this.faceDirection = this.direction;
 			}
 		}
-		else if(!this.canPlayPassMusic && this.pos.x + this.controlSpeedFactor  == 5000){
+		else if(!this.canPlayPassMusic && this.pos.x + this.controlSpeedFactor  == 6000){
 			//這邊有點奇怪，筆電的螢幕如果有接大螢幕，跑到終點的時候 screen.width 會變大，可以再往左邊跑，但是沒接的時候不行
 			if(keys.left){
 				this.moveLeft();
 				this.faceDirection = this.direction;
 			}
 		}
-		else if(!this.canPlayPassMusic && this.pos.x  == 5000){
+		else if(!this.canPlayPassMusic && this.pos.x  == 6000){
 			//這邊有點奇怪，筆電的螢幕如果有接大螢幕，跑到終點的時候 screen.width 會變大，可以再往左邊跑，但是沒接的時候不行
 			if(keys.left){
 				this.moveLeft();
@@ -267,7 +281,15 @@ class Mario{
 
 		// -------控制馬力歐落地時參數回復原狀---------
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
-
+			// console.log(this.pos.x);
+			// console.log(object);
+			if(this.pos.x < x2 * 16 + screen.width
+				&& this.pos.x + this.width > x1 * 16){
+				this.falling = false;
+			}else if(this.pos.x > x2 * 16 + screen.width
+				&& this.pos.y > y1 * screen.height - 32){
+				this.falling = true;
+			}
 			//--------------控制蹲下 --------------------
 
 			if(keys.bottom && !this.isJump && !keys.space ){
@@ -312,18 +334,16 @@ class Mario{
 			if(!this.isDie 
 				&& this.speed.y > 0 
 				&& this.pos.x + this.width > x1 * 16
-				&& this.pos.x < x2 * 16 + 16)
+				&& this.pos.x < x2 * 16 + 16
+				&& this.pos.y >= y1 * screen.height - this.height)
 			{
-				if(this.pos.y >= y1 * screen.height - this.height)
-				{
-					this.falling = false;
-					this.isJump = false;
-					this.onTube = false;
-					this.isOnGround = true;
-					this.pos.y = y1 * screen.height - this.height; //落地
-					this.isBottomBrick = false;
-					this.speed.y = 0;
-				}
+				this.isJump = false;
+				this.onTube = false;
+				this.isOnGround = true;
+				this.pos.y = y1 * screen.height - this.height; //落地
+				this.isBottomBrick = false;
+				this.speed.y = 0;
+				
 				// this.speed.y += 0.5;
 			}else if(!this.isDie && this.pos.y >= y2 * screen.height + 96){
 				//---------------------------懸崖---------
@@ -348,13 +368,6 @@ class Mario{
 		if(!this.isDie && this.isRunning){
 			
 			tubeJson.Pos[0].ranges.forEach(([x,y])=>{
-				// if(!this.isDie 
-				// 	&& this.isJump 
-				// 	&& this.stopX 
-				// 	&& this.pos.y < y - 16){
-				// 	this.stopX = false;
-				// } //這一段用 this.pos.y<192 暫時可以解決如果離障礙物已經是0的狀態不能跳起來移動 bug
-				//會有出現落地前 stopX還是 false的狀況，會造成若在空中按下左右鍵，可以穿越水管
 				
 				
 				//----------小馬力歐過水管-----------
@@ -385,7 +398,7 @@ class Mario{
 				else if(this.pos.y < y - tubeJson.height && keys.left 
 					|| this.pos.y < y - tubeJson.height && keys.right){
 					this.stopX = false;
-				}
+				} //修正會斜向穿越水管的問題，讓馬力歐身高高過它才可以移動。
 
 				// ------end of 小馬力歐過水管---------
 

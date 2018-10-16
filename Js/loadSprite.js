@@ -49,13 +49,4 @@ function loadDecorations(width,height,name,imageUrl) {
 		});
 }
 
-function loadTube() {
-	return loadImage("../imgs/images/tube.png")
-		.then(tubeImage=>{
-			let tubeSprite = new Sprites(tubeImage,32,32);
-			tubeSprite.getImage("tube",0,0,32,32);
-			return tubeSprite;
-		});
-}
-
-export {loadMario,loadSky,loadGround,loadTube,loadClouds,loadDecorations};
+export {loadMario,loadSky,loadGround,loadClouds,loadDecorations};

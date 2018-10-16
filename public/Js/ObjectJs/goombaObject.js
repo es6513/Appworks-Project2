@@ -51,7 +51,7 @@ class Goomba{
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
-			&& !marioArray.isDie 
+			&& !marioArray.willDie 
 			&& !this.isDie
 			&& !this.hitByFire
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
@@ -63,11 +63,10 @@ class Goomba{
 		{
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
-			marioArray.isDie = true;
-			marioArray.speed.y = -10;
-			marioArray.pos.y += marioArray.speed.y;
+			marioArray.willDie = true;
+			// marioArray.speed.y = -10;
+			// marioArray.pos.y += marioArray.speed.y;
 		}
-
 
 		//------2.大馬力歐死亡變小馬力歐-------
 		if(!marioArray.isInvincible 
@@ -81,9 +80,9 @@ class Goomba{
 			&& !marioArray.isJump
 			&& marioArray.isOnGround	)
 		{
-			marioArray.speed.y = -10;
 			marioArray.isInvincible = true;
-			marioArray.isBigMario = false; 
+			marioArray.backToSmall = true; 
+			this.marioPipeSound();
 		}
 
 
@@ -100,10 +99,9 @@ class Goomba{
 			&& !marioArray.isJump
 			&& marioArray.isOnGround	)
 		{
-			marioArray.speed.y = -10;
 			marioArray.isInvincible = true;
-			marioArray.isFireMario = false;
-			marioArray.isBigMario = true; 
+			marioArray.backToBig = true; 
+			this.marioPipeSound();
 		}
 
 	
@@ -122,6 +120,7 @@ class Goomba{
 			{	
 				this.speed.x *= -1;
 				this.direction *= -1;
+
 			}
 		});
 
@@ -153,7 +152,11 @@ class Goomba{
 
 
 		// ------------------1.小馬力歐的狀況-------------
-		if( !marioArray.isBigMario && !marioArray.isDie && !this.isDie && marioArray.speed.y > 0 
+		if( !marioArray.isBigMario 
+			&& !marioArray.isDie 
+			&& !this.isDie 
+			&& !marioArray.willDie 
+			&& marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
@@ -166,7 +169,9 @@ class Goomba{
 
 
 		// ------------------2.大馬力歐的狀況-------------
-		if(marioArray.isBigMario && !marioArray.isDie && !this.isDie && marioArray.speed.y > 0 
+		if(marioArray.isBigMario 
+			&& !marioArray.isDie 
+			&& !this.isDie && marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
@@ -229,7 +234,7 @@ class Goomba{
 				&& this.pos.x < x1 * 16 - 16 ){
 				this.falling = true;
 				this.pos.y += this.speed.y;
-			}
+			}  // 這一段 bug 怪物會有點向下跑
 
 			//超越畫面上一定距離就死掉並清除陣列
 			if(this.pos.y >= y2 * screen.height + 176 
@@ -283,6 +288,11 @@ class Goomba{
 	goombaDieSound(){
 		let dieSound = new Audio("/music/mario-kick-sound.wav");
 		dieSound.play();
+	}
+
+	marioPipeSound(){
+		let marioPipeSound = new 	Audio("/music/mario-pipe-sound.wav");
+		marioPipeSound.play();
 	}
 
 	running(){

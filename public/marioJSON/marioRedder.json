@@ -10,6 +10,33 @@
       ]
     },
     {
+      "name": "BigOpacity",
+      "ranges": [
+        464,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "SmallOpacity",
+      "ranges": [
+        480,
+        0,
+        16,
+        32
+      ]
+    },
+    {
+      "name": "FireOpacity",
+      "ranges": [
+        496,
+        0,
+        16,
+        32
+      ]
+    },
+    {
       "name": "mario",
       "ranges": [
         96,

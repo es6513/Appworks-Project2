@@ -1,5 +1,5 @@
-import {drawScreen,drawBackground,loadMarioImage,loadBigMarioImage,drawObjects} from "../Js/drawImage.js";
-import {loadMario,loadSky,loadGround,loadTube} from "../Js/loadSprite.js";
+import {drawScreen,drawSky,drawBackground,loadMarioImage,loadBigMarioImage,drawObjects,drawBackgroundObjects} from "../Js/drawImage.js";
+import {loadMario,loadSky,loadGround} from "../Js/loadSprite.js";
 import {loadJson} from "../Js/loadJson.js";
 import {Mario} from "../Js/ObjectJs/marioObject.js";
 import {Coin} from "../Js/ObjectJs/coinObject.js";
@@ -19,10 +19,8 @@ import {Fireball} from "../Js/ObjectJs/fireballObject.js";
 import {Flower} from "../Js/ObjectJs/flowerObject.js";
 import {Mushroom} from "../Js/ObjectJs/mushroomObject.js";
 
-let windowWidth = $(window).width();
-let windowHeight = $(window).height();
-// const canvas = document.getElementById("cvs");
-// const context = canvas.getContext("2d");
+
+
 let fps = 100;
 
 // window.onload = startGame;
@@ -47,6 +45,21 @@ function createMarioArray(name) {
 				marioArray.push(mario);
 			});
 			return marioArray;
+		});
+}
+
+
+function createSkyArray(name) {
+	return fetch(`../marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(skySprite=>{
+			let skyArray = [];
+			skySprite.Pos[0].ranges.forEach(([x,y])=>{
+				let sky = new Sky();
+				sky.pos.set(x,y);
+				skyArray.push(sky);
+			});
+			return skyArray;
 		});
 }
 
@@ -283,10 +296,12 @@ function createFlowerArray(name) {
 // mario.speed.set(4,10);   //馬力歐起始移動速度
 
 
-Promise.all([
-	loadGround(), //產出 groundSprite, 用來傳進 mario object 處理馬力歐落地
+Promise.all([                //產出 groundSprite, 用來傳進 mario object 處理馬力歐落地
 	loadJson("background"),
 	drawBackground("background"),
+
+
+
 	drawObjects("coin"),
 	createCoinArray("coin"),
 	drawObjects("flycoin"),
@@ -344,7 +359,6 @@ Promise.all([
 	createFlowerArray("flower"),
 	loadJson("flower"),
 ]).then(([
-	groundSprite,
 	screen,
 	backgroundSprite,
 	coinSpriteSet,coinArray,
@@ -451,8 +465,9 @@ Promise.all([
 		canvas : document.createElement("canvas"),
 		start : function() {
 			this.canvas.width = 8000;
-			this.canvas.height = 640;
+			this.canvas.height = 1080;
 			this.context = this.canvas.getContext("2d");
+			this.context.scale(1,1);
 			document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 			this.frameNo = 0;
 			this.interval = setInterval(function(){
@@ -502,11 +517,11 @@ Promise.all([
 		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 		for(let i = 0;i < marioArray.length;i += 1){
 			if(	marioArray[i].pos.x < 450){
-				context.drawImage(backgroundSprite,0,0,context.canvas.width,640,0,0,context.canvas.width,640);
-			}else if(	marioArray[i].pos.x >= 450 && 	marioArray[i].pos.x < 5000) {
-				context.drawImage(backgroundSprite,	marioArray[i].pos.x - 450,0,context.canvas.width,640,0,0,context.canvas.width,640);
+				context.drawImage(backgroundSprite,0,0,context.canvas.width,1080,0,0,context.canvas.width,1080);
+			}else if(	marioArray[i].pos.x >= 450 && marioArray[i].pos.x < 5000) {
+				context.drawImage(backgroundSprite,	marioArray[i].pos.x - 450,0,context.canvas.width,1080,0,0,context.canvas.width,1080);
 			}else if(	marioArray[i].pos.x >= 5000){
-				context.drawImage(backgroundSprite, 4550,0,context.canvas.width,640,0,0,context.canvas.width,640);
+				context.drawImage(backgroundSprite, 4550,0,context.canvas.width,1080,0,0,context.canvas.width,1080);
 			} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 			if(marioArray[i].isDie && marioArray[i].pos.y > 3600){
 				restart();

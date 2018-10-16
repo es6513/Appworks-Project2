@@ -1,8 +1,18 @@
 import {Sprites} from "../Js/SpriteSet.js";
-import {loadSky, loadGround,loadTube,loadClouds,loadDecorations } from "../Js/loadSprite.js";
+import {loadSky, loadGround,loadClouds,loadDecorations } from "../Js/loadSprite.js";
 
 // 用來畫不會動背景的部分
 function  drawScreen(background,context,sprites) {
+	background.ranges.forEach(([x1,x2,y1,y2]) => {
+		for(let x = x1  ; x <= x2 ; x += 1){
+			for(let y = y1 ; y <= window.screen.height ; y += 1){
+				sprites.drawTile(background.tile,context,x,y);
+			}
+		}
+	});
+}
+
+function  drawSky(background,context,sprites) {
 	background.ranges.forEach(([x1,x2,y1,y2]) => {
 		for(let x = x1  ; x <= x2 ; x += 1){
 			for(let y = y1 ; y <= window.screen.height ; y += 1){
@@ -19,16 +29,6 @@ function loadImage(src){
 			resolve (image);
 		});
 		image.src = src;
-	});
-}
-
-function  drawTubes(background,context,sprites) {
-	background.ranges.forEach(([x1,x2,y1,y2]) => {
-		for(let x = x1  ; x < x2 ; x += 1){
-			for(let y = y1 ; y < y2 ; y += 1){
-				sprites.drawTile(background.tile,context,x,y);
-			}
-		}
 	});
 }
 
@@ -52,6 +52,22 @@ function  drawDecorations(background,context,sprites) {
 	});
 }
 
+function drawBackgroundObjects(name) {
+	return fetch(`/marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(Sprite=> Promise.all([
+			Sprite,
+			loadImage(`../imgs/images/${name}.png`),
+		]))
+		.then(([Sprite,SpriteImage])=>{
+			let SpriteSet = new Sprites(SpriteImage,Sprite.width,Sprite.height);
+			Sprite.frames.forEach(spriteFrames=>{
+				SpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
+			});
+			return SpriteSet;
+		});
+}
+
 function drawObjects(name) {
 	return fetch(`/marioJSON/${name}.json`)
 		.then(r =>r.json())
@@ -73,7 +89,7 @@ function loadMarioImage(name) {
 		.then(r=>r.json())
 		.then(marioSprite=> Promise.all([
 			marioSprite,
-			loadImage("../imgs/images/MariotSetRedderTest4.png"),
+			loadImage("../imgs/images/MariotSetRedderTest5.png"),
 		]))
 		.then(([marioSprite,image])=>{
 			let marioSpriteSet = new Sprites(image,marioSprite.width,marioSprite.height);
@@ -128,7 +144,8 @@ function drawBackground(name) {
 		])=>{	
 			let backgroundSprite = document.createElement("canvas");
 			backgroundSprite.width = 8000;
-			backgroundSprite.height = 640;
+			backgroundSprite.height = 1080;
+			
 			drawScreen(screen.backgrounds[0],backgroundSprite.getContext("2d"),skySprite);
 			drawScreen(screen.backgrounds[1],backgroundSprite.getContext("2d"),groundSprite);
 			drawClouds(screen.clouds[0],backgroundSprite.getContext("2d"),cloudSprite);
@@ -143,39 +160,5 @@ function drawBackground(name) {
 }
 
 
-// function drawCoin(name) {
-// 	return fetch(`/marioJSON/${name}.json`)
-// 		.then(r =>r.json())
-// 		.then(coinsSprite=> Promise.all([
-// 			coinsSprite,
-// 			loadImage("../imgs/images/coinset.png"),
-// 		]))
-// 		.then(([coinsSprite,coinSpriteImage])=>{
-// 			let coinSpriteSet = new Sprites(coinSpriteImage,coinsSprite.width,coinsSprite.height);
-// 			coinsSprite.frames.forEach(spriteFrames=>{
-// 				coinSpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
-// 			});
-// 			return coinSpriteSet;
-// 		});
-// }
-
-// function drawTurtle(name) {
-// 	return fetch(`/marioJSON/${name}.json`)
-// 		.then(r =>r.json())
-// 		.then(turtlesSprite=> Promise.all([
-// 			turtlesSprite,
-// 			loadImage("../imgs/images/badTurtle.png"),
-// 		]))
-// 		.then(([turtlesSprite,turtleSpriteImage])=>{
-// 			let turtleSpriteSet = new Sprites(turtleSpriteImage,turtlesSprite.width,turtlesSprite.height);
-// 			turtlesSprite.frames.forEach(spriteFrames=>{
-// 				turtleSpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
-// 			});
-// 			return turtleSpriteSet;
-// 		});
-// }
-
-
-
-export {drawScreen,loadImage,drawBackground,
-	loadMarioImage,loadBigMarioImage,drawTubes,drawObjects};
+export {drawScreen,drawSky,loadImage,drawBackground,
+	loadMarioImage,loadBigMarioImage,drawObjects,drawBackgroundObjects};
