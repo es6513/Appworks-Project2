@@ -43,6 +43,7 @@ class Flower{
 			&& this.pos.y >  marioArray.pos.y  
 		){		
 			this.show = false;
+			marioArray.isInvincible = true;
 			this.flowerPowerSound();
 			if(marioArray.isBigMario && !marioArray.isFireMario){
 				marioArray.changeToFire = true;

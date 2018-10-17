@@ -75,7 +75,7 @@ class Brick{
 			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16
-				&& marioArray.pos.x + marioArray.width  > this.pos.x
+				&& marioArray.pos.x + marioArray.width > this.pos.x
 				&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				marioArray.pos.y = this.pos.y + 16 ;

@@ -626,7 +626,6 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 				break;
 			}
 		}	
-
 	
 			
 		for(let j = 0;j < goombaArray.length;j += 1){

@@ -12,15 +12,6 @@ function  drawScreen(background,context,sprites) {
 	});
 }
 
-function  drawSky(background,context,sprites) {
-	background.ranges.forEach(([x1,x2,y1,y2]) => {
-		for(let x = x1  ; x <= x2 ; x += 1){
-			for(let y = y1 ; y <= window.screen.height ; y += 1){
-				sprites.drawTile(background.tile,context,x,y);
-			}
-		}
-	});
-}
 
 function loadImage(src){
 	return new Promise(resolve=>{
@@ -160,5 +151,5 @@ function drawBackground(name) {
 }
 
 
-export {drawScreen,drawSky,loadImage,drawBackground,
+export {drawScreen,loadImage,drawBackground,
 	loadMarioImage,loadBigMarioImage,drawObjects,drawBackgroundObjects};

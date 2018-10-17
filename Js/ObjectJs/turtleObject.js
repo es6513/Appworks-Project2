@@ -39,7 +39,7 @@ class Turtle{
 		// console.log(this.speed.x);
 		// console.log(this.quickToDie);
 		this.faceDirection = this.direction;
-		if(!this.quickToDie && !this.isDie){
+		if(!this.quickToDie && !this.isDie && !this.falling){
 			this.move();	
 		}	
 		
@@ -167,7 +167,7 @@ class Turtle{
 		// End如果在馬力歐不是跳躍的情況下、並且烏龜不是旋轉狀態下，馬力歐掛掉
 
 		// ---------烏龜會飛出去----------
-		if(this.isRotating){
+		if(this.isRotating && !this.falling){
 			this.rotate();	
 		}	
 
@@ -273,47 +273,56 @@ class Turtle{
 		}//  hitByFire 的狀態轉換在 fireballObject 檔案裡
 	
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+
+			if(this.pos.x < x2 * 16 + screen.width
+				&& this.pos.x + this.width > x1 * 16){
+				this.falling = false;
+			}else if(this.pos.x > x2 * 16 + screen.width){
+				this.falling = true;
+			}
 			if(!this.hitByFire
 				&& this.pos.y >= y1 * screen.height - this.height
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
 				this.pos.y = y1 * screen.height - this.height;
 			}
-
-			if(this.faceDirection == 1 
-				&&	this.falling == true 
-				&& this.pos.x + this.width == x1 * 16 ){
-				this.direction *= -1;
-				this.speed.x *= -1;
-			} //讓 turtle 掉下懸崖時會左右彈
-
-			if(this.faceDirection == -1 
-				&&	this.falling == true 
-				&& this.pos.x + this.width == x1 * 16 - 32 ){
-				this.speed.x *= -1;
-			} 
-
-			if( this.faceDirection == 1 
-				&& this.pos.x > x2 * 16 + 16){
-				this.falling = true;
-				this.pos.y += this.speed.y;
+			if(this.falling){
+				this.pos.y += this.speed.y; 
 			}
-
-			if(this.faceDirection == -1 
-				&&	this.falling == true 
-				&& this.pos.x + this.width == x1 * 16  ){
-				this.speed.x *= -1;
-			} 
-
 			
-			if( this.faceDirection == -1 
-				&& this.pos.x < x1 * 16 - 16 ){
-				this.falling = true;
-				this.pos.y += this.speed.y;
-			}
 
+			// if(this.faceDirection == 1 
+			// 	&&	this.falling == true 
+			// 	&& this.pos.x + this.width == x1 * 16 ){
+			// 	this.direction *= -1;
+			// 	this.speed.x *= -1;
+			// } //讓 turtle 掉下懸崖時會左右彈
 
-			if(this.pos.y >= y2 * screen.height + 1600 
+			// if(this.faceDirection == -1 
+			// 	&&	this.falling == true 
+			// 	&& this.pos.x + this.width == x1 * 16 - 32 ){
+			// 	this.speed.x *= -1;
+			// } 
+
+			// if( this.faceDirection == 1 
+			// 	&& this.pos.x > x2 * 16 + 16){
+			// 	this.falling = true;
+			// 	this.pos.y += this.speed.y;
+				
+			// }
+			// if( this.faceDirection == -1 
+			// 	&& this.pos.x < x1 * 16 - 16 ){
+			// 	this.falling = true;
+			// 	this.pos.y += this.speed.y;
+			// }
+
+			// if(this.faceDirection == -1 
+			// 	&&	this.falling == true 
+			// 	&& this.pos.x + this.width == x1 * 16  ){
+			// 	this.speed.x *= -1;
+			// } 
+
+			if(this.pos.y >= y2 * screen.height + 1200 
 				|| this.pos.x >= 6000){
 				this.isDie = true;
 			}

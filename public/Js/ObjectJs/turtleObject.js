@@ -54,7 +54,7 @@ class Turtle{
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
-			&& !marioArray.isDie 
+			&& !marioArray.willDie 
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -67,14 +67,14 @@ class Turtle{
 		){
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
-			marioArray.isDie = true;
-			marioArray.speed.y = -10;
-			marioArray.pos.y += marioArray.speed.y;
+			marioArray.willDie = true;
+			// marioArray.speed.y = -10;
+			// marioArray.pos.y += marioArray.speed.y;
 		}
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
-			&& !marioArray.isDie 
+			&& !marioArray.willDie 
 			&& marioArray.pos.x + marioArray.width   > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -85,9 +85,9 @@ class Turtle{
 			&& !this.quickToDie ){
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
-			marioArray.isDie = true;
-			marioArray.speed.y = -10;  
-			marioArray.pos.y += marioArray.speed.y;
+			marioArray.willDie = true;
+			// marioArray.speed.y = -10;  
+			// marioArray.pos.y += marioArray.speed.y;
 		}		
 
 		//------2.大馬力歐死亡變小馬力歐-------
@@ -105,9 +105,9 @@ class Turtle{
 			&& this.isRotating 
 			&& this.quickToDie
 		){
-			this.marioPipeSound();
 			marioArray.isInvincible = true;
 			marioArray.backToSmall = true;  
+			this.marioPipeSound();
 		}
 
 		if(!marioArray.isInvincible 
@@ -283,6 +283,7 @@ class Turtle{
 			if(this.faceDirection == 1 
 				&&	this.falling == true 
 				&& this.pos.x + this.width == x1 * 16 ){
+				this.direction *= -1;
 				this.speed.x *= -1;
 			} //讓 turtle 掉下懸崖時會左右彈
 
@@ -312,7 +313,7 @@ class Turtle{
 			}
 
 
-			if(this.pos.y >= y2 * screen.height + 176 
+			if(this.pos.y >= y2 * screen.height + 1600 
 				|| this.pos.x >= 6000){
 				this.isDie = true;
 			}

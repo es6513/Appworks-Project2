@@ -13,52 +13,99 @@ class Mushroom{
 		this.onGround = false;
 		this.previousY;
 		this.previousX;
+		this.rightBoundX;
 		this.appear = false;
 	}
 	
-	update(marioArray,screen){
+	update(marioArray,screen,questionBrickArray,brickJson,oddBrickJson){
 		// X 軸判定要再調整一下
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
 		//	&& shape.pos.x < this.pos.x + this.width 右
 		//	&& shape.pos.y + shape.height > this.pos.y 上
 		//	&& shape.pos.y < this.pos.y + this.height 下
+
+
 		if(!this.appear){
 			this.previousY = this.pos.y;
 			this.previousX = this.pos.x;
 		}		
 
 		// //蘑菇被撞到後先往上移
-		if(this.appear && this.pos.y > this.previousY - this.height
+		if(!this.onGround && this.appear && this.pos.y > this.previousY - this.height
 			&& this.pos.x < this.previousX + this.width){
 			this.pos.y -= this.speed.y;
 		}
-		// //完全出現後往右邊移動
+
+		// 完全出現後往右邊移動
+
 		if(this.pos.y <= this.previousY - this.height 
-			&& this.pos.x < this.previousX + this.width){
+			&& this.pos.x < 2064){
 			this.pos.x += this.speed.x;
 		}
 
-		// //落地
-		if( this.pos.x == 	this.previousX + this.width){
+		// brickJson.Pos[0].ranges.forEach(([x,y])=>{
+		// 	if(!this.onGround && this.pos.y <= this.previousY - this.height 
+		// 		&& this.pos.x < x + brickJson.width + 16 ){
+		// 		this.pos.x += this.speed.x;
+		// 	}
+		// 	// //落地
+		// 	// if( this.pos.x >= x + brickJson.width){
+		// 	// 	this.pos.y += this.speed.y;
+		// 	// }
+		// });
+
+		if( this.pos.x >=  2064){
 			this.pos.y += this.speed.y;
 		}
+
+		// for(let i = 0; i < questionBrickArray.length;i += 1){
+		// 	if(this.pos.x < questionBrickArray[i].pos.x){
+		// 		this.rightBoundX = 
+		// 	}
+		// }
+
+
+
+		//----------------end 往右邊移動-----------------
+
+		//------------------障礙物-------------------
+
+		// ----------------Case 1: oddBrick ---------------------
+
+		oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  this.width > x 
+							&& this.pos.x  < x + oddBrickJson.width )
+			{	
+				this.speed.x *= -1;
+			}
+		});
+
+		
 
 
 
 		//-----------------香菇在地面上的移動-----------
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+			if(this.pos.x < x2 * 16 + screen.width
+				&& this.pos.x + this.width > x1 * 16){
+				this.falling = false;
+			}else if(this.pos.x > x2 * 16 + screen.width
+				&& this.pos.y > y1 * screen.height - 32){
+				this.falling = true;
+			}
 
 			if(this.pos.y >= y1 * screen.height - this.height
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
+				this.onGround = true;
 				this.pos.y = y1 * screen.height - this.height;
 				this.pos.x += this.speed.x;
 			}
 	
-			// if(this.appear && this.pos.x > x2 * 16 + 16){
-			// 	this.speed.y = 2;
-			// 	this.pos.y += this.speed.y;
-			// }
+			if(this.falling && this.pos.x > x2 * 16 + 16){
+				this.speed.y = 2;
+				this.pos.y += this.speed.y;
+			}
 			//-------------懸崖 bug  掉下的速度要再調整 ，
 			//蘑菇在撞擊後會直接穿越地板(應該可以像怪物一樣，用 facedirection 解決)------
 
@@ -77,6 +124,7 @@ class Mushroom{
 			&& this.pos.y >  marioArray.pos.y  
 		){	
 			this.show = false;
+			marioArray.isInvincible = true;
 			this.mushroomPowerSound();
 			if(!marioArray.isBigMario && !marioArray.isFireMario){
 				marioArray.changeToBig = true;

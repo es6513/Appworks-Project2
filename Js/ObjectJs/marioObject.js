@@ -687,6 +687,7 @@ class Mario{
 
 		if(this.isFireMario && keys.space && !keys.bottom){
 			this.shoot();
+			this.fireBallSound();
 		}else if(!keys.space){
 			if(this.shot){
 				this.shot = false;
@@ -746,12 +747,18 @@ class Mario{
 	jump(){
 		this.pos.y -= this.speed.y;
 	}
+
 	shoot(){
 		if(!this.shot){
 			let fire = new Fireball();
 			this.fireArray.push(fire);
 			this.shot = true; 
 		}
+	}
+
+	fireBallSound(){
+		let fireBallSound = new Audio("../../music/mario-fireball-sound.wav");
+		fireBallSound.play();
 	}
 
 	running(){
