@@ -237,7 +237,7 @@ class Goomba{
 			}  // 這一段 bug 怪物會有點向下跑
 
 			//超越畫面上一定距離就死掉並清除陣列
-			if(this.pos.y >= y2 * screen.height + 176 
+			if(this.pos.y >= y2 * screen.height + 2000 
 				|| this.pos.x >= 6000){
 				this.isDie = true;
 			}

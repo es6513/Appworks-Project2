@@ -35,8 +35,8 @@ class MushroomBrick{
 			if(marioArray.speed.y < 0 
 			&& marioArray.pos.y >= this.pos.y
 			&& marioArray.pos.y <= this.pos.y + 16
-			&& marioArray.pos.x + marioArray.width / 2 >= this.pos.x   
-			&& marioArray.pos.x <= this.pos.x + this.width / 2
+			&& marioArray.pos.x + marioArray.width  > this.pos.x   
+			&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				if(!this.isUseLess){
 					this.mushroomAppearSound();
@@ -67,9 +67,9 @@ class MushroomBrick{
 			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16
-				&& marioArray.pos.x + marioArray.width / 2 >= this.pos.x 
+				&& marioArray.pos.x + marioArray.width  > this.pos.x 
 				//判定的bug 用 width/2可以較精確判定(還是會有穿越的情形)
-				&& marioArray.pos.x <= this.pos.x + this.width / 2
+				&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				if(!this.isUseLess){
 					this.mushroomAppearSound();

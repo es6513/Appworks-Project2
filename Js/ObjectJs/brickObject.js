@@ -43,8 +43,8 @@ class Brick{
 			if(!this.goup && marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16
-				&& marioArray.pos.x + marioArray.width / 2  >= this.pos.x   //判定的bug
-				&& marioArray.pos.x <= this.pos.x + this.width / 2
+				&& marioArray.pos.x + marioArray.width   > this.pos.x   //判定的bug
+				&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				marioArray.pos.y = this.pos.y ;
 				this.pos.y -= 4;

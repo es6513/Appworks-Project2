@@ -1,6 +1,5 @@
 import {drawScreen,drawSky,drawBackground,loadMarioImage,loadBigMarioImage,drawObjects,drawBackgroundObjects} from "../Js/drawImage.js";
 import {loadMario,loadSky,loadGround} from "../Js/loadSprite.js";
-import {Sky} from "../Js/ObjectJs/skyObject.js";
 import {loadJson} from "../Js/loadJson.js";
 import {Mario} from "../Js/ObjectJs/marioObject.js";
 import {Coin} from "../Js/ObjectJs/coinObject.js";
@@ -19,9 +18,6 @@ import {FlowerBrick} from "../Js/ObjectJs/flowerBrickObject.js";
 import {Fireball} from "../Js/ObjectJs/fireballObject.js";
 import {Flower} from "../Js/ObjectJs/flowerObject.js";
 import {Mushroom} from "../Js/ObjectJs/mushroomObject.js";
-
-
-
 
 
 

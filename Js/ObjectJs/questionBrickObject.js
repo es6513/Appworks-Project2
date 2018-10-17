@@ -25,6 +25,10 @@ class QuestionBrick{
 		//---------------小馬力歐-----------------
 		// -------------下方----------------
 
+
+		// if(marioArray.speed.y > 0 && marioArray.isOnBrick){
+		// 	marioArray.isOnBrick = false;
+		// }
 		if(flycoinArray.length != 0){
 			for(let j = 0;j < questionBrickArray.length;j += 1){
 				if(questionBrickArray[j].isUseLess == true){
@@ -33,12 +37,14 @@ class QuestionBrick{
 			}
 		}		
 
+
+
 		if(!marioArray.isBigMario && !marioArray.isFireMario){
 			if(marioArray.speed.y < 0 
 			&& marioArray.pos.y >= this.pos.y
-			&& marioArray.pos.y <= this.pos.y + 16
-			&& marioArray.pos.x + marioArray.width   >= this.pos.x 
-			&& marioArray.pos.x <= this.pos.x + this.width / 2
+			&& marioArray.pos.y <= this.pos.y + this.height
+			&& marioArray.pos.x + marioArray.width    > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				if(!this.isUseLess){
 					this.coinBrickSound();
@@ -54,16 +60,15 @@ class QuestionBrick{
 			&& marioArray.pos.x + marioArray.width > this.pos.x  
 			&& marioArray.pos.x < this.pos.x + this.width 
 			){
-				if(marioArray.pos.y >= this.pos.y - 32){
-					marioArray.pos.y = this.pos.y - 32;
+				if(marioArray.pos.y >= this.pos.y - marioArray.height){
+					marioArray.pos.y = this.pos.y - marioArray.height;
 					marioArray.speed.y = 0;
 					marioArray.isOnBrick = true;
 					marioArray.isJump = false;
 				}
 			}
-			
 		}
-
+	
 
 
 		//---------------大馬力歐-----------------
@@ -72,9 +77,9 @@ class QuestionBrick{
 			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16
-				&& marioArray.pos.x + marioArray.width >= this.pos.x 
+				&& marioArray.pos.x + marioArray.width > this.pos.x 
 				//判定的bug 用 width/2可以較精確判定(還是會有穿越的情形)
-				&& marioArray.pos.x <= this.pos.x + this.width / 2
+				&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				if(!this.isUseLess){
 					this.coinBrickSound();

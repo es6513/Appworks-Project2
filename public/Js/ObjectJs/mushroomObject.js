@@ -62,7 +62,7 @@ class Mushroom{
 			//-------------懸崖 bug  掉下的速度要再調整 ，
 			//蘑菇在撞擊後會直接穿越地板(應該可以像怪物一樣，用 facedirection 解決)------
 
-			if(this.pos.y >= y2 * screen.height + 176){
+			if(this.pos.y >= y2 * screen.height + 1600){
 				this.show = false;
 			}
 
