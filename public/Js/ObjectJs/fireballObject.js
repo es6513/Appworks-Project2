@@ -58,9 +58,7 @@ class Fireball{
 		});
 
 		oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{
-			if(this.pos.x +  this.width 
-			
-			  > x 
+			if(this.pos.x +  this.width  > x 
 				&& this.pos.x  < x + oddBrickJson.width
 				&& this.pos.y +  this.height  > y
 				&& this.pos.y  < y + tubeJson.height )
@@ -166,8 +164,7 @@ class Fireball{
 		if(!this.isExplosion){
 			this.pos.y += this.speed.y;
 		}
-			
-		
+					
 		
 		if(this.goRight && this.pos.x > 6000 ){
 			this.goRight = false;

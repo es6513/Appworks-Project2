@@ -29,7 +29,7 @@ class Goomba{
 		];
 	}
 	
-	update(tubeJson,turtleArray,marioArray,screen,oddBrickJson){
+	update(tubeJson,highTubeJson,highestTubeJson,turtleArray,marioArray,screen,oddBrickJson){
 		this.faceDirection = this.direction;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
@@ -38,7 +38,7 @@ class Goomba{
 		// console.log(this.speed.x);
 
 		// ------bug----- 已經消失的怪物需要清除掉(preffered) 或是讓她不能再移動，否則會有bug
-		if(!this.isDie){
+		if(!this.isDie && !this.falling){
 			this.move();	
 		}	
 		
@@ -48,6 +48,7 @@ class Goomba{
 		// X軸的判定 用 width/2 比較好一點,
 
 		//------1.小馬力歐的死亡-------
+
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
@@ -69,6 +70,7 @@ class Goomba{
 		}
 
 		//------2.大馬力歐死亡變小馬力歐-------
+		
 		if(!marioArray.isInvincible 
 			&& marioArray.isBigMario 
 			&& !this.isDie
@@ -123,6 +125,27 @@ class Goomba{
 
 			}
 		});
+
+		highTubeJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  this.width > x  
+				&& this.pos.x  < x + tubeJson.width )
+			{	
+				this.speed.x *= -1;
+				this.direction *= -1;
+
+			}
+		});
+
+		highestTubeJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  this.width > x  
+				&& this.pos.x  < x + tubeJson.width )
+			{	
+				this.speed.x *= -1;
+				this.direction *= -1;
+
+			}
+		});
+
 
 		// ----------------Case 2: oddBrick ---------------------
 
@@ -194,50 +217,66 @@ class Goomba{
 
 
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+			if(this.pos.x < x2 * 16 + screen.width
+				&& this.pos.x + this.width > x1 * 16){
+				this.falling = false;
+			}else if(this.pos.x > x2 * 16 + screen.width){
+				this.falling = true;
+			}
+			if(!this.hitByFire
+				&& this.pos.y >= y1 * screen.height - this.height
+				&& this.pos.x + this.width > x1 * 16
+				&& this.pos.x < x2 * 16 + 16){
+				this.pos.y = y1 * screen.height - this.height;
+			}
+			if(this.falling){
+				this.pos.y += this.speed.y; 
+			}
+			
 			if(!this.hitByFire && this.pos.y >= y1 * screen.height - this.height
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
 				this.pos.y = y1 * screen.height - this.height;
 			}
 
-			if(this.faceDirection == 1 
-				&&	this.falling == true 
-				&& this.pos.x + this.width == x1 * 16 ){
-				this.speed.x *= -1;
-			} //讓 goomba 掉下懸崖時會左右彈
+			// if(this.faceDirection == 1 
+			// 	&&	this.falling == true 
+			// 	&& this.pos.x + this.width == x1 * 16 ){
+			// 	this.speed.x *= -1;
+			// } //讓 goomba 掉下懸崖時會左右彈
 
-			if(this.faceDirection == -1 
-				&&	this.falling == true
-				 && this.pos.x + this.width == x1 * 16 - 32 ){
-				this.speed.x *= -1;
-			} 
+			// if(this.faceDirection == -1 
+			// 	&&	this.falling == true
+			// 	 && this.pos.x + this.width == x1 * 16 - 32 ){
+			// 	this.speed.x *= -1;
+			// } 
 
-			if( this.faceDirection == 1 
-				&& this.pos.x > x2 * 16 + 16){
-				this.falling = true;
-				this.pos.y += this.speed.y;
-			}
-
-			if(this.faceDirection == -1 
-				&&	this.falling == true 
-				&& this.pos.x + this.width == x1 * 16  ){
-				this.speed.x *= -1;
-			} 
-
-			// if( this.pos.x > x2 * 16 + 16){
+			// if( this.faceDirection == 1 
+			// 	&& this.pos.x > x2 * 16 + 16){
 			// 	this.falling = true;
 			// 	this.pos.y += this.speed.y;
-			// }			
+			// }
+
+			// if(this.faceDirection == -1 
+			// 	&&	this.falling == true 
+			// 	&& this.pos.x + this.width == x1 * 16  ){
+			// 	this.speed.x *= -1;
+			// } 
+
+			// // if( this.pos.x > x2 * 16 + 16){
+			// // 	this.falling = true;
+			// // 	this.pos.y += this.speed.y;
+			// // }			
 		
 			
-			if( this.faceDirection == -1 
-				&& this.pos.x < x1 * 16 - 16 ){
-				this.falling = true;
-				this.pos.y += this.speed.y;
-			}  // 這一段 bug 怪物會有點向下跑
+			// if( this.faceDirection == -1 
+			// 	&& this.pos.x < x1 * 16 - 16 ){
+			// 	this.falling = true;
+			// 	this.pos.y += this.speed.y;
+			// }  // 這一段 bug 怪物會有點向下跑
 
 			//超越畫面上一定距離就死掉並清除陣列
-			if(this.pos.y >= y2 * screen.height + 2000 
+			if(this.pos.y >= y2 * screen.height + 1200 
 				|| this.pos.x >= 6000){
 				this.isDie = true;
 			}

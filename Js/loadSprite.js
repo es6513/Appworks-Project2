@@ -11,6 +11,17 @@ function loadMario() {
 		});
 }// 一開始只畫一個馬力歐的時候用的
 
+
+function loadFont() {
+  return loadImage("../imgs/images/font.png")
+  .then(fontImage=>{
+    let fontSprite = new Sprites(fontImage,128,48);
+    
+    fontSprite.getTileImage("font",16,16,16,16)
+    return fontSprite;
+  })
+}
+
 function loadSky() {
 	return loadImage("../imgs/images/sky.png")
 		.then(skyImage=>{
@@ -49,4 +60,4 @@ function loadDecorations(width,height,name,imageUrl) {
 		});
 }
 
-export {loadMario,loadSky,loadGround,loadClouds,loadDecorations};
+export {loadMario,loadSky,loadGround,loadClouds,loadDecorations,loadFont};

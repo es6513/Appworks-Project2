@@ -16,6 +16,7 @@ class Fireball{
 		this.width = 16;
 		this.height = 16;
 		this.show = false;
+		this.falling = false;
 		this.canBounce = false;
 		this.isExplosion  = false;
 		this.clearTimeout;
@@ -33,7 +34,7 @@ class Fireball{
 		];
 	}
 	
-	update(marioArray,screen,goombaArray,turtleArray,tubeJson,oddBrickJson){
+	update(marioArray,screen,goombaArray,turtleArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
 		this.faceDirection = marioArray.faceDirection;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
 		//	&& shape.pos.x < this.pos.x + this.width 右
@@ -57,20 +58,39 @@ class Fireball{
 			}
 		});
 
-		oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{
-			if(this.pos.x +  this.width 
-			
-			  > x 
-				&& this.pos.x  < x + oddBrickJson.width
+		highTubeJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  this.width  > x  
+				&& this.pos.x  < x + highTubeJson.width 
 				&& this.pos.y +  this.height  > y
-				&& this.pos.y  < y + tubeJson.height )
+				&& this.pos.y  < y + highTubeJson.height  )
 			{	
 				this.isExplosion = true;
 				// this.show = false;
 			}
-	
 		});
 
+		highestTubeJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  this.width  > x  
+				&& this.pos.x  < x + highestTubeJson.width 
+				&& this.pos.y +  this.height  > y
+				&& this.pos.y  < y + highestTubeJson.height  )
+			{	
+				this.isExplosion = true;
+				// this.show = false;
+			}
+		});
+
+
+		oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  this.width  > x 
+				&& this.pos.x  < x + oddBrickJson.width
+				&& this.pos.y +  this.height  > y
+				&& this.pos.y  < y + oddBrickJson.height )
+			{	
+				this.isExplosion = true;
+				// this.show = false;
+			}
+		});
 
 		let timeoutId;
 	
@@ -125,13 +145,20 @@ class Fireball{
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
 			// this.height / 4 為了配合圖片大小而調整
 			if(!this.isExplosion 
-				&& this.pos.y >= y1 * screen.height - this.height + this.height / 4){
+				&& this.pos.y >= y1 * screen.height - this.height + this.height / 4
+				&&this.pos.x + this.width > x1 * screen.width 
+				&& this.pos.x < x2 * screen.width){
 				this.speed.y *= -1;
 				this.canBounce = true;
 			}
-			if(this.canBounce && this.pos.y <= 224 ){
+
+			if(this.canBounce
+				&&this.pos.x + this.width > x1 * screen.width 
+				&& this.pos.x < x2 * screen.width 
+				&&this.pos.y <= 224 ){
 				this.speed.y *= -1;
 			}
+
 		});
 
 
@@ -166,8 +193,7 @@ class Fireball{
 		if(!this.isExplosion){
 			this.pos.y += this.speed.y;
 		}
-			
-		
+					
 		
 		if(this.goRight && this.pos.x > 6000 ){
 			this.goRight = false;

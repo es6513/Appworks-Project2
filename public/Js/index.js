@@ -6,6 +6,8 @@ import {Coin} from "../Js/ObjectJs/coinObject.js";
 import {Flycoin} from "../Js/ObjectJs/flycoinObject.js";
 import {Turtle} from "../Js/ObjectJs/turtleObject.js";
 import {Tube} from "../Js/ObjectJs/tubeObject.js";
+import {HighTube} from "../Js/ObjectJs/highTubeObject.js"
+import {HighestTube} from "../Js/ObjectJs/highestTubeObject.js"
 import {OddBrick} from "../Js/ObjectJs/oddBrickObject.js";
 import {Goomba} from "../Js/ObjectJs/goombaObject.js";
 import {Pole} from "../Js/ObjectJs/poleObject.js";
@@ -17,6 +19,7 @@ import {MushroomBrick} from "../Js/ObjectJs/mushroomBrickObject.js";
 import {FlowerBrick} from "../Js/ObjectJs/flowerBrickObject.js";
 import {Flower} from "../Js/ObjectJs/flowerObject.js";
 import {Mushroom} from "../Js/ObjectJs/mushroomObject.js";
+
 
 import {keys} from "../Js/keyEvent.js";
 let snippet = new Array();
@@ -105,6 +108,35 @@ function createTubeArray(name) {
 				tubeArray.push(tube);
 			});
 			return tubeArray;
+		});
+}
+
+function createhighTubeArray(name) {
+	return fetch(`../marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(highTubeSprite=>{
+			let highTubeArray = [];
+			highTubeSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let highTube = new HighTube();
+				highTube.pos.set(x,y);
+				highTubeArray.push(highTube);
+			});
+			return highTubeArray;
+		});
+}
+
+
+function createhighestTubeArray(name) {
+	return fetch(`../marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(highestTubeSprite=>{
+			let highestTubeArray = [];
+			highestTubeSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let higheseTube = new HighestTube();
+				higheseTube.pos.set(x,y);
+				highestTubeArray.push(higheseTube);
+			});
+			return highestTubeArray;
 		});
 }
 
@@ -315,6 +347,12 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 	drawObjects("tube"),
 	createTubeArray("tube"),
 	loadJson("tube"),
+	drawObjects("highTube"),
+	createTubeArray("highTube"),
+	loadJson("highTube"),
+	drawObjects("highestTube"),
+	createhighestTubeArray("highestTube"),
+	loadJson("highestTube"),
 	drawObjects("oddBrick"),
 	createOddBrickArray("oddBrick"),
 	loadJson("oddBrick"),
@@ -367,6 +405,8 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 	flycoinSprite,flycoinArray,
 	turtleSpriteSet,turtleArray,
 	tubeSprite,tubeArray,tubeJson,
+	highTubeSprite,highTubeArray,highTubeJson,
+	highestTubeSprite,highestTubeArray,highestTubeJson,
 	oddBrickSprite,oddBrickArray,oddBrickJson,
 	goombaSpriteSet,goombaArray,
 	poleSprite,poleArray,poleJson,
@@ -390,6 +430,8 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 		turtleArray = [];
 		flagArray = [];
 		tubeArray = [];
+		highTubeArray =[];
+		highestTubeArray =[];
 		oddBrickArray = [];
 		goombaArray = [];
 		poleArray = [];
@@ -409,6 +451,8 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 			createFlycoinArray("flycoin"),
 			createTurtleArray("badTurtle"),
 			createTubeArray("tube"),
+			createhighTubeArray("highTube"),
+			createhighestTubeArray("highestTube"),
 			createOddBrickArray("oddBrick"),
 			createGoombaArray("goomba"),
 			createPoleArray("pole"),
@@ -427,6 +471,8 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 			flycoin,
 			turtle,
 			tube,
+			highTube,
+			highestTube,
 			oddBrick,
 			goomba,
 			pole,
@@ -445,6 +491,8 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 			coinArray = coin;
 			turtleArray = turtle;
 			tubeArray = tube;
+			highTubeArray = highTube;
+			highestTubeArray = highestTube;
 			oddBrickArray = oddBrick;
 			goombaArray = goomba;
 			poleArray = pole;
@@ -550,10 +598,19 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 		// ------------end 密技區----------
 
 
-
-
 		let context = myGameArea.context;
 		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+
+		// -----------------文字區--------------------------
+
+
+	
+
+
+		// -----------------end of 文字區-----------------
+
+
+
 		for(let i = 0;i < marioArray.length;i += 1){
 			if(	marioArray[i].pos.x < 450){
 				context.drawImage(backgroundSprite,0,0,context.canvas.width,1080,0,0,context.canvas.width,1080);
@@ -602,21 +659,29 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 			tubeArray[j].update(marioArray[0]);
 		}	
 
+		for(let j = 0;j < highTubeArray.length;j += 1){
+			highTubeArray[j].draw(context,highTubeSprite,marioArray[0]);
+			highTubeArray[j].update(marioArray[0]);
+		}	
+
+		for(let j = 0;j < highestTubeArray.length;j += 1){
+			highestTubeArray[j].draw(context,highestTubeSprite,marioArray[0]);
+			highestTubeArray[j].update(marioArray[0]);
+		}	
+
 
 		for(let j = 0;j < oddBrickArray.length;j += 1){
 			oddBrickArray[j].draw(context,oddBrickSprite,marioArray[0]);
 			oddBrickArray[j].update();
 		}	
 
-
 		// ---------------end of 障礙區-----------------
-
 
 
 		// --------------------怪物區---------------------
 		for(let j = 0;j < turtleArray.length;j += 1){
 			turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
-			turtleArray[j].update(screen,tubeJson,marioArray[0],oddBrickJson);
+			turtleArray[j].update(screen,tubeJson,highTubeJson,highestTubeJson,marioArray[0],oddBrickJson);
 			let turtle = turtleArray[j];
 			if(turtle.isDie){
 				turtleArray.splice(j,1);
@@ -626,12 +691,11 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 				break;
 			}
 		}	
-
 	
 			
 		for(let j = 0;j < goombaArray.length;j += 1){
 			goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
-			goombaArray[j].update(tubeJson,turtleArray,marioArray[0],screen,oddBrickJson);
+			goombaArray[j].update(tubeJson,highTubeJson,highestTubeJson,turtleArray,marioArray[0],screen,oddBrickJson);
 			let goomba = goombaArray[j];
 			if(!goomba.show){
 				goombaArray.splice(j,1);
@@ -679,7 +743,8 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 
 		for(let j = 0;j < mushroomArray.length;j += 1){
 			mushroomArray[j].draw(context,mushroomSprite,marioArray[0]);
-			mushroomArray[j].update(marioArray[0],screen,questionBrickArray,brickJson,oddBrickJson);
+			mushroomArray[j].update(marioArray[0],screen,questionBrickArray,brickJson,oddBrickJson
+				,tubeJson,highTubeJson,highestTubeJson);
 			let mushroom = mushroomArray[j];
 			if(mushroom.show == false){
 				mushroomArray.splice(j,1);
@@ -711,11 +776,12 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 				screen,fireballSprite,
 				goombaArray,turtleArray,tubeJson,oddBrickJson);
 
-			marioArray[j].update(screen,tubeJson,poleJson,
-				castleJson,flagArray,brickJson,oddBrickJson,
+			marioArray[j].update(screen,tubeJson,highTubeJson,highestTubeJson,
+				poleJson,				castleJson,flagArray,brickJson,oddBrickJson,
 				questionBrickJson,flowerBrickJson,mushroomBrickJson);
 		}	
-		
+
+
 		// if(mario.pos.x > 40){
 		// 	backgroundMusic.play();
 		// }   
