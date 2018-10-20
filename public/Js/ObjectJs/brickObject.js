@@ -105,6 +105,7 @@ class Brick{
 				marioArray.speed.y = 0;
 				marioArray.isBottomBrick = true;
 				this.break = true;
+				this.bricksmashsound();
 			}
 	
 			// -------------上方----------------
@@ -127,6 +128,11 @@ class Brick{
 	bumpkSound(){
 		let bumpkSound = new Audio("/music/mario-bump-sound.wav");
 		bumpkSound.play();
+	}
+
+	bricksmashsound(){
+		let bricksmashsound = new Audio("/music/brick-smash.wav");
+		bricksmashsound.play();
 	}
 
 	draw(context,brickSprite,marioArray){

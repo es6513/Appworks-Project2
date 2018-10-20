@@ -53,6 +53,8 @@ class Goomba{
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
 			&& !marioArray.willDie 
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& !this.isDie
 			&& !this.hitByFire
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
@@ -75,6 +77,8 @@ class Goomba{
 			&& marioArray.isBigMario 
 			&& !this.isDie
 			&& !this.hitByFire
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -94,6 +98,8 @@ class Goomba{
 			&& marioArray.isFireMario 
 			&& !this.isDie
 			&& !this.hitByFire
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -176,7 +182,9 @@ class Goomba{
 			&& !marioArray.isFireMario
 			&& !marioArray.isDie 
 			&& !this.isDie 
+			&& !marioArray.falling
 			&& !marioArray.willDie 
+			&& !marioArray.underGround
 			&& marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
@@ -193,6 +201,8 @@ class Goomba{
 		if(marioArray.isBigMario 
 			&& !marioArray.isDie 
 			&& !this.isDie 
+			&& !marioArray.falling
+			&& !marioArray.underGround
 			&& marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
@@ -209,6 +219,8 @@ class Goomba{
 		if(marioArray.isFireMario 
 			&& !marioArray.isDie 
 			&& !this.isDie 
+			&& !marioArray.falling
+			&& !marioArray.underGround
 			&& marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width

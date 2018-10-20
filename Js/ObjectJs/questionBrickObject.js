@@ -38,13 +38,17 @@ class QuestionBrick{
 		}		
 
 
-			if(marioArray.pos.x + marioArray.width   > this.pos.x 
-			&& marioArray.pos.x < this.pos.x + this.width ){
-				console.log("brickzone");
-			}
+		// if(marioArray.pos.x + marioArray.width   > this.pos.x 
+		// && marioArray.pos.x < this.pos.x + this.width ){
+		
+		// }
 
 
-		if(!marioArray.isBigMario && !marioArray.isFireMario){
+		if(!marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& !marioArray.isDie 
+			&& !marioArray.underGround
+			&& !marioArray.willDie ){
 			if(marioArray.speed.y < 0 
 			&& marioArray.pos.y >= this.pos.y
 			&& marioArray.pos.y <= this.pos.y + this.height
@@ -83,10 +87,10 @@ class QuestionBrick{
 			// 		marioArray.fallingFromBrick = true;
 			// 	}
 
-				// if(marioArray.speed.y > 0 
-				// 	&& marioArray.pos.y > ){
-				// 	marioArray.stopX = false;
-				// }
+			// if(marioArray.speed.y > 0 
+			// 	&& marioArray.pos.y > ){
+			// 	marioArray.stopX = false;
+			// }
 
 
 		}
@@ -95,7 +99,10 @@ class QuestionBrick{
 
 		//---------------大馬力歐-----------------
 		// -------------下方----------------
-		if(marioArray.isBigMario || marioArray.isFireMario){
+		if((marioArray.isBigMario || marioArray.isFireMario )
+			&& !marioArray.underGround	
+			&& !marioArray.isDie 
+			&& !marioArray.willDie ){
 			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16

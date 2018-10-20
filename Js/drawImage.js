@@ -1,17 +1,16 @@
 import {Sprites} from "../Js/SpriteSet.js";
-import {loadSky, loadGround,loadClouds,loadDecorations } from "../Js/loadSprite.js";
+import {loadSky, loadGround,loadClouds,loadDecorations,loadunderGround,loadunderSky } from "../Js/loadSprite.js";
 
 // 用來畫不會動背景的部分
 function  drawScreen(background,context,sprites) {
 	background.ranges.forEach(([x1,x2,y1,y2]) => {
 		for(let x = x1  ; x <= x2 ; x += 1){
-			for(let y = y1 ; y <= window.screen.height ; y += 1){
+			for(let y = y1 ; y <= y2 ; y += 1){
 				sprites.drawTile(background.tile,context,x,y);
 			}
 		}
 	});
 }
-
 
 function loadImage(src){
 	return new Promise(resolve=>{
@@ -123,6 +122,8 @@ function drawBackground(name) {
 			loadSky(),
 			loadGround(),
 			loadClouds(),
+			loadunderSky(),
+			loadunderGround(),
 			loadDecorations(32,16,"smallGrass","smallGrass3216"),
 			loadDecorations(48,16,"mediumGrass","mediumGrass4816"),
 			loadDecorations(64,16,"bigGrass","bigGrass6416"),
@@ -130,6 +131,7 @@ function drawBackground(name) {
 			loadDecorations(80,48,"bigMountain","bigMountain8048"),
 		]))
 		.then(([screen,skySprite,groundSprite,cloudSprite,
+			undergroundSprite,underskySprite,
 			smallGrassSprite,mediumGrassSprite,bigGrassSprite,
 			smallMountainSprite,bigMountainSprite,
 		])=>{	
@@ -139,6 +141,9 @@ function drawBackground(name) {
 			drawScreen(screen.backgrounds[0],backgroundSprite.getContext("2d"),skySprite);
 			drawScreen(screen.backgrounds[1],backgroundSprite.getContext("2d"),groundSprite);
 			drawClouds(screen.clouds[0],backgroundSprite.getContext("2d"),cloudSprite);
+			drawScreen(screen.underbackgrounds[0],backgroundSprite.getContext("2d"),undergroundSprite);
+			drawScreen(screen.underbackgrounds[1],backgroundSprite.getContext("2d"),underskySprite);
+		
 			drawDecorations(screen.smallGrass[0],backgroundSprite.getContext("2d"),smallGrassSprite);
 			drawDecorations(screen.mediumGrass[0],backgroundSprite.getContext("2d"),mediumGrassSprite);
 			drawDecorations(screen.bigGrass[0],backgroundSprite.getContext("2d"),bigGrassSprite);

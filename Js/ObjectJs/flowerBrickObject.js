@@ -30,7 +30,11 @@ class FlowerBrick{
 			}
 		}
 	
-		if(!marioArray.isBigMario && !marioArray.isFireMario){
+		if(!marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& !marioArray.underGround
+			&& !marioArray.isDie 
+			&& !marioArray.willDie ){
 			if(marioArray.speed.y < 0 
 			&& marioArray.pos.y >= this.pos.y
 			&& marioArray.pos.y <= this.pos.y + 16
@@ -48,7 +52,9 @@ class FlowerBrick{
 			}
 
 			// -------------上方----------------
-			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
+			if(!marioArray.isBottomBrick 
+				&& !marioArray.underGround
+			&& marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.width > this.pos.x  
 			&& marioArray.pos.x < this.pos.x + this.width 
 			){
@@ -63,7 +69,10 @@ class FlowerBrick{
 
 		//---------------大馬力歐-----------------
 		// -------------下方----------------
-		if(marioArray.isBigMario || marioArray.isFireMario){
+		if((marioArray.isBigMario || marioArray.isFireMario)
+			&& !marioArray.isDie 
+			&& !marioArray.underGround
+			&& !marioArray.willDie ){
 			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16

@@ -146,16 +146,16 @@ class Fireball{
 			// this.height / 4 為了配合圖片大小而調整
 			if(!this.isExplosion 
 				&& this.pos.y >= y1 * screen.height - this.height + this.height / 4
-				&&this.pos.x + this.width > x1 * screen.width 
+				&& this.pos.x + this.width > x1 * screen.width 
 				&& this.pos.x < x2 * screen.width){
 				this.speed.y *= -1;
 				this.canBounce = true;
 			}
 
 			if(this.canBounce
-				&&this.pos.x + this.width > x1 * screen.width 
+				&& this.pos.x + this.width > x1 * screen.width 
 				&& this.pos.x < x2 * screen.width 
-				&&this.pos.y <= 224 ){
+				&& this.pos.y <= 224 ){
 				this.speed.y *= -1;
 			}
 

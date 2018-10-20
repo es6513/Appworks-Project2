@@ -1,0 +1,26 @@
+{
+  "frames": [
+    {
+      "name": "undergroundTube",
+      "ranges": [
+        0,
+        0,
+        80,
+        128
+      ]
+    }
+  ],
+  "Pos": [
+    {
+      "tile": "undergroundTube",
+      "ranges": [
+        [
+          2496,
+          912
+        ]
+      ]
+    }
+  ],
+  "width": 80,
+  "height": 128
+}
