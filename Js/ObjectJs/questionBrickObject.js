@@ -38,6 +38,11 @@ class QuestionBrick{
 		}		
 
 
+			if(marioArray.pos.x + marioArray.width   > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width ){
+				console.log("brickzone");
+			}
+
 
 		if(!marioArray.isBigMario && !marioArray.isFireMario){
 			if(marioArray.speed.y < 0 
@@ -67,6 +72,23 @@ class QuestionBrick{
 					marioArray.isJump = false;
 				}
 			}
+
+			// if(marioArray.isOnBrick 
+			// 	&& marioArray.speed.y > 0.5)
+			// 	// && marioArray.pos.x >= this.pos.x+this.width 
+			// 	// && marioArray.pos.y + marioArray.height >= this.pos.y
+			// 	// && marioArray.pos.y + marioArray.height/2 <= this.pos.y + this.height)
+			// 	{					
+			// 		marioArray.stopX = true;
+			// 		marioArray.fallingFromBrick = true;
+			// 	}
+
+				// if(marioArray.speed.y > 0 
+				// 	&& marioArray.pos.y > ){
+				// 	marioArray.stopX = false;
+				// }
+
+
 		}
 	
 

@@ -49,6 +49,15 @@ function loadClouds() {
 		});
 }
 
+function loadBricks() {
+	return loadImage("../imgs/images/brick.png")
+		.then(brickImage=>{
+			let brickSprite = new Sprites(brickImage,16,16);
+			brickSprite.getTileImage("brick",0,0,16,16);  
+			return brickSprite;
+		});
+}
+
 
 
 function loadDecorations(width,height,name,imageUrl) {

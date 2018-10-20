@@ -54,7 +54,7 @@ class Mushroom{
 		// 	// }
 		// });
 
-		if( this.pos.x >=  this.previousX + this.width*4){
+		if( this.pos.x >=  this.previousX + this.width*5){
 			this.pos.y += this.speed.y;
 		}
 

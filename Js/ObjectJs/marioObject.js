@@ -4,7 +4,6 @@ import {loadMario,loadSky,loadGround} from "../loadSprite.js";
 import {Fireball} from "../ObjectJs/fireballObject.js";
 // import { mario } from "../marioTest.js";
 
-let windowWidth = $(window).width();
 class Mario{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);
@@ -16,14 +15,26 @@ class Mario{
 		this.isRunning = false;
 		this.faceDirection = 1;
 
+
+		// --------------穿越水管-------------------
+
+		this.goThroughTube = false;
+		this.getDestinationTube = false;
+		this.playDownTubeMusic = false;
+
+
+
+
+		// --------------end 穿越水管-------------------
+
 		// ----------控制撞到磚塊狀態----------
 
 		this.stuckBrick = false;
 		this.inBrickZone = false;
+		this.higherThanBrick = false;
 
 		this.isOnBrick = false;
 		this.isBottomBrick = false;
-
 		this.fallingFromBrick = false;
 
 		this.previousX;
@@ -60,6 +71,7 @@ class Mario{
 		this.passStage = false;
 		this.falling = false;
 		this.canPlayPassMusic = false;
+		this.stopBackgroundMusic = false;
 		this.onPoleBottom = false;
 		this.walkToCastle = false;
 		this.hide = false;
@@ -68,7 +80,8 @@ class Mario{
 		this.clearTimeout3;
 		this.clearTimeout4;
 		this.clearTimeout5;
-		this.clearTimeout6;
+		this.clearTimeout7;
+		this.clearTimeout8;
 		this.controlSpeedFactor; 
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 		this.frameIndex = 0;
@@ -136,27 +149,17 @@ class Mario{
 	}
 
 	update(screen,tubeJson,highTubeJson,highestTubeJson,poleJson,
-		castleJson,flagArray,brickJson,
+		castleJson,flagArray,brickJson,brickArray,
 		oddBrickJson,questionBrickJson,flowerBrickJson,mushroomBrickJson){
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// // 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
-		console.log(this.speed.y);
 		// ------------ 解決各個磚塊橫向穿越的問題---------------
-		brickJson.Pos[0].ranges.forEach(([x,y])=>{
-			if(this.isJump
-				&& this.pos.x < x + brickJson.width 
-					&& this.pos.x + this.width > x 
-					&& this.pos.y + this.height > y
-					&& this.pos.y + this.height / 2 < y + brickJson.height)
-			{
-				this.stuckBrick = true;
-				this.stopX = true;
-				this.stopY = true;
-			}
-
+		// if(this.stopBackgroundMusic){
+		// 	this.BackgroundMusic();
+		// 	return;
+		// }
 			
-			//修正磚塊前跳躍會斜向穿越的 bug ,但動作還有點不自然
-		});
+
 
 		questionBrickJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.isJump
@@ -228,7 +231,7 @@ class Mario{
 	
 		if(this.willDie && !this.clearTimeout6){
 			timeoutId = setTimeout(() => {
-				this.willDie = false;
+				// this.willDie = false;
 				this.isDie = true;	
 				this.clearTimeout = null;
 			}, 1500);
@@ -255,11 +258,12 @@ class Mario{
 			&& !this.changeToFire
 			&& !this.willDie
 			&& !this.falling
-			&& !this.fallingFromBrick
+			&& !this.goThroughTube
+			&& !this.getDestinationTube
 			&& !keys.space 
 			&& !this.canPlayPassMusic 
 			&& !this.isDie 
-			&& this.pos.x + this.speed.x <= 7000
+			&& this.pos.x + this.speed.x <= 6000
 			&& this.pos.x > 0
 			&& !this.isSquat
 		)
@@ -295,7 +299,7 @@ class Mario{
 				this.faceDirection = this.direction;
 			}
 		}
-		else if(!this.canPlayPassMusic && this.pos.x  == 7000){
+		else if(!this.canPlayPassMusic && this.pos.x  == 6000){
 			//這邊有點奇怪，筆電的螢幕如果有接大螢幕，跑到終點的時候 screen.width 會變大，可以再往左邊跑，但是沒接的時候不行
 			if(keys.left){
 				this.moveLeft();
@@ -307,11 +311,15 @@ class Mario{
 
 		 // --------跳躍的設定 ---------------
 		 				
-		if(!this.canPlayPassMusic){
+		if(!this.canPlayPassMusic ){
 			this.speed.y += 0.5;  //gravity
-			this.pos.y += this.speed.y; 
-		}		
-		
+			if(!this.getDestinationTube){
+				this.pos.y += this.speed.y; 
+			}else if(this.getDestinationTube){
+				this.pos.y -= this.speed.y; 
+			}
+		}	
+	
 		
 
 		// --------end 跳躍的設定 ---------------
@@ -352,6 +360,8 @@ class Mario{
 				&& !this.willDie
 				&& keys.top 
 				&& !this.isJump
+				&& !this.goThroughTube
+				&& !this.getDestinationTube
 				&& !this.isSquat
 				&& !this.shot
 				&& this.pos.x + this.width > x1 * 16
@@ -360,6 +370,7 @@ class Mario{
 				this.speed.y -= 10;  //起始跳躍速度，這個速度加上馬力歐的身高，剛好可以跳到最高的水管上面
 				this.speed.x = 4;	
 				this.isOnGround = false;
+				this.onTube = false;
 				if( !this.isBigMario && !this.isFireMario){
 					this.jumpSound();
 				}else{
@@ -381,6 +392,7 @@ class Mario{
 				this.isOnBrick = false;
 				this.isOnGround = true;
 				this.pos.y = y1 * screen.height - this.height; //落地
+				this.higherThanBrick = false;
 				this.isBottomBrick = false;
 				this.isOnBrick = false;
 				this.fallingFromBrick = false;
@@ -409,7 +421,7 @@ class Mario{
 		if(!this.isDie && this.isRunning){
 			
 			tubeJson.Pos[0].ranges.forEach(([x,y])=>{
-				
+
 				//----------小馬力歐過水管-----------
 				if( this.pos.x + this.width == x
 					&& this.pos.y >= y - tubeJson.height )
@@ -452,7 +464,7 @@ class Mario{
 						this.isJump = false;
 						this.isOnGround = false; //為了控制從水管上下來採怪物不會死掉
 						this.onTube = true;
-						this.pos.y = y - this.height;
+						this.pos.y = y - this.height;	
 						this.speed.y = 0;
 					}	
 					// if(keys.top && 	this.onTube && !this.isJump){
@@ -480,11 +492,11 @@ class Mario{
 						this.stopX = false;
 					}
 				}
-				else if(this.pos.x == x + tubeJson.width
+				else if(this.pos.x == x + highTubeJson.width
 					&& this.pos.y >= y - tubeJson.height )
 				{	// 從右側碰到水管
 					
-					this.pos.x = x + tubeJson.width ;
+					this.pos.x = x + highTubeJson.width ;
 					this.stopX = true;
 					// this.speed.x = 0;
 				
@@ -503,7 +515,7 @@ class Mario{
 				// ------------控制站在水管上--------------
 				if(this.speed.y > 0 
 					&& this.pos.x + this.width > x
-					&& this.pos.x < x + tubeJson.width ){
+					&& this.pos.x < x + highTubeJson.width ){
 					if(this.pos.y >= y - this.height){
 						this.isJump = false;
 						this.onTube = true;
@@ -511,18 +523,53 @@ class Mario{
 						this.pos.y = y - this.height;
 						this.speed.y = 0;
 					}	
-					// if(keys.top && 	this.onTube && !this.isJump){
-					// 	this.isJump = true;
-					// 	this.onTube = false;
-					// 	this.speed.y -= 8;
-					// } // 忘記這幹嘛用的，先 comment 
 					this.speed.y += 0.5;
 				}					
 				// ------------end of 控制站在水管上-----------------
 			});
 
 			highestTubeJson.Pos[0].ranges.forEach(([x,y])=>{
+				// ----------------下水管-----------------
+				let canDownTubeX =  highestTubeJson.Pos[0].ranges[0][0];
+				let canDownTubeY =  highestTubeJson.Pos[0].ranges[0][1];
 				
+				if(this.onTube
+					&& this.pos.x  >= canDownTubeX + 4
+					&& this.pos.x + this.width <= canDownTubeX + highestTubeJson.width){
+					if(keys.bottom && !this.playDownTubeMusic ){
+						this.PowerDownSound();
+						this.goThroughTube = true;
+						this.playDownTubeMusic  = true;
+						// timeoutId7 = setTimeout(() => {
+						// 	this.pos.x = 4308;
+						// 	this.goThroughTube = false;
+						// 	this.getDestinationTube = true;
+						// 	this.clearTimeout7 = null;
+						// }, 3000);
+						// this.clearTimeout7 = timeoutId7;
+					}	
+				}		
+
+
+				let timeoutId7;
+				if(this.isOnGround && this.goThroughTube && !this.clearTimeout7){
+					timeoutId7 = setTimeout(() => {
+						this.pos.x = 4308;
+						this.goThroughTube = false;
+						this.getDestinationTube = true;
+						this.clearTimeout7 = null;
+					}, 500);
+					this.clearTimeout7 = timeoutId7;
+				}
+
+				if(	this.getDestinationTube && this.pos.y <= y - 32){
+					this.getDestinationTube = false;
+					this.playDownTubeMusic = false;
+				}
+		
+			
+				// --------------end  下水管-----------------
+
 				//----------小馬力歐過水管-----------
 				if( this.pos.x + this.width == x
 					&& this.pos.y >= y - tubeJson.height )
@@ -535,16 +582,16 @@ class Mario{
 						this.stopX = false;
 					}
 				}
-				else if(this.pos.x == x + tubeJson.width
+				else if(this.pos.x == x + highestTubeJson.width
 					&& this.pos.y >= y - tubeJson.height )
 				{	// 從右側碰到水管
 					
-					this.pos.x = x + tubeJson.width ;
+					this.pos.x = x + highestTubeJson.width ;
 					this.stopX = true;
 					// this.speed.x = 0;
-				
+			
 					if(keys.right && !keys.left){
-						// this.speed.x = 4;
+					// this.speed.x = 4;
 						this.stopX = false;
 					}
 				}
@@ -558,19 +605,17 @@ class Mario{
 				// ------------控制站在水管上--------------
 				if(this.speed.y > 0 
 					&& this.pos.x + this.width > x
-					&& this.pos.x < x + tubeJson.width ){
+					&& this.pos.x < x + highestTubeJson.width ){
 					if(this.pos.y >= y - this.height){
 						this.isJump = false;
 						this.onTube = true;
 						this.isOnGround = false; //為了控制從水管上下來採怪物不會死掉
-						this.pos.y = y - this.height;
+						if(!this.goThroughTube && !this.getDestinationTube){
+							this.pos.y = y - this.height;
+						}			
+							
 						this.speed.y = 0;
 					}	
-					// if(keys.top && 	this.onTube && !this.isJump){
-					// 	this.isJump = true;
-					// 	this.onTube = false;
-					// 	this.speed.y -= 8;
-					// } // 忘記這幹嘛用的，先 comment 
 					this.speed.y += 0.5;
 				}					
 				// ------------end of 控制站在水管上-----------------
@@ -587,8 +632,11 @@ class Mario{
 		if(!this.isDie && this.isRunning){
 			oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{	
 				//----------小馬力歐-----------
+
+				//-----------bug -this.speed.y 為了在磚塊頂端不能移動
 				if( this.pos.x + this.width == x
-					&& this.pos.y + this.height / 2 >= y - oddBrickJson.height )
+					&& this.pos.y + this.height - this.speed.y > y  
+					&& this.pos.y + this.height / 2  - this.speed.y < y + oddBrickJson.height)
 				{ //從左側碰到
 					this.pos.x = x - this.width ;
 					this.stopX = true;
@@ -599,18 +647,16 @@ class Mario{
 					}
 				}
 				else if(this.pos.x == x + oddBrickJson.width
-					&& this.pos.y + this.height / 2  >= y - oddBrickJson.height )
+					&& this.pos.y + this.height - this.speed.y > y
+					&& this.pos.y + this.height / 2 - this.speed.y  < y + oddBrickJson.height)
 				{	// 從右側碰到
+					
 					this.pos.x = x + oddBrickJson.width ;
 					this.stopX = true;
-					if(keys.right && !keys.left){
+					if( keys.right && !keys.left){
 						this.stopX = false;
 					}
 				}
-				// else if(this.pos.y < y  && keys.left 
-				// 	|| this.pos.y < y && keys.right){
-				// 	this.stopX = false;
-				// }
 
 				// ------end of 小馬力歐---------
 
@@ -619,6 +665,7 @@ class Mario{
 					&& this.pos.x + this.width > x
 					&& this.pos.x < x + oddBrickJson.width ){
 					if(this.pos.y >= y - this.height){
+						this.onOddbrick = true;
 						this.isJump = false;
 						this.pos.y = y - this.height;
 						this.speed.y = 0;
@@ -628,7 +675,6 @@ class Mario{
 				// ------------end of 控制站上-----------------
 			});
 		}
-
 
 
 		// ---------------end of 控制 oddBrick 障礙-------
@@ -644,8 +690,8 @@ class Mario{
 
 		// 1. -----碰到旗桿後馬力歐下降-----
 
-		// -----bug 要測試一下拉旗子的動作-------
-		
+
+
 		poleJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.pos.x + this.width >= x + 8
 				&& this.pos.y < y + poleJson.height - this.height
@@ -654,10 +700,12 @@ class Mario{
 				this.direction = 0;
 				this.pos.x = x - poleJson.width / 2;  //拉旗桿的時候馬力歐的X位置
 				this.passStage = true;
+				this.stopBackgroundMusic = true;
 			}
 
 			if(!this.onPoleBottom && !this.isJump && this.pos.x + this.width >= x && this.pos.y >= 224){
 				this.stopX = true;
+
 				if(keys.left && !keys.right){
 					this.stopX = false;
 				}
@@ -681,7 +729,7 @@ class Mario{
 			}
 			
 			if(this.pos.x >= x + 16){
-				if(this.pos.y < 224){  //修正過關跑進城堡動作有點不自然的 bug
+				if(this.pos.y < 224){  
 					this.speed.y = 2;
 				}else if(this.pos.y >= 224){
 					this.speed.y = 0;
@@ -734,7 +782,7 @@ class Mario{
 				this.changeToBig = false;	
 				this.clearTimeout2 = null;
 				this.isBigMario = true;
-			}, 1500);
+			}, 1000);
 			this.clearTimeout2 = timeoutId2;
 		}	
 
@@ -746,7 +794,7 @@ class Mario{
 				this.isBigMario = false;
 				this.clearTimeout3 = null;
 				this.isFireMario = true;
-			}, 1500);
+			}, 1000);
 			this.clearTimeout3 = timeoutId3;
 		}	
 
@@ -757,7 +805,7 @@ class Mario{
 				this.backToSmall = false;	
 				this.isBigMario = false;
 				this.clearTimeout4 = null;
-			}, 1500);
+			}, 1000);
 			this.clearTimeout4 = timeoutId4;
 		}	
 		
@@ -770,10 +818,11 @@ class Mario{
 				this.isFireMario = false;
 				this.clearTimeout5 = null;
 				this.isBigMario = true;
-			}, 1500);
+			}, 1000);
 			this.clearTimeout5 = timeoutId5;
 		}	
-		
+
+	
 		
 		// ---------------end of狀態改變--------------
 
@@ -826,6 +875,11 @@ class Mario{
 	PowerDownSound(){
 		let PowerDownSound = new Audio("/music/maro-powerdown-sound.wav");
 		PowerDownSound.play();
+	}
+
+	BackgroundMusic(){
+		let backgroundMusic = new Audio("../music/TitleBGM.mp3");
+		backgroundMusic.play();
 	}
 
 
@@ -1121,7 +1175,6 @@ class Mario{
 			}		
 		}
 		
-		//---------大馬力歐死亡圖片的 bug-----------
 
 
 		if(!this.hide 
@@ -1217,7 +1270,7 @@ class Mario{
 			}		
 		}
 		
-		//--------火馬力歐死亡圖片的 bug-----------
+
 
 
 		if(!this.hide 

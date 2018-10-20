@@ -17,7 +17,7 @@ class Mushroom{
 		this.appear = false;
 	}
 	
-	update(marioArray,screen,questionBrickArray,brickJson,oddBrickJson){
+	update(marioArray,screen,questionBrickArray,brickJson,oddBrickJson,tubeJson,highTubeJson,highestTubeJson){
 		// X 軸判定要再調整一下
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
 		//	&& shape.pos.x < this.pos.x + this.width 右
@@ -54,7 +54,7 @@ class Mushroom{
 		// 	// }
 		// });
 
-		if( this.pos.x >=  2064){
+		if( this.pos.x >=  this.previousX + this.width*5){
 			this.pos.y += this.speed.y;
 		}
 
@@ -80,7 +80,32 @@ class Mushroom{
 			}
 		});
 
-		
+
+		// ----------------Case 2 : tube-----------------
+		tubeJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  this.width > x 
+							&& this.pos.x  < x + tubeJson.width )
+			{	
+				this.speed.x *= -1;
+			}
+		});
+
+
+		highTubeJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  this.width > x 
+				&& this.pos.x  < x + highTubeJson.width )
+			{	
+				this.speed.x *= -1;
+			}
+		});
+
+		highestTubeJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  this.width > x 
+				&& this.pos.x  < x + highestTubeJson.width )
+			{	
+				this.speed.x *= -1;
+			}
+		});	
 
 
 

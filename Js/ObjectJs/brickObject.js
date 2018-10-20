@@ -9,12 +9,14 @@ class Brick{
 		this.width = 16;
 		this.height = 16;
 		this.break = false;
+		this.show = true;
 		this.previousY;
 		this.clearTimeout;
+		this.clearTimeout2;
 		this.goUp = false;
 	}
 	
-	update(marioArray,brickJson){
+	update(marioArray){
 
 		if(!this.goUp){
 			this.previousY = this.pos.y;
@@ -31,13 +33,31 @@ class Brick{
 				},100);
 				this.clearTimeout = timeoutId;
 			}	
-		}
+		}	
+
+
+			// ------------ 解決各個磚塊橫向穿越的問題---------------
+
+
+		if(marioArray.isJump && !this.break
+				&& marioArray.pos.x < this.pos.x + this.width 
+					&& marioArray.pos.x + marioArray.width > this.pos.x
+					&& marioArray.pos.y + marioArray.height > this.pos.y
+					&& marioArray.pos.y + marioArray.height / 2 < this.pos.y + this.height)
+			{
+				marioArray.stuckBrick = true;
+				marioArray.stopX = true;
+				marioArray.stopY = true;
+			}
+		
+			//修正磚塊前跳躍會斜向穿越的 bug ,但動作還有點不自然
+		
 
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-		if( !marioArray.isBigMario && !marioArray.isFireMario){
+		if( !marioArray.isBigMario && !marioArray.isFireMario && !this.break ){
 
 			// -------------下方----------------
 			if(!this.goup && marioArray.speed.y < 0 
@@ -56,7 +76,7 @@ class Brick{
 			
 
 			// -------------上方----------------
-			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
+			if(!marioArray.isBottomBrick  &&  marioArray.speed.y > 0 
 				&& marioArray.pos.x + marioArray.width  > this.pos.x 
 				&& marioArray.pos.x < this.pos.x + this.width 
 			){
@@ -71,7 +91,8 @@ class Brick{
 
 		//---------------- 大馬力歐-----
 		// -------------下方----------------
-		if(marioArray.isBigMario || marioArray.isFireMario){
+		if((marioArray.isBigMario || marioArray.isFireMario)
+		&& !this.break){
 			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16
@@ -79,15 +100,17 @@ class Brick{
 				&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				marioArray.pos.y = this.pos.y + 16 ;
-				this.pos.y -= 4;
-				// this.pos.y += 2;
-				this.goUp = true;
+				// this.pos.y -= 4;
+				// this.goUp = true;
 				marioArray.speed.y = 0;
 				marioArray.isBottomBrick = true;
+				this.break = true;
+				this.bricksmashsound();
 			}
 	
 			// -------------上方----------------
-			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
+
+			if(!marioArray.isBottomBrick && !this.break  && marioArray.speed.y > 0 
 				&& marioArray.pos.x + marioArray.width  > this.pos.x 
 				&& marioArray.pos.x < this.pos.x + this.width 
 			){
@@ -107,13 +130,18 @@ class Brick{
 		bumpkSound.play();
 	}
 
+	bricksmashsound(){
+		let bricksmashsound = new Audio("/music/brick-smash.wav");
+		bricksmashsound.play();
+	}
+
 	draw(context,brickSprite,marioArray){
 	
-		if(marioArray.pos.x < 450 ){
+		if(marioArray.pos.x < 450 && !this.break ){
 			brickSprite.drawSprite("brick",context,this.pos.x,this.pos.y);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 ){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 && !this.break){
 			brickSprite.drawSprite("brick",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-		}else if(marioArray.pos.x >= 5000 ){
+		}else if(marioArray.pos.x >= 5000 && !this.break){
 			brickSprite.drawSprite("brick",context,this.pos.x  - 4550 ,this.pos.y);
 		}
 	

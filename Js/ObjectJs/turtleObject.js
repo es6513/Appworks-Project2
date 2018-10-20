@@ -79,6 +79,7 @@ class Turtle{
 			&& this.canRotateAttack 
 			&& this.quickToDie
 		){
+			
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
 			marioArray.willDie = true;
@@ -188,11 +189,13 @@ class Turtle{
 		if(!marioArray.isBigMario 
 			&&!marioArray.isFireMario
 			&& !marioArray.isDie 
+			&& !marioArray.willDie 
 			&& this.quickToDie  
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
+				
 				this.speed.x = 4;
 				this.isRotating = true;
 				if(!marioArray.isOnGround){
@@ -207,6 +210,7 @@ class Turtle{
 
 		if(!marioArray.isDie 
 			&& this.quickToDie  
+			&& (marioArray.isBigMario || marioArray.isFireMario)
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y > this.pos.y -  marioArray.height){
@@ -216,7 +220,6 @@ class Turtle{
 				if(!marioArray.isOnGround){
 					marioArray.speed.y = -6;
 				}		
-			
 				this.turtleDieSound();
 			}		
 		}
@@ -287,7 +290,7 @@ class Turtle{
 
 		// ------------------1.小馬力歐的狀況-------------
 
-		if( !marioArray.isBigMario && !marioArray.isDie && !this.quickToDie && marioArray.speed.y > 0 
+		if( !marioArray.isBigMario && !marioArray.isDie	&& !marioArray.willDie  && !this.quickToDie && marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){

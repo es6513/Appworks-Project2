@@ -122,27 +122,24 @@ class Goomba{
 			{	
 				this.speed.x *= -1;
 				this.direction *= -1;
-
 			}
 		});
 
 		highTubeJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.pos.x +  this.width > x  
-				&& this.pos.x  < x + tubeJson.width )
+				&& this.pos.x  < x + highTubeJson.width )
 			{	
 				this.speed.x *= -1;
 				this.direction *= -1;
-
 			}
 		});
 
 		highestTubeJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.pos.x +  this.width > x  
-				&& this.pos.x  < x + tubeJson.width )
+				&& this.pos.x  < x + highestTubeJson.width )
 			{	
 				this.speed.x *= -1;
 				this.direction *= -1;
-
 			}
 		});
 
@@ -176,6 +173,7 @@ class Goomba{
 
 		// ------------------1.小馬力歐的狀況-------------
 		if( !marioArray.isBigMario 
+			&& !marioArray.isFireMario
 			&& !marioArray.isDie 
 			&& !this.isDie 
 			&& !marioArray.willDie 
@@ -194,7 +192,24 @@ class Goomba{
 		// ------------------2.大馬力歐的狀況-------------
 		if(marioArray.isBigMario 
 			&& !marioArray.isDie 
-			&& !this.isDie && marioArray.speed.y > 0 
+			&& !this.isDie 
+			&& marioArray.speed.y > 0 
+			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width
+			&& marioArray.pos.y > this.pos.y - marioArray.height){
+			{
+				this.goombaDieSound();
+				this.isDie = true;
+				marioArray.speed.y = -4;
+			}		
+		}
+		
+
+		// ------------------2.大馬力歐的狀況-------------
+		if(marioArray.isFireMario 
+			&& !marioArray.isDie 
+			&& !this.isDie 
+			&& marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){

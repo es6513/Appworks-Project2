@@ -15,7 +15,9 @@ class Turtle{
 		this.width = 16;
 		this.height = 24;
 		this.isRotating = false;
+		this.canRotateAttack = false;
 		this.clearTimeout;
+		this.clearTimeout2;
 		this.show = true;
 		this.falling = false;
 		this.isDie = false;
@@ -51,6 +53,18 @@ class Turtle{
 		// X軸的判定 用 width/2 比較好一點,
 
 		//------1.小馬力歐的死亡-------
+		let timeoutId2;
+	
+		if(this.isRotating && !this.clearTimeout2){
+			timeoutId2 = setTimeout(() => {
+			this.canRotateAttack = true;
+			this.clearTimeout2 = null;
+			}, 500);
+			this.clearTimeout2 = timeoutId2;
+		}	
+		
+
+
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
@@ -62,7 +76,7 @@ class Turtle{
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
 			&& !this.hitByFire
-			&& this.isRotating 
+			&& this.canRotateAttack 
 			&& this.quickToDie
 		){
 			let dieSound = new Audio("/music/mario-die-sound.wav");
@@ -102,7 +116,7 @@ class Turtle{
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
 			&& !this.hitByFire
-			&& this.isRotating 
+			&& this.canRotateAttack 
 			&& this.quickToDie
 		){
 			marioArray.isInvincible = true;
@@ -138,7 +152,7 @@ class Turtle{
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
 			&& !this.hitByFire
-			&& this.isRotating 
+			&& this.canRotateAttack 
 			&& this.quickToDie
 		){
 			this.marioPipeSound();
@@ -170,30 +184,39 @@ class Turtle{
 		if(this.isRotating && !this.falling){
 			this.rotate();	
 		}	
-
 		// ---------1.小馬力歐的狀況----------------
-		if(!marioArray.isBigMario  && !marioArray.isDie && this.quickToDie  
+		if(!marioArray.isBigMario 
+			&&!marioArray.isFireMario
+			&& !marioArray.isDie 
+			&& this.quickToDie  
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
 				this.speed.x = 4;
 				this.isRotating = true;
-				marioArray.speed.y = -6;
+				if(!marioArray.isOnGround){
+					marioArray.speed.y = -6;
+				}
 				this.turtleDieSound();
 			}		
 		}
 
 		// ---------2.大馬力歐的狀況----------------
-		if(marioArray.isBigMario && 
-			!marioArray.isDie && this.quickToDie  
+	
+
+		if(!marioArray.isDie 
+			&& this.quickToDie  
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y > this.pos.y -  marioArray.height){
 			{
 				this.speed.x = 4;
 				this.isRotating = true;
-				marioArray.speed.y = -6;
+				if(!marioArray.isOnGround){
+					marioArray.speed.y = -6;
+				}		
+			
 				this.turtleDieSound();
 			}		
 		}
@@ -219,7 +242,7 @@ class Turtle{
 
 		highTubeJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.pos.x +  this.width > x  
-				&& this.pos.x  < x + tubeJson.width )
+				&& this.pos.x  < x + highTubeJson.width )
 			{	
 				this.speed.x *= -1;
 				this.direction *= -1;
@@ -232,7 +255,7 @@ class Turtle{
 
 		highestTubeJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.pos.x +  this.width > x  
-				&& this.pos.x  < x + tubeJson.width )
+				&& this.pos.x  < x + highestTubeJson.width )
 			{	
 				this.speed.x *= -1;
 				this.direction *= -1;
