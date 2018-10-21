@@ -42,7 +42,8 @@ class QuestionBrick{
 		// && marioArray.pos.x < this.pos.x + this.width ){
 		
 		// }
-
+		// -------------小馬力歐--------------------
+		// -------------下方-----------------------
 
 		if(!marioArray.isBigMario 
 			&& !marioArray.isFireMario
@@ -65,11 +66,20 @@ class QuestionBrick{
 			}
 
 			// -------------上方----------------
+	
+			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
+				&& marioArray.pos.x + marioArray.width > this.pos.x  
+				&& marioArray.pos.x < this.pos.x + this.width ){
+					
+				}
+
+
 			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.width > this.pos.x  
 			&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				if(marioArray.pos.y >= this.pos.y - marioArray.height){
+					console.log("123");
 					marioArray.pos.y = this.pos.y - marioArray.height;
 					marioArray.speed.y = 0;
 					marioArray.isOnBrick = true;
@@ -91,8 +101,6 @@ class QuestionBrick{
 			// 	&& marioArray.pos.y > ){
 			// 	marioArray.stopX = false;
 			// }
-
-
 		}
 	
 

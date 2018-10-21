@@ -16,7 +16,7 @@ class Mario{
 		this.faceDirection = 1;
 
 
-		// --------------穿越水管-------------------
+		// --------------穿越下水道-------------------
 
 		this.goThroughTube = false;
 		this.getDestinationTube = false;
@@ -27,7 +27,7 @@ class Mario{
 		this.canmoveFromUnder = true;
 
 
-		// --------------end 穿越水管-------------------
+		// --------------end 穿越下水道-------------------
 
 		// ----------控制撞到磚塊狀態----------
 
@@ -38,6 +38,7 @@ class Mario{
 		this.isOnBrick = false;
 		this.isBottomBrick = false;
 		this.fallingFromBrick = false;
+
 
 		this.previousX;
 		this.prvioxusY;
@@ -179,32 +180,29 @@ class Mario{
 
 				if( this.pos.x + this.width == x
 				&& this.pos.y + this.height > y 
-				&& this.pos.y + this.height/2  < y +flowerBrickJson.height)
-			{ //從左側碰到水管
+				&& this.pos.y + this.height/2  < y + questionBrickJson.height)
+			{ 
 				this.pos.x = x - this.width ;
 				this.stopX = true;  //控制跑回來會上去的問題
 				this.fallingFromBrick = true;
 			}	
 
 			
-			if( this.pos.x  == x + flowerBrickJson.width
+			if( this.pos.x  == x + questionBrickJson.width
 				&& this.pos.y + this.height > y 
-				&& this.pos.y + this.height/2  < y +flowerBrickJson.height)
-			{ //從左側碰到水管
-				this.pos.x = x + flowerBrickJson.width ;
+				&& this.pos.y + this.height / 2  < y +questionBrickJson.height)
+			{ 
+				this.pos.x = x + questionBrickJson.width ;
 				this.stopX = true;  //控制跑回來會上去的問題
 				this.fallingFromBrick = true;
 			}	
-
 			if(!this.isOnBrick && this.stopX && this.pos.x + this.width == x && 
 				(keys.left || keys.right)){
-				// this.speed.x = 4;
 				this.stopX = false;
 			}
 
-			if(!this.isOnBrick && this.stopX && 	this.pos.x == x + flowerBrickJson.width && 
+			if(!this.isOnBrick && this.stopX && 	this.pos.x == x + questionBrickJson.width && 
 				(keys.left || keys.right)){
-				// this.speed.x = 4;
 				this.stopX = false;
 			}
 	
@@ -735,7 +733,7 @@ class Mario{
 				// this.speed.y += 0.5;
 			}
 			
-
+		// -------下去水管-----------------	
 			let timeoutId7;
 			if(this.goThroughTube 
 				&& !this.clearTimeout7){
@@ -814,6 +812,8 @@ class Mario{
 			});
 		}
 
+
+		// -------回到地面上-----------------
 		let timeoutId8;
 		if(this.gobacktoground
 			&& !this.clearTimeout8){

@@ -57,8 +57,8 @@ class Turtle{
 	
 		if(this.isRotating && !this.clearTimeout2){
 			timeoutId2 = setTimeout(() => {
-			this.canRotateAttack = true;
-			this.clearTimeout2 = null;
+				this.canRotateAttack = true;
+				this.clearTimeout2 = null;
 			}, 500);
 			this.clearTimeout2 = timeoutId2;
 		}	
@@ -69,6 +69,8 @@ class Turtle{
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
 			&& !marioArray.willDie 
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -89,7 +91,9 @@ class Turtle{
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
-			&& !marioArray.willDie 
+			&& !marioArray.willDie
+			&& !marioArray.falling  
+			&& !marioArray.underGround
 			&& marioArray.pos.x + marioArray.width   > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -110,6 +114,8 @@ class Turtle{
 		if(!marioArray.isInvincible 
 			&& marioArray.isBigMario 
 			&& !marioArray.isDie 
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -128,6 +134,8 @@ class Turtle{
 		if(!marioArray.isInvincible 
 			&& marioArray.isBigMario 
 			&& !marioArray.isDie 
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& marioArray.pos.x + marioArray.width   > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -146,6 +154,8 @@ class Turtle{
 		if(!marioArray.isInvincible 
 			&& marioArray.isFireMario 
 			&& !marioArray.isDie 
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -164,6 +174,8 @@ class Turtle{
 		if(!marioArray.isInvincible 
 			&& marioArray.isFireMario
 			&& !marioArray.isDie 
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& marioArray.pos.x + marioArray.width   > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -187,9 +199,11 @@ class Turtle{
 		}	
 		// ---------1.小馬力歐的狀況----------------
 		if(!marioArray.isBigMario 
-			&&!marioArray.isFireMario
+			&& !marioArray.isFireMario
 			&& !marioArray.isDie 
 			&& !marioArray.willDie 
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& this.quickToDie  
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
@@ -210,6 +224,8 @@ class Turtle{
 
 		if(!marioArray.isDie 
 			&& this.quickToDie  
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& (marioArray.isBigMario || marioArray.isFireMario)
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
@@ -290,7 +306,12 @@ class Turtle{
 
 		// ------------------1.小馬力歐的狀況-------------
 
-		if( !marioArray.isBigMario && !marioArray.isDie	&& !marioArray.willDie  && !this.quickToDie && marioArray.speed.y > 0 
+		if( !marioArray.isBigMario 
+			&& !marioArray.underGround
+			&& !marioArray.isDie	
+			&& !marioArray.falling	
+			&& !marioArray.willDie  
+			&& !this.quickToDie && marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
@@ -305,7 +326,12 @@ class Turtle{
 
 
 		// ---------------2.大馬力歐的狀況-------------
-		if(marioArray.isBigMario && !marioArray.isDie && !this.isDie && marioArray.speed.y > 0 
+		if(marioArray.isBigMario 
+			&& !marioArray.underGround
+			&& !marioArray.isDie 
+			&& !marioArray.falling	
+			&& !this.isDie 
+			&& marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){

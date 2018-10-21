@@ -36,31 +36,40 @@ class Brick{
 		}	
 
 
-			// ------------ 解決各個磚塊橫向穿越的問題---------------
+		// ------------ 解決各個磚塊橫向穿越的問題---------------
 
 
-		if(marioArray.isJump && !this.break
-				&& marioArray.pos.x < this.pos.x + this.width 
-					&& marioArray.pos.x + marioArray.width > this.pos.x
-					&& marioArray.pos.y + marioArray.height > this.pos.y
-					&& marioArray.pos.y + marioArray.height / 2 < this.pos.y + this.height)
-			{
-				marioArray.stuckBrick = true;
-				marioArray.stopX = true;
-				marioArray.stopY = true;
-			}
+		if(!marioArray.isDie 
+			&& !marioArray.willDie 
+			&& !marioArray.underGround
+			&& marioArray.isJump && !this.break
+			&& marioArray.pos.x < this.pos.x + this.width 
+			&& marioArray.pos.x + marioArray.width > this.pos.x
+			&& marioArray.pos.y + marioArray.height > this.pos.y
+			&& marioArray.pos.y + marioArray.height / 2 < this.pos.y + this.height)
+		{
+			marioArray.stuckBrick = true;
+			marioArray.stopX = true;
+			marioArray.stopY = true;
+		}
 		
-			//修正磚塊前跳躍會斜向穿越的 bug ,但動作還有點不自然
+		//修正磚塊前跳躍會斜向穿越的 bug ,但動作還有點不自然
 		
 
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-		if( !marioArray.isBigMario && !marioArray.isFireMario && !this.break ){
+		if(!marioArray.isBigMario 
+			&& !marioArray.isFireMario 
+			&& !marioArray.isDie 
+			&& !marioArray.willDie 
+			&& !marioArray.underGround
+			&& !this.break ){
 
 			// -------------下方----------------
-			if(!this.goup && marioArray.speed.y < 0 
+			if(!this.goup 
+				&& marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16
 				&& marioArray.pos.x + marioArray.width   > this.pos.x   //判定的bug
@@ -76,10 +85,13 @@ class Brick{
 			
 
 			// -------------上方----------------
-			if(!marioArray.isBottomBrick  &&  marioArray.speed.y > 0 
+			if(!marioArray.isBottomBrick
+				&& !marioArray.underGround  
+				&&  marioArray.speed.y > 0 
 				&& marioArray.pos.x + marioArray.width  > this.pos.x 
 				&& marioArray.pos.x < this.pos.x + this.width 
 			){
+				console.log("456");
 				if(marioArray.pos.y >= this.pos.y - 32){
 					marioArray.pos.y = this.pos.y - 32;
 					marioArray.speed.y = 0;
@@ -92,7 +104,10 @@ class Brick{
 		//---------------- 大馬力歐-----
 		// -------------下方----------------
 		if((marioArray.isBigMario || marioArray.isFireMario)
-		&& !this.break){
+		&& !marioArray.underGround
+		&& !this.break 
+		&& !marioArray.isDie 
+		&& !marioArray.willDie ){
 			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + 16
@@ -110,7 +125,9 @@ class Brick{
 	
 			// -------------上方----------------
 
-			if(!marioArray.isBottomBrick && !this.break  && marioArray.speed.y > 0 
+			if(!marioArray.isBottomBrick 
+				&& !this.break  
+				&& marioArray.speed.y > 0 
 				&& marioArray.pos.x + marioArray.width  > this.pos.x 
 				&& marioArray.pos.x < this.pos.x + this.width 
 			){

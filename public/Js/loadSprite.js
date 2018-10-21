@@ -13,13 +13,13 @@ function loadMario() {
 
 
 function loadFont() {
-  return loadImage("../imgs/images/font.png")
-  .then(fontImage=>{
-    let fontSprite = new Sprites(fontImage,128,48);
-    
-    fontSprite.getTileImage("font",16,16,16,16)
-    return fontSprite;
-  })
+	return loadImage("../imgs/images/font.png")
+		.then(fontImage=>{
+			let fontSprite = new Sprites(fontImage,128,48);
+			
+			fontSprite.getTileImage("font",16,16,16,16);
+			return fontSprite;
+		});
 }
 
 function loadSky() {
@@ -40,6 +40,36 @@ function loadGround() {
 		});	
 }
 
+
+function loadunderGround() {
+	return loadImage("../imgs/images/underground/sewwerUnderground.png")
+		.then(undergroundImage=>{
+			let undergroundSprite = new Sprites(undergroundImage,16,16);
+			undergroundSprite.getTileImage("underground",0,0,16,16);
+			return undergroundSprite;
+		});	
+}
+
+
+function loadunderSky() {
+	return loadImage("../imgs/images/underground/blackBackground.png")
+		.then(underskyImage=>{
+			let underskySprite = new Sprites(underskyImage,16,16);
+			underskySprite.getTileImage("undersky",0,0,16,16);
+			return underskySprite;
+		});
+}
+
+function loadunderBricks() {
+	return loadImage("../imgs/images/underground/sewerBrick.png")
+		.then(underbrickImage=>{
+			let underbrickSprite = new Sprites(underbrickImage,16,16);
+			underbrickSprite.getTileImage("underbrick",0,0,16,16);  
+			return underbrickSprite;
+		});
+}
+
+
 function loadClouds() {
 	return loadImage("../imgs/images/smileCloud3224.png")
 		.then(cloudImage=>{
@@ -59,7 +89,6 @@ function loadBricks() {
 }
 
 
-
 function loadDecorations(width,height,name,imageUrl) {
 	return loadImage(`../imgs/images/background/${imageUrl}.png`)
 		.then(Image=>{
@@ -69,4 +98,4 @@ function loadDecorations(width,height,name,imageUrl) {
 		});
 }
 
-export {loadMario,loadSky,loadGround,loadClouds,loadDecorations,loadFont};
+export {loadMario,loadSky,loadGround,loadClouds,loadDecorations,loadFont,loadunderGround,loadunderSky};
