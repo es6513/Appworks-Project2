@@ -137,7 +137,7 @@ function drawBackground(name) {
 		])=>{	
 			let backgroundSprite = document.createElement("canvas");
 			backgroundSprite.width = 8000;
-			backgroundSprite.height = 1080;
+			backgroundSprite.height = 2160;
 			drawScreen(screen.backgrounds[0],backgroundSprite.getContext("2d"),skySprite);
 			drawScreen(screen.backgrounds[1],backgroundSprite.getContext("2d"),groundSprite);
 			drawClouds(screen.clouds[0],backgroundSprite.getContext("2d"),cloudSprite);

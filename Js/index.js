@@ -585,7 +585,7 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 		canvas : document.createElement("canvas"),
 		start : function() {
 			this.canvas.width = 8000;
-			this.canvas.height = 1080;
+			this.canvas.height = 2160;
 			this.context = this.canvas.getContext("2d");
 			this.context.scale(1,1);
 			document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -682,6 +682,14 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 			backgroundMusic.currentTime = 0;
 		}
 
+		if(marioArray[0].underGround){
+			document.querySelector("canvas").style.position  = "absolute"
+			document.querySelector("canvas").style.left  = "-150px"
+			document.querySelector("canvas").style.top  = "-600px"
+		}else if(!marioArray[0].underGround){
+			document.querySelector("canvas").style.left = "0";
+			document.querySelector("canvas").style.top  = "0"
+		}
 
 
 		// --------end of 音樂播放----------------
@@ -702,11 +710,11 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 
 		for(let i = 0;i < marioArray.length;i += 1){
 			if(	marioArray[i].pos.x < 450){
-				context.drawImage(backgroundSprite,0,0,context.canvas.width,1080,0,0,context.canvas.width,1080);
+				context.drawImage(backgroundSprite,0,0,context.canvas.width,2160,0,0,context.canvas.width,2160);
 			}else if(	marioArray[i].pos.x >= 450 && marioArray[i].pos.x < 5000) {
-				context.drawImage(backgroundSprite,	marioArray[i].pos.x - 450,0,context.canvas.width,1080,0,0,context.canvas.width,1080);
+				context.drawImage(backgroundSprite,	marioArray[i].pos.x - 450,0,context.canvas.width,2160,0,0,context.canvas.width,2160);
 			}else if(	marioArray[i].pos.x >= 5000){
-				context.drawImage(backgroundSprite, 4550,0,context.canvas.width,1080,0,0,context.canvas.width,1080);
+				context.drawImage(backgroundSprite, 4550,0,context.canvas.width,2160,0,0,context.canvas.width,2160);
 			} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 			if(marioArray[i].isDie && marioArray[i].pos.y > 3600){
 				restart();

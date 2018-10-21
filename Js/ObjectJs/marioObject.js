@@ -20,8 +20,11 @@ class Mario{
 
 		this.goThroughTube = false;
 		this.getDestinationTube = false;
+		this.gobacktoground = false;
 		this.playDownTubeMusic = false;
 		this.underGround = false;
+
+		this.canmoveFromUnder = true;
 
 
 		// --------------end 穿越水管-------------------
@@ -173,6 +176,37 @@ class Mario{
 			}
 			//修正磚塊前跳躍會斜向穿越的 bug ,但動作還有點不自然
 
+
+				if( this.pos.x + this.width == x
+				&& this.pos.y + this.height > y 
+				&& this.pos.y + this.height/2  < y +flowerBrickJson.height)
+			{ //從左側碰到水管
+				this.pos.x = x - this.width ;
+				this.stopX = true;  //控制跑回來會上去的問題
+				this.fallingFromBrick = true;
+			}	
+
+			
+			if( this.pos.x  == x + flowerBrickJson.width
+				&& this.pos.y + this.height > y 
+				&& this.pos.y + this.height/2  < y +flowerBrickJson.height)
+			{ //從左側碰到水管
+				this.pos.x = x + flowerBrickJson.width ;
+				this.stopX = true;  //控制跑回來會上去的問題
+				this.fallingFromBrick = true;
+			}	
+
+			if(!this.isOnBrick && this.stopX && this.pos.x + this.width == x && 
+				(keys.left || keys.right)){
+				// this.speed.x = 4;
+				this.stopX = false;
+			}
+
+			if(!this.isOnBrick && this.stopX && 	this.pos.x == x + flowerBrickJson.width && 
+				(keys.left || keys.right)){
+				// this.speed.x = 4;
+				this.stopX = false;
+			}
 	
 		});
 
@@ -187,7 +221,47 @@ class Mario{
 				this.stopX = true;
 				this.stopY = true;
 			}
+
 			//修正磚塊前跳躍會斜向穿越的 bug ,但動作還有點不自然
+
+
+			// ***------bug 測試中，避免落下來還可以跑回去-----------
+
+			if( this.pos.x + this.width == x
+				&& this.pos.y + this.height > y 
+				&& this.pos.y + this.height/2  < y +flowerBrickJson.height)
+			{ //從左側碰到水管
+				this.pos.x = x - this.width ;
+				this.stopX = true;  //控制跑回來會上去的問題
+				this.fallingFromBrick = true;
+			}	
+
+			
+			if( this.pos.x  == x + flowerBrickJson.width
+				&& this.pos.y + this.height > y 
+				&& this.pos.y + this.height/2  < y +flowerBrickJson.height)
+			{ //從左側碰到水管
+				this.pos.x = x + flowerBrickJson.width ;
+				this.stopX = true;  //控制跑回來會上去的問題
+				this.fallingFromBrick = true;
+			}	
+
+			if(!this.isOnBrick && this.stopX && this.pos.x + this.width == x && 
+				(keys.left || keys.right)){
+				// this.speed.x = 4;
+				this.stopX = false;
+			}
+
+			if(!this.isOnBrick && this.stopX && 	this.pos.x == x + flowerBrickJson.width && 
+				(keys.left || keys.right)){
+				// this.speed.x = 4;
+				this.stopX = false;
+			}
+
+			//-----------------end  測試中------------------
+
+
+			
 		});
 
 		mushroomBrickJson.Pos[0].ranges.forEach(([x,y])=>{
@@ -258,6 +332,8 @@ class Mario{
 			&& !this.willDie
 			&& !this.falling
 			&& !this.goThroughTube
+			&& !this.gobacktoground
+			&& this.canmoveFromUnder
 			&& !keys.space 
 			&& !this.canPlayPassMusic 
 			&& !this.isDie 
@@ -359,6 +435,8 @@ class Mario{
 				&& keys.top 
 				&& !this.isJump
 				&& !this.goThroughTube
+				&& !this.gobacktoground
+				&& this.canmoveFromUnder
 				&& !this.isSquat
 				&& !this.shot
 				&& this.pos.x + this.width > x1 * 16
@@ -393,12 +471,12 @@ class Mario{
 				this.higherThanBrick = false;
 				this.isBottomBrick = false;
 				this.isOnBrick = false;
-				this.fallingFromBrick = false;
+			
 				this.speed.y = 0;
 				this.stopY = false;
 			
 				// this.speed.y += 0.5;
-			}else if(!this.underGround && !this.isDie && this.pos.y >= y1 * screen.height + 256){
+			}else if(!this.getDestinationTube && !this.underGround && !this.isDie && this.pos.y >= y1 * screen.height + 256){
 				//---------------------------懸崖---------
 				// 用+96讓馬力歐掉下去一段距離才死掉
 				this.speed.x = 0;
@@ -542,19 +620,19 @@ class Mario{
 				}		
 
 				//-------------這一段目前可以穿越水管到終點前----------
-				let timeoutId7;
-				if(this.isOnGround 
-					&& this.goThroughTube 
-					&& !this.clearTimeout7){
-					timeoutId7 = setTimeout(() => {
-						this.PowerDownSound();
-						this.pos.x = 4308;
-						this.goThroughTube = false;
-						this.getDestinationTube = true;
-						this.clearTimeout7 = null;
-					}, 500);
-					this.clearTimeout7 = timeoutId7;
-				}
+				// let timeoutId7;
+				// if(this.isOnGround 
+				// 	&& this.goThroughTube 
+				// 	&& !this.clearTimeout7){
+				// 	timeoutId7 = setTimeout(() => {
+				// 		this.PowerDownSound();
+				// 		this.pos.x = 4308;
+				// 		this.goThroughTube = false;
+				// 		this.getDestinationTube = true;
+				// 		this.clearTimeout7 = null;
+				// 	}, 500);
+				// 	this.clearTimeout7 = timeoutId7;
+				// }
 
 				// //-------------end  這一段目前可以穿越水管到終點前----------
 				// console.log(this.pos.y);
@@ -564,6 +642,7 @@ class Mario{
 				if(	this.getDestinationTube && this.pos.y <= y - 32){
 					this.getDestinationTube = false;
 					this.playDownTubeMusic = false;
+					this.canmoveFromUnder = true;
 				}
 		
 			
@@ -634,93 +713,124 @@ class Mario{
 		//-----------------下水道控制馬力歐位置------------
 
 
-		// screen.underbackgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
-		// 	if(!this.isDie 
-		// 		&& this.underGround
-		// 		&& this.speed.y > 0 
-		// 		&& this.pos.x + this.width > x1 * 16
-		// 		&& this.pos.x < x2 * 16 + 16
-		// 		&& this.pos.y >= y1 * screen.height - this.height)
-		// 	{
-		// 		this.isJump = false;
-		// 		this.onTube = false;
-		// 		this.isOnBrick = false;
-		// 		this.isOnGround = true;
-		// 		this.pos.y = y1 * screen.height - this.height; //落地
-		// 		this.higherThanBrick = false;
-		// 		this.isBottomBrick = false;
-		// 		this.isOnBrick = false;
-		// 		this.fallingFromBrick = false;
-		// 		this.speed.y = 0;
-		// 		this.stopY = false;
-		// 		// this.speed.y += 0.5;
-		// 	}
+		screen.underbackgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+			if(!this.isDie 
+				&& this.underGround
+				&& this.speed.y > 0 
+				&& this.pos.x + this.width > x1 * 16
+				&& this.pos.x < x2 * 16 + 16
+				&& this.pos.y >= y1 * screen.height - this.height)
+			{
+				this.isJump = false;
+				this.onTube = false;
+				this.isOnBrick = false;
+				this.isOnGround = true;
+				this.pos.y = y1 * screen.height - this.height; //落地
+				this.higherThanBrick = false;
+				this.isBottomBrick = false;
+				this.isOnBrick = false;
+				this.fallingFromBrick = false;
+				this.speed.y = 0;
+				this.stopY = false;
+				// this.speed.y += 0.5;
+			}
 			
 
-		// 	let timeoutId7;
-		// 	if(this.goThroughTube 
-		// 		&& !this.clearTimeout7){
-		// 		timeoutId7 = setTimeout(() => {
-		// 			this.PowerDownSound();
-		// 			this.pos.x = 1600;
-		// 			this.pos.y = 800;
-		// 			this.goThroughTube = false;
-		// 			this.underGround = true;
-		// 			this.getDestinationTube = true;
-		// 			this.clearTimeout7 = null;
-		// 		}, 1200);
-		// 		this.clearTimeout7 = timeoutId7;
-		// 	}
+			let timeoutId7;
+			if(this.goThroughTube 
+				&& !this.clearTimeout7){
+				timeoutId7 = setTimeout(() => {
+					this.PowerDownSound();
+					this.pos.x = 1600;
+					this.pos.y = 800;
+					this.goThroughTube = false;
+					this.underGround = true;
+					this.getDestinationTube = true;
+					this.clearTimeout7 = null;
+				}, 1200);
+				this.clearTimeout7 = timeoutId7;
+			}
 	
-		// 	if(this.underGround ){
-		// 		this.pos.y += this.speed.y; 
-		// 	}
-		// });
+			if(this.underGround ){
+				this.pos.y += this.speed.y; 
+			}
+		});
 	
 
-		// if(this.underGround){
-		// 	undergroundBrickJson.Pos[0].ranges.forEach(([x,y])=>{
+		if(this.underGround){
+			undergroundBrickJson.Pos[0].ranges.forEach(([x,y])=>{
 
-		// 		if( this.pos.x + this.width == x
-		// 			&& this.pos.y >= y - undergroundBrickJson.height )
-		// 		{ //從左側碰到
-		// 			this.pos.x = x - this.width ;
-		// 			this.stopX = true;
+				if( this.pos.x + this.width == x
+					&& this.pos.y >= y - undergroundBrickJson.height )
+				{ //從左側碰到
+					this.pos.x = x - this.width ;
+					this.stopX = true;
 
-		// 			if(keys.left && !keys.right){
-		// 				this.stopX = false;
-		// 			}
-		// 		}
-		// 		else if(this.pos.x == x + undergroundBrickJson.width
-		// 			&& this.pos.y >= y - undergroundBrickJson.height )
-		// 		{	
-		// 			this.pos.x = x + undergroundBrickJson.width ;
-		// 			this.stopX = true;
-		// 			console.log("123");
-		// 			if(keys.right && !keys.left){
-		// 				this.stopX = false;
-		// 			}
-		// 		}
-		// 		else if(this.pos.y < y - undergroundBrickJson.height && keys.left 
-		// 			|| this.pos.y < y - undergroundBrickJson.height  && keys.right){
-		// 			this.stopX = false;
-		// 		}
+					if(keys.left && !keys.right){
+						this.stopX = false;
+					}
+				}
+				else if(this.pos.x == x + undergroundBrickJson.width
+					&& this.pos.y >= y - undergroundBrickJson.height )
+				{	
+					this.pos.x = x + undergroundBrickJson.width ;
+					this.stopX = true;
+					if(keys.right && !keys.left){
+						this.stopX = false;
+					}
+				}
+				else if(this.pos.y < y - undergroundBrickJson.height && keys.left 
+					|| this.pos.y < y - undergroundBrickJson.height  && keys.right){
+					this.stopX = false;
+				}
 
-		// 		// ------end of 小馬力歐過水管---------
+				// ------end --------
 
-		// 		// ------------控制站在水管上--------------
-		// 		if(this.speed.y > 0 
-		// 			&& this.pos.x + this.width > x
-		// 			&& this.pos.x < x + undergroundBrickJson.width ){
-		// 			if(this.pos.y >= y - this.height){
-		// 				this.isJump = false;
-		// 				this.pos.y = y - this.height;
-		// 				this.speed.y = 0;
-		// 			}	
-		// 		}					
-		// 		// ------------end of 控制站在水管上-----------------
-		// 	});
-		// }
+				// ------------控制站在地下道磚塊上--------------
+				if(this.speed.y > 0 
+					&& this.pos.x + this.width > x
+					&& this.pos.x < x + undergroundBrickJson.width ){
+					if(this.pos.y >= y - this.height){
+						this.isJump = false;
+						this.pos.y = y - this.height;
+						this.speed.y = 0;
+					}	
+				}					
+				// ------------end of 控制站在地下道磚塊-----------------
+			});
+		}
+
+		if(this.underGround){
+			undergroundTubeJson.Pos[0].ranges.forEach(([x,y])=>{
+				if( this.pos.x + this.width >= x + 16
+					&& this.pos.x + this.width <= x + 64
+					&& this.pos.y >= y - undergroundTubeJson.height )
+				{ //從左側碰到水管
+					this.speed.x = 2;
+					this.pos.x  += this.speed.x;
+					this.gobacktoground = true;
+					this.canmoveFromUnder = false;
+				}
+			});
+		}
+
+		let timeoutId8;
+		if(this.gobacktoground
+			&& !this.clearTimeout8){
+			timeoutId8 = setTimeout(() => {
+				this.PowerDownSound();
+				this.pos.x = 4308;
+				this.underGround = false;
+				this.gobacktoground = false;
+				this.speed.x = 4;
+				this.getDestinationTube = true;
+				this.clearTimeout8 = null;
+			}, 1000);
+			this.clearTimeout8 = timeoutId8;
+		}
+	
+
+
 	
 
 

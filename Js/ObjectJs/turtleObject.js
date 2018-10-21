@@ -309,6 +309,7 @@ class Turtle{
 		if( !marioArray.isBigMario 
 			&& !marioArray.underGround
 			&& !marioArray.isDie	
+			&& !marioArray.falling	
 			&& !marioArray.willDie  
 			&& !this.quickToDie && marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
@@ -328,6 +329,7 @@ class Turtle{
 		if(marioArray.isBigMario 
 			&& !marioArray.underGround
 			&& !marioArray.isDie 
+			&& !marioArray.falling	
 			&& !this.isDie 
 			&& marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
