@@ -5,7 +5,7 @@ class Fragment{
 	constructor(){
     this.pos = new PositionAndSpeed(0,0);
     this.previousPos = new PositionAndSpeed(0,0);
-    this.speed = new PositionAndSpeed(0.25,0.5);
+    this.speed = new PositionAndSpeed(0.05,0.15);
 		this.width = 8;
     this.height = 8;
     this.show =false;
@@ -19,7 +19,6 @@ class Fragment{
         this.underground = true;
       }
     })
-
     
 
     if(!this.record){
@@ -66,8 +65,8 @@ class Fragment{
         if(fragmentArray[matchNum+3].pos.y < fragmentArray[matchNum+3].previousPos.y - fragmentArray[matchNum+3].height * 4){
           fragmentArray[matchNum+3].speed.y *= -1;
         }
-         
-        }
+      }
+        
     }
 	}
 

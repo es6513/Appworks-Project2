@@ -1,5 +1,5 @@
 import {Sprites} from "../Js/SpriteSet.js";
-import {loadSky, loadGround,loadClouds,loadDecorations,loadunderGround,loadunderSky } from "../Js/loadSprite.js";
+import {loadSky, loadGround,loadClouds,loadDecorations,loadunderGround,loadunderSky,loadunderBricks } from "../Js/loadSprite.js";
 
 // 用來畫不會動背景的部分
 function  drawScreen(background,context,sprites) {
@@ -124,6 +124,7 @@ function drawBackground(name) {
 			loadClouds(),
 			loadunderSky(),
 			loadunderGround(),
+			loadunderBricks(),
 			loadDecorations(32,16,"smallGrass","smallGrass3216"),
 			loadDecorations(48,16,"mediumGrass","mediumGrass4816"),
 			loadDecorations(64,16,"bigGrass","bigGrass6416"),
@@ -131,7 +132,7 @@ function drawBackground(name) {
 			loadDecorations(80,48,"bigMountain","bigMountain8048"),
 		]))
 		.then(([screen,skySprite,groundSprite,cloudSprite,
-			undergroundSprite,underskySprite,
+			undergroundSprite,underskySprite,undergroundBrickSprite,
 			smallGrassSprite,mediumGrassSprite,bigGrassSprite,
 			smallMountainSprite,bigMountainSprite,
 		])=>{	
@@ -143,7 +144,8 @@ function drawBackground(name) {
 			drawClouds(screen.clouds[0],backgroundSprite.getContext("2d"),cloudSprite);
 			drawScreen(screen.underbackgrounds[0],backgroundSprite.getContext("2d"),undergroundSprite);
 			drawScreen(screen.underbackgrounds[1],backgroundSprite.getContext("2d"),underskySprite);
-		
+			drawScreen(screen.underbackgrounds[2],backgroundSprite.getContext("2d"),undergroundBrickSprite);
+
 			drawDecorations(screen.smallGrass[0],backgroundSprite.getContext("2d"),smallGrassSprite);
 			drawDecorations(screen.mediumGrass[0],backgroundSprite.getContext("2d"),mediumGrassSprite);
 			drawDecorations(screen.bigGrass[0],backgroundSprite.getContext("2d"),bigGrassSprite);

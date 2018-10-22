@@ -36,6 +36,7 @@ let fps = 100;
 // -------------------音效--------------------
 let backgroundMusic = new Audio("../music/TitleBGM.mp3");
 
+let undergroundMuscic = new Audio("../music/underworld.mp3")
 let powerupSound = new Audio("/music/maro-powerup-sound.wav");
 
 // -------------------end 音效--------------------
@@ -677,14 +678,19 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 
 		if(marioArray[0].willDie 
 			|| marioArray[0].stopBackgroundMusic 
-			|| marioArray[0].isDie){
+			|| marioArray[0].isDie ){
 			backgroundMusic.pause();
 			backgroundMusic.currentTime = 0;
+		}else if(marioArray[0].underGround){
+			backgroundMusic.pause();
+			undergroundMuscic.play();
+		}else if(!marioArray[0].underGround){
+			undergroundMuscic.pause();
 		}
 
 		if(marioArray[0].underGround){
 			document.querySelector("canvas").style.position  = "absolute"
-			document.querySelector("canvas").style.left  = "-150px"
+			document.querySelector("canvas").style.left  = "-250px"
 			document.querySelector("canvas").style.top  = "-600px"
 		}else if(!marioArray[0].underGround){
 			document.querySelector("canvas").style.left = "0";

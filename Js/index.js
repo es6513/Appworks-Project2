@@ -690,7 +690,7 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 
 		if(marioArray[0].underGround){
 			document.querySelector("canvas").style.position  = "absolute"
-			document.querySelector("canvas").style.left  = "-150px"
+			document.querySelector("canvas").style.left  = "-250px"
 			document.querySelector("canvas").style.top  = "-600px"
 		}else if(!marioArray[0].underGround){
 			document.querySelector("canvas").style.left = "0";

@@ -26,6 +26,7 @@ class Mario{
 
 		this.canmoveFromUnder = true;
 
+		this.fallingToUnder = false;
 
 		// --------------end 穿越下水道-------------------
 
@@ -162,8 +163,7 @@ class Mario{
 		// 	return;
 		// }
 			
-
-
+		console.log(this.fallingFromBrick);
 		questionBrickJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(!this.underGround && this.isJump
 				&& this.pos.x < x + questionBrickJson.width 
@@ -257,8 +257,58 @@ class Mario{
 			}
 
 			//-----------------end  測試中------------------
+			
+		});
+
+		brickJson.Pos[0].ranges.forEach(([x,y])=>{
+			// if(this.isJump
+			// 	&& this.pos.x < x + brickJson.width 
+			// 		&& this.pos.x + this.width > x 
+			// 		&& this.pos.y + this.height > y
+			// 		&& this.pos.y + this.height / 2 < y + brickJson.height)
+			// {
+			// 	this.stuckBrick = true;
+			// 	this.stopX = true;
+			// 	this.stopY = true;
+			// }
+
+			//修正磚塊前跳躍會斜向穿越的 bug ,但動作還有點不自然
 
 
+			// ***------bug 測試中，避免落下來還可以跑回去-----------
+
+			if( this.pos.x + this.width == x
+				&& this.pos.y + this.height > y 
+				&& this.pos.y + this.height/2  < y +brickJson.height)
+			{ //從左側碰到水管
+				this.pos.x = x - this.width ;
+				this.stopX = true;  //控制跑回來會上去的問題
+				this.fallingFromBrick = true;
+			}	
+
+			
+			if( this.pos.x  == x + flowerBrickJson.width
+				&& this.pos.y + this.height > y 
+				&& this.pos.y + this.height/2  < y +brickJson.height)
+			{ //從左側碰到水管
+				this.pos.x = x + brickJson.width ;
+				this.stopX = true;  //控制跑回來會上去的問題
+				this.fallingFromBrick = true;
+			}	
+
+			if(!this.isOnBrick && this.stopX && this.pos.x + this.width == x && 
+				(keys.left || keys.right)){
+				// this.speed.x = 4;
+				this.stopX = false;
+			}
+
+			if(!this.isOnBrick && this.stopX && 	this.pos.x == x + brickJson.width && 
+				(keys.left || keys.right)){
+				// this.speed.x = 4;
+				this.stopX = false;
+			}
+
+			//-----------------end  測試中------------------
 			
 		});
 
@@ -274,6 +324,37 @@ class Mario{
 				this.stopY = true;
 			}
 			//修正磚塊前跳躍會斜向穿越的 bug ,但動作還有點不自然
+
+			if( this.pos.x + this.width == x
+				&& this.pos.y + this.height > y 
+				&& this.pos.y + this.height/2  < y +mushroomBrickJson.height)
+			{ //從左側碰到水管
+				this.pos.x = x - this.width ;
+				this.stopX = true;  //控制跑回來會上去的問題
+				this.fallingFromBrick = true;
+			}	
+
+			
+			if( this.pos.x  == x + mushroomBrickJson.width
+				&& this.pos.y + this.height > y 
+				&& this.pos.y + this.height/2  < y +mushroomBrickJson.height)
+			{ //從左側碰到水管
+				this.pos.x = x + mushroomBrickJson.width ;
+				this.stopX = true;  //控制跑回來會上去的問題
+				this.fallingFromBrick = true;
+			}	
+
+			if(!this.isOnBrick && this.stopX && this.pos.x + this.width == x && 
+				(keys.left || keys.right)){
+				// this.speed.x = 4;
+				this.stopX = false;
+			}
+
+			if(!this.isOnBrick && this.stopX && 	this.pos.x == x + mushroomBrickJson.width && 
+				(keys.left || keys.right)){
+				// this.speed.x = 4;
+				this.stopX = false;
+			}
 		});
 
 
@@ -332,6 +413,7 @@ class Mario{
 			&& !this.goThroughTube
 			&& !this.gobacktoground
 			&& this.canmoveFromUnder
+			&& !this.fallingToUnder
 			&& !keys.space 
 			&& !this.canPlayPassMusic 
 			&& !this.isDie 
@@ -435,6 +517,7 @@ class Mario{
 				&& !this.goThroughTube
 				&& !this.gobacktoground
 				&& this.canmoveFromUnder
+				&& !this.fallingToUnder
 				&& !this.isSquat
 				&& !this.shot
 				&& this.pos.x + this.width > x1 * 16
@@ -465,8 +548,8 @@ class Mario{
 				this.onTube = false;
 				this.isOnBrick = false;
 				this.isOnGround = true;
-				this.pos.y = y1 * screen.height - this.height; //落地
 				this.higherThanBrick = false;
+				this.pos.y = y1 * screen.height - this.height; //落地
 				this.isBottomBrick = false;
 				this.isOnBrick = false;
 			
@@ -612,7 +695,7 @@ class Mario{
 					if(keys.bottom && !this.playDownTubeMusic ){
 						this.PowerDownSound();
 						this.goThroughTube = true;
-						
+						this.fallingToUnder = true;
 						this.playDownTubeMusic  = true;
 					}	
 				}		
@@ -724,6 +807,7 @@ class Mario{
 				this.isOnBrick = false;
 				this.isOnGround = true;
 				this.pos.y = y1 * screen.height - this.height; //落地
+				this.fallingToUnder = false;
 				this.higherThanBrick = false;
 				this.isBottomBrick = false;
 				this.isOnBrick = false;
@@ -763,13 +847,12 @@ class Mario{
 				{ //從左側碰到
 					this.pos.x = x - this.width ;
 					this.stopX = true;
-
 					if(keys.left && !keys.right){
 						this.stopX = false;
 					}
 				}
 				else if(this.pos.x == x + undergroundBrickJson.width
-					&& this.pos.y >= y - undergroundBrickJson.height )
+					&& this.pos.y >= y-undergroundBrickJson.height )
 				{	
 					this.pos.x = x + undergroundBrickJson.width ;
 					this.stopX = true;
@@ -777,9 +860,10 @@ class Mario{
 						this.stopX = false;
 					}
 				}
-				else if(this.pos.y < y - undergroundBrickJson.height && keys.left 
-					|| this.pos.y < y - undergroundBrickJson.height  && keys.right){
-					this.stopX = false;
+				else if(this.pos.x + this.width == x &&
+					(this.pos.y < y - undergroundBrickJson.height && keys.left 
+					|| this.pos.y < y - undergroundBrickJson.height  && keys.right)){
+						this.stopX = false;
 				}
 
 				// ------end --------
@@ -803,13 +887,25 @@ class Mario{
 				if( this.pos.x + this.width >= x + 16
 					&& this.pos.x + this.width <= x + 64
 					&& this.pos.y >= y - undergroundTubeJson.height )
-				{ //從左側碰到水管
+				{ //從左側碰到水管回到地面
 					this.speed.x = 2;
 					this.pos.x  += this.speed.x;
 					this.gobacktoground = true;
 					this.canmoveFromUnder = false;
 				}
+				
+			// if(this.speed.y > 0 
+			// 	&& this.pos.x + this.width > x +16
+			// 	&& this.pos.x < x + 50 ){
+			// 	if(this.pos.y >= y - 32){
+			// 		this.isJump = false; //為了控制從水管上下來採怪物不會死掉
+			// 		this.onTube = true;
+			// 		this.pos.y = y - 32;	
+			// 		this.speed.y = 0;
+			// 	}	
+			// }	
 			});
+
 		}
 
 

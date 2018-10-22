@@ -64,7 +64,6 @@ class Turtle{
 		}	
 		
 
-
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
@@ -307,7 +306,9 @@ class Turtle{
 		// ------------------1.小馬力歐的狀況-------------
 
 		if( !marioArray.isBigMario 
+			&& !marioArray.isFireMario 
 			&& !marioArray.underGround
+			&& marioArray.canmoveFromUnder
 			&& !marioArray.isDie	
 			&& !marioArray.falling	
 			&& !marioArray.willDie  
@@ -328,6 +329,26 @@ class Turtle{
 		// ---------------2.大馬力歐的狀況-------------
 		if(marioArray.isBigMario 
 			&& !marioArray.underGround
+			&& marioArray.canmoveFromUnder
+			&& !marioArray.isDie 
+			&& !marioArray.falling	
+			&& !this.isDie 
+			&& marioArray.speed.y > 0 
+			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width
+			&& marioArray.pos.y > this.pos.y - marioArray.height){
+			{
+				this.quickToDie = true;
+				marioArray.speed.y = -10;
+				this.turtleDieSound();
+			}		
+		}
+
+		//-------------3.火力歐的狀況------------
+
+		if(marioArray.isFireMario 
+			&& !marioArray.underGround
+			&& marioArray.canmoveFromUnder
 			&& !marioArray.isDie 
 			&& !marioArray.falling	
 			&& !this.isDie 

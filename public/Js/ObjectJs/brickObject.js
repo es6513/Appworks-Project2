@@ -1,5 +1,6 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
 // import {marioArray} from "../marioArrayTest.js";
+import {pressed,keys,keyup,keydown,keypress} from "../keyEvent.js";
 
 
 class Brick{
@@ -53,8 +54,10 @@ class Brick{
 			marioArray.stopY = true;
 		}
 		
+
 		//修正磚塊前跳躍會斜向穿越的 bug ,但動作還有點不自然
-		
+
+				
 
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
@@ -91,7 +94,6 @@ class Brick{
 				&& marioArray.pos.x + marioArray.width  > this.pos.x 
 				&& marioArray.pos.x < this.pos.x + this.width 
 			){
-				console.log("456");
 				if(marioArray.pos.y >= this.pos.y - 32){
 					marioArray.pos.y = this.pos.y - 32;
 					marioArray.speed.y = 0;

@@ -14,7 +14,6 @@ class Fragment{
 	}
 	
 	update(screen,brickArray,fragmentArray){
-    console.log(this.pos.y);
     screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
       if(this.pos.y >= y1*screen.height){
         this.underground = true;

@@ -79,7 +79,6 @@ class QuestionBrick{
 			&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				if(marioArray.pos.y >= this.pos.y - marioArray.height){
-					console.log("123");
 					marioArray.pos.y = this.pos.y - marioArray.height;
 					marioArray.speed.y = 0;
 					marioArray.isOnBrick = true;

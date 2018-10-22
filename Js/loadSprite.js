@@ -64,7 +64,7 @@ function loadunderBricks() {
 	return loadImage("../imgs/images/underground/sewerBrick.png")
 		.then(underbrickImage=>{
 			let underbrickSprite = new Sprites(underbrickImage,16,16);
-			underbrickSprite.getTileImage("underbrick",0,0,16,16);  
+			underbrickSprite.getTileImage("undergroundBrick",0,0,16,16);  
 			return underbrickSprite;
 		});
 }
@@ -98,4 +98,4 @@ function loadDecorations(width,height,name,imageUrl) {
 		});
 }
 
-export {loadMario,loadSky,loadGround,loadClouds,loadDecorations,loadFont,loadunderGround,loadunderSky};
+export {loadMario,loadSky,loadGround,loadClouds,loadDecorations,loadFont,loadunderGround,loadunderSky,loadunderBricks};

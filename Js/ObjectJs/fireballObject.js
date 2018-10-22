@@ -54,6 +54,7 @@ class Fireball{
 				&& this.pos.y  < y + tubeJson.height  )
 			{	
 				this.isExplosion = true;
+
 				// this.show = false;
 			}
 		});
@@ -65,6 +66,7 @@ class Fireball{
 				&& this.pos.y  < y + highTubeJson.height  )
 			{	
 				this.isExplosion = true;
+
 				// this.show = false;
 			}
 		});
@@ -76,6 +78,7 @@ class Fireball{
 				&& this.pos.y  < y + highestTubeJson.height  )
 			{	
 				this.isExplosion = true;
+
 				// this.show = false;
 			}
 		});
@@ -88,11 +91,13 @@ class Fireball{
 				&& this.pos.y  < y + oddBrickJson.height )
 			{	
 				this.isExplosion = true;
+
 				// this.show = false;
 			}
 		});
 
 		let timeoutId;
+
 	
 		if(this.isExplosion && !this.clearTimeout){
 			timeoutId = setTimeout(() => {
@@ -121,6 +126,7 @@ class Fireball{
 				&& this.pos.y < goombaArray[j].pos.y + goombaArray[j].height
 			){
 				goombaArray[j].hitByFire = true;
+				this.dieSound();
 				// this.show = false;
 				this.isExplosion = true;
 				return;
@@ -135,6 +141,7 @@ class Fireball{
 			){
 				turtleArray[j].hitByFire = true;
 				// this.show = false;
+				this.dieSound();
 				this.isExplosion = true;
 				return;
 			}
@@ -143,6 +150,15 @@ class Fireball{
 		//-------------end of 火球打死goomba-----------
 
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+			if(this.pos.x < x2 * 16 + screen.width
+				&& this.pos.x + this.width > x1 * 16){
+				this.falling = false;
+			}else if(this.pos.x > x2 * 16 + screen.width
+				&& this.pos.y > y1 * screen.height - 32){
+				this.falling = true;
+			}
+
+
 			// this.height / 4 為了配合圖片大小而調整
 			if(!this.isExplosion 
 				&& this.pos.y >= y1 * screen.height - this.height + this.height / 4
@@ -152,7 +168,7 @@ class Fireball{
 				this.canBounce = true;
 			}
 
-			if(this.canBounce
+			if(this.canBounce 
 				&& this.pos.x + this.width > x1 * screen.width 
 				&& this.pos.x < x2 * screen.width 
 				&& this.pos.y <= 224 ){
@@ -215,6 +231,16 @@ class Fireball{
 	explosion(){
 		this.frameIndex = ++this.frameIndex % 15 ;
 		return this.explosionRun[this.frameIndex];
+	}
+
+	dieSound(){
+		let dieSound = new Audio("/music/mario-kick-sound.wav");
+		dieSound.play();
+	}
+
+	kicksound(){
+		let kicksound = new Audio("/music/mario-kick-sound.wav");
+		kicksound.play();
 	}
 
 
