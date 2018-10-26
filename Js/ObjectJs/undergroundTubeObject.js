@@ -8,10 +8,6 @@ class UndergroundTube{
 		this.width = 32;
 		this.height = 32;
 	}
-	
-	update(){
-
-	}
 
 	draw(context,undergroundTubeSprite,marioArray){
 				

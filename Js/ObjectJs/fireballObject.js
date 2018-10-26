@@ -6,7 +6,6 @@ class Fireball{
 	constructor(){
 		this.pos = new PositionAndSpeed();
 		this.previousPos = new PositionAndSpeed();
-		this.previousLeftPos = new PositionAndSpeed();
 		this.speed = new PositionAndSpeed(8,2);
 		this.frameIndex = 0;
 		this.faceDirection = 1;
@@ -16,10 +15,12 @@ class Fireball{
 		this.width = 16;
 		this.height = 16;
 		this.show = false;
+		this.recordSwitch = true;
 		this.falling = false;
 		this.canBounce = false;
 		this.isExplosion  = false;
 		this.clearTimeout;
+		this.clearTimeout2;
 		this.framesRun = [
 			"bullet-1","bullet-1","bullet-1","bullet-1",
 			"bullet-2","bullet-2","bullet-2","bullet-2",
@@ -34,13 +35,24 @@ class Fireball{
 		];
 	}
 	
-	update(marioArray,screen,goombaArray,turtleArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
+	update(marioArray,screen,goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
 		this.faceDirection = marioArray.faceDirection;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
 		//	&& shape.pos.x < this.pos.x + this.width 右
 		//	&& shape.pos.y + shape.height > this.pos.y 上
 		//	&& shape.pos.y < this.pos.y + this.height 下
+		if(this.recordSwitch){
+			this.previousPos.x = this.pos.x
+		}
 
+		let timeoutId2;
+		if(this.recordSwitch && !this.clearTimeout2){
+			timeoutId2 = setTimeout(() => {
+				this.recordSwitch = false;
+				this.clearTimeout2 = null;
+			}, 20);
+			this.clearTimeout2 = timeoutId2;
+		}	//用來切換紀錄先前位置
 
 		// -------------火球碰到障礙物-------------------
 
@@ -54,8 +66,6 @@ class Fireball{
 				&& this.pos.y  < y + tubeJson.height  )
 			{	
 				this.isExplosion = true;
-
-				// this.show = false;
 			}
 		});
 
@@ -66,8 +76,6 @@ class Fireball{
 				&& this.pos.y  < y + highTubeJson.height  )
 			{	
 				this.isExplosion = true;
-
-				// this.show = false;
 			}
 		});
 
@@ -78,11 +86,8 @@ class Fireball{
 				&& this.pos.y  < y + highestTubeJson.height  )
 			{	
 				this.isExplosion = true;
-
-				// this.show = false;
 			}
 		});
-
 
 		oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.pos.x +  this.width  > x 
@@ -91,13 +96,10 @@ class Fireball{
 				&& this.pos.y  < y + oddBrickJson.height )
 			{	
 				this.isExplosion = true;
-
-				// this.show = false;
 			}
 		});
 
 		let timeoutId;
-
 	
 		if(this.isExplosion && !this.clearTimeout){
 			timeoutId = setTimeout(() => {
@@ -110,8 +112,6 @@ class Fireball{
 
 
 		// -------------end 火球碰到障礙物-----------------
-
-
 
 
 		// 這裡用來控制當馬力歐發射火球的狀況。
@@ -127,7 +127,6 @@ class Fireball{
 			){
 				goombaArray[j].hitByFire = true;
 				this.dieSound();
-				// this.show = false;
 				this.isExplosion = true;
 				return;
 			}
@@ -140,7 +139,19 @@ class Fireball{
 				&& this.pos.y < turtleArray[j].pos.y + turtleArray[j].height
 			){
 				turtleArray[j].hitByFire = true;
-				// this.show = false;
+				this.dieSound();
+				this.isExplosion = true;
+				return;
+			}
+		}
+
+		for(let j = 0;j < badPlantArray.length;j += 1){
+			if(!this.isExplosion && this.pos.x + this.width > badPlantArray[j].pos.x
+				&& this.pos.x < badPlantArray[j].pos.x + badPlantArray[j].width
+				&& this.pos.y + this.height > badPlantArray[j].pos.y
+				&& this.pos.y < badPlantArray[j].pos.y + badPlantArray[j].height
+			){
+				badPlantArray[j].hitByFire = true;
 				this.dieSound();
 				this.isExplosion = true;
 				return;
@@ -148,13 +159,12 @@ class Fireball{
 		}
 
 		//-------------end of 火球打死goomba-----------
-
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
 			if(this.pos.x < x2 * 16 + screen.width
 				&& this.pos.x + this.width > x1 * 16){
 				this.falling = false;
 			}else if(this.pos.x > x2 * 16 + screen.width
-				&& this.pos.y > y1 * screen.height - 32){
+				&& this.pos.y > y1 * screen.height - 16){
 				this.falling = true;
 			}
 
@@ -180,7 +190,6 @@ class Fireball{
 
 		if(!this.isExplosion && !this.show  && this.faceDirection == 1 && !this.goRight){
 			this.pos.x = marioArray.pos.x ;
-			this.previousPos.x = this.pos.x;
 			this.pos.y = marioArray.pos.y + 8;
 			this.goRight = true;
 			this.show = true;
@@ -191,7 +200,6 @@ class Fireball{
 
 		if(!this.isExplosion && !this.show  && this.faceDirection == -1 && !this.goLeft){
 			this.pos.x = marioArray.pos.x ;
-			this.previousLeftPos.x = this.pos.x;
 			this.pos.y = marioArray.pos.y + 8;
 			this.goLeft = true;
 			this.show = true;
@@ -247,31 +255,31 @@ class Fireball{
 	draw(context,fireballSprite,marioArray){	
 		// 這邊要調數字 BUG  往左邊發射的話，會重複在畫面上畫
 		if(this.show && this.goRight && !this.goLeft && !this.isExplosion ){
-			if(this.pos.x < 450){
+			if(this.previousPos.x < 450){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 5000 ){
+			}else if(this.previousPos.x >= 450 && this.previousPos.x < 5000 ){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x - marioArray.pos.x  + 450 ,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 5000 ){
+			}else if(this.previousPos.x >= 5000 ){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
 			}
 		}
 
 		if(this.isExplosion){
-			if(this.pos.x < 450){
+			if(this.previousPos.x < 450){
 				fireballSprite.drawFireBallSprite(this.explosion(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 5000 ){
+			}else if(this.previousPos.x >= 450 && this.previousPos.x < 5000 ){
 				fireballSprite.drawFireBallSprite(this.explosion(),context,this.pos.x - marioArray.pos.x  + 450   ,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 5000 ){
+			}else if(this.previousPos.x >= 5000 ){
 				fireballSprite.drawFireBallSprite(this.explosion(),context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
 			}
 		}
 
 		if(this.show && this.goLeft && !this.goRight && !this.isExplosion ){
-			if(this.pos.x < 450){
+			if(this.previousPos.x < 450){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 450 && this.pos.x < 5000 ){
+			}else if(this.previousPos.x >= 450 && this.previousPos.x < 5000 ){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x - marioArray.pos.x  + 450 ,this.pos.y,this.faceDirection < 0);
-			}else if(this.pos.x >= 5000 ){
+			}else if(this.previousPos.x >= 5000 ){
 				fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
 			}
 		}

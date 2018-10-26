@@ -1,5 +1,4 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-// import {marioArray} from "../marioArrayTest.js";
 
 
 class Goomba{
@@ -35,8 +34,6 @@ class Goomba{
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-		// console.log(this.speed.x);
-
 		// ------bug----- 已經消失的怪物需要清除掉(preffered) 或是讓她不能再移動，否則會有bug
 		if(!this.isDie && !this.falling){
 			this.move();	
@@ -142,7 +139,7 @@ class Goomba{
 
 		highestTubeJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.pos.x +  this.width > x  
-				&& this.pos.x  < x + highestTubeJson.width )
+				&& this.pos.x  < x + highestTubeJson.width)
 			{	
 				this.speed.x *= -1;
 				this.direction *= -1;
@@ -174,8 +171,6 @@ class Goomba{
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-		// console.log(this.speed.x);
-
 
 		// ------------------1.小馬力歐的狀況-------------
 		if( !marioArray.isBigMario 
@@ -268,42 +263,6 @@ class Goomba{
 				&& this.pos.x < x2 * 16 + 16){
 				this.pos.y = y1 * screen.height - this.height;
 			}
-
-			// if(this.faceDirection == 1 
-			// 	&&	this.falling == true 
-			// 	&& this.pos.x + this.width == x1 * 16 ){
-			// 	this.speed.x *= -1;
-			// } //讓 goomba 掉下懸崖時會左右彈
-
-			// if(this.faceDirection == -1 
-			// 	&&	this.falling == true
-			// 	 && this.pos.x + this.width == x1 * 16 - 32 ){
-			// 	this.speed.x *= -1;
-			// } 
-
-			// if( this.faceDirection == 1 
-			// 	&& this.pos.x > x2 * 16 + 16){
-			// 	this.falling = true;
-			// 	this.pos.y += this.speed.y;
-			// }
-
-			// if(this.faceDirection == -1 
-			// 	&&	this.falling == true 
-			// 	&& this.pos.x + this.width == x1 * 16  ){
-			// 	this.speed.x *= -1;
-			// } 
-
-			// // if( this.pos.x > x2 * 16 + 16){
-			// // 	this.falling = true;
-			// // 	this.pos.y += this.speed.y;
-			// // }			
-		
-			
-			// if( this.faceDirection == -1 
-			// 	&& this.pos.x < x1 * 16 - 16 ){
-			// 	this.falling = true;
-			// 	this.pos.y += this.speed.y;
-			// }  // 這一段 bug 怪物會有點向下跑
 
 			//超越畫面上一定距離就死掉並清除陣列
 			if(this.pos.y >= y2 * screen.height + 1200 

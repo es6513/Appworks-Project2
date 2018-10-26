@@ -79,30 +79,10 @@ function loadMarioImage(name) {
 		.then(r=>r.json())
 		.then(marioSprite=> Promise.all([
 			marioSprite,
-			loadImage("../imgs/images/MariotSetRedderTest5.png"),
+			loadImage("../imgs/images/MariotSetRedder.png"),
 		]))
 		.then(([marioSprite,image])=>{
 			let marioSpriteSet = new Sprites(image,marioSprite.width,marioSprite.height);
-			marioSprite.frames.forEach(spriteFrames=>{
-				marioSpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
-			});
-
-			// 傳遞順序: loadImage.js 呼叫 SpriteSet.js 的 getImage
-			// => marioTest.js 呼叫 marioObject.js 的 mario.draw()方法
-
-			return marioSpriteSet;
-		});
-}
-
-function loadBigMarioImage(name) {
-	return fetch(`/marioJSON/${name}.json`)
-		.then(r=>r.json())
-		.then(marioSprite=> Promise.all([
-			marioSprite,
-			loadImage("../imgs/images/MariotSetRedderTest4.png"),
-		]))
-		.then(([marioSprite,image])=>{
-			let marioSpriteSet = new Sprites(image,marioSprite.width,marioSprite.Bigheight);
 			marioSprite.frames.forEach(spriteFrames=>{
 				marioSpriteSet.getImage(spriteFrames.name,...spriteFrames.ranges);
 			});
@@ -158,4 +138,4 @@ function drawBackground(name) {
 
 
 export {drawScreen,loadImage,drawBackground,
-	loadMarioImage,loadBigMarioImage,drawObjects,drawBackgroundObjects};
+	loadMarioImage,drawObjects,drawBackgroundObjects};

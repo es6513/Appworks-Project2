@@ -1,5 +1,4 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-// import {marioArray} from "../marioArrayTest.js";
 
 
 class Flycoin{
@@ -34,7 +33,6 @@ class Flycoin{
 			this.previousY = this.pos.y;
 			this.previousX = this.pos.x;
 		}		
-		// console.log(this.previousY - this.width * 4);
 		if(this.pos.y == this.previousY - this.width * 6){
 			this.speed.y *= -1;
 		}
@@ -47,6 +45,7 @@ class Flycoin{
 		if(this.show){
 			this.pos.y -= this.speed.y;
 		}
+
 
 	}
 

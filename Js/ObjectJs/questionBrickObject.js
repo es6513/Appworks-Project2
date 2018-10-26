@@ -1,6 +1,4 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-// import {marioArray} from "../marioArrayTest.js";
-
 
 class QuestionBrick{
 	constructor(){
@@ -9,6 +7,7 @@ class QuestionBrick{
 		this.width = 16;
 		this.height = 16;
 		this.isUseLess = false;
+		this.lowerzone;
 		this.framesRun = [
 			"questionBrick-1","questionBrick-1","questionBrick-1","questionBrick-1","questionBrick-1","questionBrick-1",
 			"questionBrick-1","questionBrick-1","questionBrick-1","questionBrick-1","questionBrick-1","questionBrick-1",
@@ -25,7 +24,6 @@ class QuestionBrick{
 		//---------------小馬力歐-----------------
 		// -------------下方----------------
 
-
 		// if(marioArray.speed.y > 0 && marioArray.isOnBrick){
 		// 	marioArray.isOnBrick = false;
 		// }
@@ -37,23 +35,26 @@ class QuestionBrick{
 			}
 		}		
 
-
 		// if(marioArray.pos.x + marioArray.width   > this.pos.x 
 		// && marioArray.pos.x < this.pos.x + this.width ){
 		
 		// }
 		// -------------小馬力歐--------------------
-		// -------------下方-----------------------
+	
 
 		if(!marioArray.isBigMario 
 			&& !marioArray.isFireMario
 			&& !marioArray.isDie 
 			&& !marioArray.underGround
-			&& !marioArray.willDie ){
+			&& !marioArray.willDie){
+				
+
+			// -------------下方-----------------------
+			
 			if(marioArray.speed.y < 0 
-			&& marioArray.pos.y >= this.pos.y
-			&& marioArray.pos.y <= this.pos.y + this.height
-			&& marioArray.pos.x + marioArray.width    > this.pos.x 
+			&& marioArray.pos.y + marioArray.height/2 >= this.pos.y  //Mario 頭頂大於磚塊上緣
+			&& marioArray.pos.y + marioArray.height/2 <= this.pos.y + this.height  //Mario 頭頂小於磚塊下緣
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				if(!this.isUseLess){
@@ -63,25 +64,39 @@ class QuestionBrick{
 				marioArray.pos.y = this.pos.y ;
 				marioArray.speed.y = 0;
 				marioArray.isBottomBrick = true;
+				marioArray.isOnBrick = false;
 			}
 
 			// -------------上方----------------
 	
-			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
-				&& marioArray.pos.x + marioArray.width > this.pos.x  
-				&& marioArray.pos.x < this.pos.x + this.width ){
-					
-				}
+				//目前用 lowzerzone 控制還有點問題
 
+			if(marioArray.pos.x + marioArray.width > this.pos.x  
+				&& marioArray.pos.x < this.pos.x + this.width 
+				&& marioArray.pos.y + marioArray.height/2  >= this.pos.y + this.height) {
+					this.lowerzone = true;
+			}else if(marioArray.pos.x + marioArray.width > this.pos.x  
+				&& marioArray.pos.x < this.pos.x + this.width 
+				&& marioArray.pos.y + marioArray.height/2  < this.pos.y ){
+					this.lowerzone = false;
+			}
+			
+			
+			// if(marioArray.speed.y == 0 && marioArray.isJump){
+			// 	marioArray.prvioxusY = marioArray.pos.y
+			// }else if(marioArray.isOnBrick || marioArray.onTube || marioArray.isOnGround){
+			// 	marioArray.prvioxusY = marioArray.pos.y
+			// }
 
-			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
+			if(!this.lowerzone  && marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.width > this.pos.x  
 			&& marioArray.pos.x < this.pos.x + this.width 
 			){
-				if(marioArray.pos.y >= this.pos.y - marioArray.height){
+				if(marioArray.pos.y > this.pos.y - marioArray.height){
 					marioArray.pos.y = this.pos.y - marioArray.height;
 					marioArray.speed.y = 0;
 					marioArray.isOnBrick = true;
+					marioArray.isBottomBrick = false;
 					marioArray.isJump = false;
 				}
 			}
@@ -105,14 +120,18 @@ class QuestionBrick{
 
 
 		//---------------大馬力歐-----------------
-		// -------------下方----------------
+
+		
 		if((marioArray.isBigMario || marioArray.isFireMario )
 			&& !marioArray.underGround	
 			&& !marioArray.isDie 
 			&& !marioArray.willDie ){
-			if(marioArray.speed.y < 0 
+		
+				// -------------下方----------------
+
+				if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
-				&& marioArray.pos.y <= this.pos.y + 16
+				&& marioArray.pos.y  <= this.pos.y + this.height
 				&& marioArray.pos.x + marioArray.width > this.pos.x 
 				//判定的bug 用 width/2可以較精確判定(還是會有穿越的情形)
 				&& marioArray.pos.x < this.pos.x + this.width 
@@ -127,12 +146,23 @@ class QuestionBrick{
 			}
 	
 			// -------------上方----------------
-			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 
+
+			if(marioArray.pos.x + marioArray.width > this.pos.x  
+				&& marioArray.pos.x < this.pos.x + this.width 
+				&& marioArray.pos.y  >= this.pos.y + this.height) {
+					this.lowerzone = true;
+			}else if(marioArray.pos.x + marioArray.width > this.pos.x  
+				&& marioArray.pos.x < this.pos.x + this.width 
+				&& marioArray.pos.y + marioArray.height/2  < this.pos.y ){
+					this.lowerzone = false;
+			}
+
+			if(!this.lowerzone && marioArray.speed.y > 0 
 				&& marioArray.pos.x + marioArray.width  > this.pos.x  
 				&& marioArray.pos.x < this.pos.x + this.width 
-			){
-				if(marioArray.pos.y >= this.pos.y - 32){
-					marioArray.pos.y = this.pos.y - 32;
+			){				
+				if(marioArray.pos.y >= this.pos.y - marioArray.height){
+					marioArray.pos.y = this.pos.y - marioArray.height;
 					marioArray.speed.y = 0;
 					marioArray.isOnBrick = true;
 					marioArray.isJump = false;

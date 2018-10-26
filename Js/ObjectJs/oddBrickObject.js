@@ -8,10 +8,6 @@ class OddBrick{
 		this.height = 16;
 	}
 	
-	update(){
-
-	}
-
 	draw(context,oddBrickSprite,marioArray){
         
     

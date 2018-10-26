@@ -7,6 +7,7 @@ class Turtle{
 		this.pos = new PositionAndSpeed(0,0);
 		this.frameIndex = 0;
 		this.quickToDie = false;
+		this.backToLive = false;
 		this.hitByFire = false;
 		this.speed = {
 			x:1,
@@ -18,6 +19,7 @@ class Turtle{
 		this.canRotateAttack = false;
 		this.clearTimeout;
 		this.clearTimeout2;
+		this.clearTimeout3;
 		this.show = true;
 		this.falling = false;
 		this.isDie = false;
@@ -31,6 +33,14 @@ class Turtle{
 			"turtleRun-2","turtleRun-2","turtleRun-2","turtleRun-2",
 			"turtleRun-2","turtleRun-2"
 		];
+
+
+		this.framesRunBackToLiving = [
+			"turtleFireDie","turtleFireDie","turtleFireDie","turtleFireDie","turtleFireDie",
+			"turtleFireDie","turtleFireDie","turtleFireDie","turtleFireDie","turtleFireDie",
+			"turtleDie-1","turtleDie-1","turtleDie-1","turtleDie-1","turtleDie-1",
+			"turtleDie-1","turtleDie-1","turtleDie-1","turtleDie-1","turtleDie-1"
+		];
 	}
 	
 	update(screen,tubeJson,highTubeJson,highestTubeJson,marioArray,oddBrickJson){
@@ -38,10 +48,8 @@ class Turtle{
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-		// console.log(this.speed.x);
-		// console.log(this.quickToDie);
 		this.faceDirection = this.direction;
-		if(!this.quickToDie && !this.isDie && !this.falling){
+		if(!this.backToLive && !this.quickToDie && !this.isDie && !this.falling){
 			this.move();	
 		}	
 		
@@ -59,10 +67,11 @@ class Turtle{
 			timeoutId2 = setTimeout(() => {
 				this.canRotateAttack = true;
 				this.clearTimeout2 = null;
-			}, 500);
+			}, 50);
 			this.clearTimeout2 = timeoutId2;
 		}	
 		
+		// Case 1 : 旋轉中的烏龜打死馬力歐
 
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
@@ -79,14 +88,18 @@ class Turtle{
 			&& !this.hitByFire
 			&& this.canRotateAttack 
 			&& this.quickToDie
+			&& !this.backToLive
 		){
 			
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
 			marioArray.willDie = true;
+			
 			// marioArray.speed.y = -10;
 			// marioArray.pos.y += marioArray.speed.y;
 		}
+
+		// Case 2 : 走路中的烏龜打死馬力歐
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
@@ -100,7 +113,9 @@ class Turtle{
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
 			&& !this.hitByFire
-			&& !this.quickToDie ){
+			&& !this.quickToDie
+			&& !this.backToLive
+			){
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
 			marioArray.willDie = true;
@@ -124,7 +139,9 @@ class Turtle{
 			&& !this.hitByFire
 			&& this.canRotateAttack 
 			&& this.quickToDie
+			&& !this.backToLive
 		){
+			
 			marioArray.isInvincible = true;
 			marioArray.backToSmall = true;  
 			this.marioPipeSound();
@@ -142,7 +159,9 @@ class Turtle{
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
 			&& !this.hitByFire
-			&& !this.quickToDie ){
+			&& !this.quickToDie
+			&& !this.backToLive
+			){
 			this.marioPipeSound();
 			marioArray.isInvincible = true;
 			marioArray.backToSmall = true;  
@@ -182,7 +201,8 @@ class Turtle{
 			&& !marioArray.isJump
 			&& marioArray.isOnGround
 			&& !this.hitByFire
-			&& !this.quickToDie ){
+			&& !this.quickToDie 
+			&& !this.backToLive){
 			this.marioPipeSound();
 			marioArray.isInvincible = true;
 			marioArray.backToBig = true; 
@@ -202,8 +222,9 @@ class Turtle{
 			&& !marioArray.isDie 
 			&& !marioArray.willDie 
 			&& !marioArray.falling 
+			&& !this.isRotating
 			&& !marioArray.underGround
-			&& this.quickToDie  
+			&& (this.quickToDie   || this.backToLive)
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
@@ -222,15 +243,16 @@ class Turtle{
 	
 
 		if(!marioArray.isDie 
-			&& this.quickToDie  
+			&& (this.quickToDie   || this.backToLive)
 			&& !marioArray.falling 
 			&& !marioArray.underGround
 			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& !this.isRotating
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y > this.pos.y -  marioArray.height){
 			{
-				this.speed.x = 4;
+				this.speed.x = 10;
 				this.isRotating = true;
 				if(!marioArray.isOnGround){
 					marioArray.speed.y = -6;
@@ -389,38 +411,6 @@ class Turtle{
 				this.pos.y += this.speed.y; 
 			}
 			
-
-			// if(this.faceDirection == 1 
-			// 	&&	this.falling == true 
-			// 	&& this.pos.x + this.width == x1 * 16 ){
-			// 	this.direction *= -1;
-			// 	this.speed.x *= -1;
-			// } //讓 turtle 掉下懸崖時會左右彈
-
-			// if(this.faceDirection == -1 
-			// 	&&	this.falling == true 
-			// 	&& this.pos.x + this.width == x1 * 16 - 32 ){
-			// 	this.speed.x *= -1;
-			// } 
-
-			// if( this.faceDirection == 1 
-			// 	&& this.pos.x > x2 * 16 + 16){
-			// 	this.falling = true;
-			// 	this.pos.y += this.speed.y;
-				
-			// }
-			// if( this.faceDirection == -1 
-			// 	&& this.pos.x < x1 * 16 - 16 ){
-			// 	this.falling = true;
-			// 	this.pos.y += this.speed.y;
-			// }
-
-			// if(this.faceDirection == -1 
-			// 	&&	this.falling == true 
-			// 	&& this.pos.x + this.width == x1 * 16  ){
-			// 	this.speed.x *= -1;
-			// } 
-
 			if(this.pos.y >= y2 * screen.height + 1200 
 				|| this.pos.x >= 6000){
 				this.isDie = true;
@@ -443,16 +433,32 @@ class Turtle{
 			timeoutId = setTimeout(() => {
 
 				if(!this.isRotating){
-
+					this.backToLive = true;
 					this.quickToDie = false;
 				}				
 				// this.speed.x = 1;
 				// this.direction = 1;
 				this.clearTimeout = null;
-			}, 3000);
+			}, 3500);
 			this.clearTimeout = timeoutId;
 		}	
 		
+		let timeoutId3;
+	
+		if(this.backToLive && !this.clearTimeout3){
+
+			timeoutId3 = setTimeout(() => {
+
+				if(!this.isRotating){
+					this.backToLive = false;
+				}				
+				// this.speed.x = 1;
+				// this.direction = 1;
+				this.clearTimeout3 = null;
+			}, 3500);
+			this.clearTimeout3 = timeoutId3;
+		}	
+
 		// ------------End of 烏龜復活----------------
 		
 
@@ -491,22 +497,35 @@ class Turtle{
 		// return this.framesRun[this.frameIndex];
 	}
 
+	backToLiving(){
+		this.frameIndex = ++this.frameIndex % 20;
+		return this.framesRunBackToLiving[this.frameIndex];
+	}
+
 	draw(context,turtleSprite,marioArray){
-		if(marioArray.pos.x < 450 && !this.quickToDie && this.show && !this.hitByFire){
+		if(marioArray.pos.x < 450 && !this.quickToDie && this.show && !this.hitByFire && !this.backToLive){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 && !this.quickToDie && this.show && !this.hitByFire){
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 && !this.quickToDie && this.show && !this.hitByFire && !this.backToLive){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
-		}else if(marioArray.pos.x >= 5000 && !this.quickToDie && this.show && !this.hitByFire){
+		}else if(marioArray.pos.x >= 5000 && !this.quickToDie && this.show && !this.hitByFire && !this.backToLive){
 			turtleSprite.drawTurtleSprite(this.running(),context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
 		}
 
 		if(marioArray.pos.x < 450 && this.quickToDie && this.show && !this.hitByFire){
-			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x,this.pos.y,this.faceDirection < 0);
+			turtleSprite.drawTurtleSprite("turtleFireDie",context,this.pos.x,this.pos.y,this.faceDirection < 0);
 		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 && this.quickToDie && this.show && !this.hitByFire){
-			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
+			turtleSprite.drawTurtleSprite("turtleFireDie",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y,this.faceDirection < 0);
 		}else if(marioArray.pos.x >= 5000 && this.quickToDie && this.show && !this.hitByFire){
-			turtleSprite.drawTurtleSprite("turtleDie-1",context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
+			turtleSprite.drawTurtleSprite("turtleFireDie",context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
 		}	
+
+		if(marioArray.pos.x < 450 && !this.isDie && this.backToLive && this.show && !this.hitByFire){
+			turtleSprite.drawTurtleSprite(this.backToLiving(),context,this.pos.x,this.pos.y);
+		}else if(marioArray.pos.x >= 450 && !this.isDie && this.backToLive && marioArray.pos.x < 5000  && this.show && !this.hitByFire){
+			turtleSprite.drawTurtleSprite(this.backToLiving(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+		}else if(marioArray.pos.x >= 5000 && !this.isDie && this.backToLive && this.show && !this.hitByFire){
+			turtleSprite.drawTurtleSprite(this.backToLiving(),context,this.pos.x  - 4550 ,this.pos.y);
+		}
 
 		if(marioArray.pos.x < 450 && !this.isDie && this.hitByFire && this.show){
 			turtleSprite.drawTurtleSprite("turtleFireDie",context,this.pos.x,this.pos.y);

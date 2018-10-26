@@ -7,10 +7,7 @@ class HighestTube{
 		this.width = 32;
 		this.height = 64;
 	}
-	
-	update(){
 
-	}
 
 	draw(context,tubeSprite,marioArray){
 				

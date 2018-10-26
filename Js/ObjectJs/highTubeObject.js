@@ -8,9 +8,6 @@ class HighTube{
 		this.height = 48;
 	}
 	
-	update(){
-
-	}
 
 	draw(context,tubeSprite,marioArray){
 				

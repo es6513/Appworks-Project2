@@ -609,10 +609,6 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 		startGame();
 	}
 
-	// document.querySelector("#stop").addEventListener("click", function() {
-	// 	start();
-	// });
-
 	// document.querySelector("#start").addEventListener("click", function() {
 	// 	restart();
 	// });
@@ -631,7 +627,6 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 
 		// requestAnimationFrame(animate);
 		// if(keys.zbutton){
-		// 	console.log("123");
 		// }
 
 

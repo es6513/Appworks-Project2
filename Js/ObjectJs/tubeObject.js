@@ -1,5 +1,4 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-// import {mario} from "../marioTest.js";
 
 
 class Tube{
@@ -9,12 +8,8 @@ class Tube{
 		this.height = 32;
 	}
 	
-	update(){
-
-	}
 
 	draw(context,tubeSprite,marioArray){
-				
 		if(marioArray.pos.x < 450 ){
 			tubeSprite.drawSprite("tube",context,this.pos.x,this.pos.y);
 		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000){
@@ -22,7 +17,6 @@ class Tube{
 		}else if(marioArray.pos.x >= 5000 ){
 			tubeSprite.drawSprite("tube",context,this.pos.x  - 4550 ,this.pos.y);
 		}
-	
 	}
 }
 

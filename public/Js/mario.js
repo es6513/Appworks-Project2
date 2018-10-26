@@ -1,4 +1,4 @@
-import {keys,keyup,keydown} from "../Js/keyEvent.js";
+import {keys,keydown} from "../Js/keyEvent.js";
 
 let c = document.querySelector("#cvs").getContext("2d");
 

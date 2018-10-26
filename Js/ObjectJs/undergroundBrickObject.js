@@ -9,10 +9,6 @@ class UndergroundBrick{
 		this.height = 16;
 	}
 	
-	update(){
-
-	}
-
 	draw(context,undergroundBrickSprite,marioArray){
 				
 		if(marioArray.pos.x < 450 ){
