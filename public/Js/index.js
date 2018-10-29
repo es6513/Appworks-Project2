@@ -22,20 +22,14 @@ import {MushroomBrick} from "../Js/ObjectJs/mushroomBrickObject.js";
 import {FlowerBrick} from "../Js/ObjectJs/flowerBrickObject.js";
 import {Flower} from "../Js/ObjectJs/flowerObject.js";
 import {Mushroom} from "../Js/ObjectJs/mushroomObject.js";
-
-
 import {keys} from "../Js/keyEvent.js";
 let snippet = new Array();
 let firesnippet = new Array();
 
-
 let fps = 100;
-
-// window.onload = startGame;
 
 // -------------------音效--------------------
 let backgroundMusic = new Audio("../music/TitleBGM.mp3");
-
 let undergroundMuscic = new Audio("../music/underworld.mp3")
 let powerupSound = new Audio("/music/maro-powerup-sound.wav");
 
@@ -615,8 +609,6 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
   
 	//--------------------遊戲控制流程-----------------------
 	
-
-
 	function animate() {
 		// setTimeout(function() {
 		// requestAnimationFrame(animate);
@@ -624,11 +616,6 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 		// 	// your draw() stuff goes here
 
 		// }, 1000 / fps)
-
-		// requestAnimationFrame(animate);
-		// if(keys.zbutton){
-		// }
-
 
 		// ------------密技區----------
 		if(keys.zbutton){
@@ -695,19 +682,8 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 
 		// --------end of 音樂播放----------------
 
-
 		let context = myGameArea.context;
 		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-
-		// -----------------文字區--------------------------
-
-
-	
-
-
-		// -----------------end of 文字區-----------------
-
-
 
 		for(let i = 0;i < marioArray.length;i += 1){
 			if(	marioArray[i].pos.x < 450){
@@ -748,7 +724,6 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 			// }
 		}
 
-
 		// --------------------怪物區---------------------
 		for(let j = 0;j < turtleArray.length;j += 1){
 			turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
@@ -762,8 +737,7 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 				break;
 			}
 		}	
-		
-				
+						
 		for(let j = 0;j < goombaArray.length;j += 1){
 			goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
 			goombaArray[j].update(tubeJson,highTubeJson,highestTubeJson,turtleArray,marioArray[0],screen,oddBrickJson);
@@ -804,12 +778,7 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 
 		// ---------------end of 障礙區-----------------
 
-
-	
-
-
 		//--------------終點物件-------------------
-
 
 		for(let j = 0;j < poleArray.length;j += 1){
 			poleArray[j].draw(context,poleSprite,marioArray[0]);
@@ -825,7 +794,6 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 			castleArray[j].draw(context,castleSprite,marioArray[0]);
 			castleArray[j].update(marioArray[0]);
 		}	
-
 
 		//--------------end   終點物件-------------------
 
@@ -884,7 +852,6 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 			// } 
 		}	
 	
-
 		for(let j = 0;j < mushroomBrickArray.length;j += 1){
 			mushroomBrickArray[j].draw(context,mushroomBrickSprite,marioArray[0]);
 			mushroomBrickArray[j].update(marioArray[0],mushroomArray,mushroomBrickArray);
@@ -895,17 +862,13 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 			flowerBrickArray[j].update(marioArray[0],flowerArray,flowerBrickArray);
 		}	
 
-
 		for(let j = 0;j < questionBrickArray.length;j += 1){
 			questionBrickArray[j].draw(context,questionBrickSprite,marioArray[0]);
 			questionBrickArray[j].update(marioArray[0],flycoinArray,questionBrickArray);
 		}	
 
-
 		//-----------------end of 各種磚塊------------------
 
-		
-	
 		for(let j = 0;j < marioArray.length;j += 1){
 			marioArray[j].draw(context, marioSpriteSet,
 				screen,fireballSprite,
@@ -921,7 +884,6 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 			highestTubeArray[j].update(marioArray[0]);
 		}	
 
-
 		for(let j = 0;j < undergroundTubeArray.length;j += 1){
 			undergroundTubeArray[j].draw(context,undergroundTubeSprite,marioArray[0]);
 			undergroundTubeArray[j].update(marioArray[0]);
@@ -930,13 +892,9 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 		for(let j = 0;j < undergroundBrickArray.length;j += 1){
 			undergroundBrickArray[j].draw(context,undergroundBrickSprite,marioArray[0]);
 			undergroundBrickArray[j].update(marioArray[0]);
-		}	
-
-			
+		}			
 		
-		// 當馬力歐跑一定的距離之後，開始撥音樂
 	};
-	// animate();
 	startGame();
 });
 

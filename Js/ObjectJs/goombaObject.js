@@ -182,7 +182,7 @@ class Goomba{
 			&& !marioArray.willDie 
 			&& !marioArray.underGround
 			&& marioArray.speed.y > 0 
-			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
@@ -201,7 +201,7 @@ class Goomba{
 			&& marioArray.canmoveFromUnder
 			&& !marioArray.underGround
 			&& marioArray.speed.y > 0 
-			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{

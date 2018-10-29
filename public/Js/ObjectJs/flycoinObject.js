@@ -34,7 +34,7 @@ class Flycoin{
 			this.previousY = this.pos.y;
 			this.previousX = this.pos.x;
 		}		
-		// console.log(this.previousY - this.width * 4);
+
 		if(this.pos.y == this.previousY - this.width * 6){
 			this.speed.y *= -1;
 		}

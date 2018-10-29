@@ -23,7 +23,7 @@ class BadPlant{
 		];
 	}
 	
-	update(tubeJson,highTubeJson,highestTubeJson,marioArray,screen){
+	update(marioArray){
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y

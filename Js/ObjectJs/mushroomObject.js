@@ -13,17 +13,10 @@ class Mushroom{
 		this.onGround = false;
 		this.previousY;
 		this.previousX;
-		this.rightBoundX;
 		this.appear = false;
 	}
 	
 	update(marioArray,screen,questionBrickArray,brickJson,oddBrickJson,tubeJson,highTubeJson,highestTubeJson){
-		// X 軸判定要再調整一下
-		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
-		//	&& shape.pos.x < this.pos.x + this.width 右
-		//	&& shape.pos.y + shape.height > this.pos.y 上
-		//	&& shape.pos.y < this.pos.y + this.height 下
-
 
 		if(!this.appear){
 			this.previousY = this.pos.y;
@@ -43,28 +36,9 @@ class Mushroom{
 			this.pos.x += this.speed.x;
 		}
 
-		// brickJson.Pos[0].ranges.forEach(([x,y])=>{
-		// 	if(!this.onGround && this.pos.y <= this.previousY - this.height 
-		// 		&& this.pos.x < x + brickJson.width + 16 ){
-		// 		this.pos.x += this.speed.x;
-		// 	}
-		// 	// //落地
-		// 	// if( this.pos.x >= x + brickJson.width){
-		// 	// 	this.pos.y += this.speed.y;
-		// 	// }
-		// });
-
 		if( this.pos.x >=  this.previousX + this.width*5){
 			this.pos.y += this.speed.y;
 		}
-
-		// for(let i = 0; i < questionBrickArray.length;i += 1){
-		// 	if(this.pos.x < questionBrickArray[i].pos.x){
-		// 		this.rightBoundX = 
-		// 	}
-		// }
-
-
 
 		//----------------end 往右邊移動-----------------
 
@@ -79,7 +53,6 @@ class Mushroom{
 				this.speed.x *= -1;
 			}
 		});
-
 
 		// ----------------Case 2 : tube-----------------
 		tubeJson.Pos[0].ranges.forEach(([x,y])=>{
@@ -107,8 +80,6 @@ class Mushroom{
 			}
 		});	
 
-
-
 		//-----------------香菇在地面上的移動-----------
 		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
 			if(this.pos.x < x2 * 16 + screen.width
@@ -131,8 +102,6 @@ class Mushroom{
 				this.speed.y = 2;
 				this.pos.y += this.speed.y;
 			}
-			//-------------懸崖 bug  掉下的速度要再調整 ，
-			//蘑菇在撞擊後會直接穿越地板(應該可以像怪物一樣，用 facedirection 解決)------
 
 			if(this.pos.y >= y2 * screen.height + 1600){
 				this.show = false;
@@ -155,8 +124,6 @@ class Mushroom{
 				marioArray.changeToBig = true;
 			}
 		}
-		//16是金幣的寬度， EX : 160 < marioArray.pos < 176
-		// 前兩行的 +8 +10 => 讓判定範圍更精準，並非真正碰撞
 	}
 
 	mushroomPowerSound(){

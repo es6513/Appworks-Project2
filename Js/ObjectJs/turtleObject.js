@@ -335,7 +335,7 @@ class Turtle{
 			&& !marioArray.falling	
 			&& !marioArray.willDie  
 			&& !this.quickToDie && marioArray.speed.y > 0 
-			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
@@ -356,7 +356,7 @@ class Turtle{
 			&& !marioArray.falling	
 			&& !this.isDie 
 			&& marioArray.speed.y > 0 
-			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
@@ -375,7 +375,7 @@ class Turtle{
 			&& !marioArray.falling	
 			&& !this.isDie 
 			&& marioArray.speed.y > 0 
-			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{

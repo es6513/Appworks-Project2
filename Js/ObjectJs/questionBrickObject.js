@@ -19,14 +19,9 @@ class QuestionBrick{
 	}
 	
 	update(marioArray,flycoinArray,questionBrickArray){
-
-		// X 軸判定要再調整一下
 		//---------------小馬力歐-----------------
 		// -------------下方----------------
 
-		// if(marioArray.speed.y > 0 && marioArray.isOnBrick){
-		// 	marioArray.isOnBrick = false;
-		// }
 		if(flycoinArray.length != 0){
 			for(let j = 0;j < questionBrickArray.length;j += 1){
 				if(questionBrickArray[j].isUseLess == true){
@@ -34,26 +29,19 @@ class QuestionBrick{
 				}
 			}
 		}		
-
-		// if(marioArray.pos.x + marioArray.width   > this.pos.x 
-		// && marioArray.pos.x < this.pos.x + this.width ){
-		
-		// }
 		// -------------小馬力歐--------------------
 	
-
 		if(!marioArray.isBigMario 
 			&& !marioArray.isFireMario
 			&& !marioArray.isDie 
 			&& !marioArray.underGround
 			&& !marioArray.willDie){
 				
-
 			// -------------下方-----------------------
 			
 			if(marioArray.speed.y < 0 
-			&& marioArray.pos.y + marioArray.height/2 >= this.pos.y  //Mario 頭頂大於磚塊上緣
-			&& marioArray.pos.y + marioArray.height/2 <= this.pos.y + this.height  //Mario 頭頂小於磚塊下緣
+			&& marioArray.pos.y + marioArray.height / 2 >= this.pos.y  //Mario 頭頂大於磚塊上緣
+			&& marioArray.pos.y + marioArray.height / 2 <= this.pos.y + this.height  //Mario 頭頂小於磚塊下緣
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			){
@@ -64,31 +52,33 @@ class QuestionBrick{
 				marioArray.pos.y = this.pos.y ;
 				marioArray.speed.y = 0;
 				marioArray.isBottomBrick = true;
-				marioArray.isOnBrick = false;
 			}
 
 			// -------------上方----------------
 	
 				//目前用 lowzerzone 控制還有點問題
+				// lowzerzone 第一段為 馬力歐的頭頂大於磚塊的下緣
+				// lowzerzone 第二段為 馬力歐腳底小於磚塊上緣
 
 			if(marioArray.pos.x + marioArray.width > this.pos.x  
 				&& marioArray.pos.x < this.pos.x + this.width 
-				&& marioArray.pos.y + marioArray.height/2  >= this.pos.y + this.height) {
+				&& marioArray.pos.y + marioArray.height / 2  >= this.pos.y + this.height) {
 					this.lowerzone = true;
 			}else if(marioArray.pos.x + marioArray.width > this.pos.x  
 				&& marioArray.pos.x < this.pos.x + this.width 
-				&& marioArray.pos.y + marioArray.height/2  < this.pos.y ){
+				&& marioArray.pos.y + marioArray.height / 2  < this.pos.y ){
 					this.lowerzone = false;
 			}
-			
+
 			
 			// if(marioArray.speed.y == 0 && marioArray.isJump){
 			// 	marioArray.prvioxusY = marioArray.pos.y
 			// }else if(marioArray.isOnBrick || marioArray.onTube || marioArray.isOnGround){
 			// 	marioArray.prvioxusY = marioArray.pos.y
 			// }
-
-			if(!this.lowerzone  && marioArray.speed.y > 0 
+			if(!this.lowerzone  
+			&& !marioArray.underGround  
+			&& marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.width > this.pos.x  
 			&& marioArray.pos.x < this.pos.x + this.width 
 			){
@@ -96,7 +86,6 @@ class QuestionBrick{
 					marioArray.pos.y = this.pos.y - marioArray.height;
 					marioArray.speed.y = 0;
 					marioArray.isOnBrick = true;
-					marioArray.isBottomBrick = false;
 					marioArray.isJump = false;
 				}
 			}
@@ -116,52 +105,49 @@ class QuestionBrick{
 			// 	marioArray.stopX = false;
 			// }
 		}
-	
-
 
 		//---------------大馬力歐-----------------
 
-		
 		if((marioArray.isBigMario || marioArray.isFireMario )
 			&& !marioArray.underGround	
 			&& !marioArray.isDie 
 			&& !marioArray.willDie ){
 		
-				// -------------下方----------------
+			// -------------下方----------------
 
-				if(marioArray.speed.y < 0 
+			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
-				&& marioArray.pos.y  <= this.pos.y + this.height
+				&& marioArray.pos.y <= this.pos.y + this.height
 				&& marioArray.pos.x + marioArray.width > this.pos.x 
-				//判定的bug 用 width/2可以較精確判定(還是會有穿越的情形)
 				&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				if(!this.isUseLess){
 					this.coinBrickSound();
 				}
 				this.isUseLess = true;
-				marioArray.pos.y = this.pos.y + 16 ;
+				marioArray.pos.y = this.pos.y + this.height ;
 				marioArray.speed.y = 0;
 				marioArray.isBottomBrick = true;
 			}
 	
 			// -------------上方----------------
-
 			if(marioArray.pos.x + marioArray.width > this.pos.x  
 				&& marioArray.pos.x < this.pos.x + this.width 
-				&& marioArray.pos.y  >= this.pos.y + this.height) {
+				&& marioArray.pos.y >= this.pos.y + this.height) {
 					this.lowerzone = true;
 			}else if(marioArray.pos.x + marioArray.width > this.pos.x  
 				&& marioArray.pos.x < this.pos.x + this.width 
-				&& marioArray.pos.y + marioArray.height/2  < this.pos.y ){
+				&& (marioArray.pos.y + marioArray.height <= this.pos.y ||
+					marioArray.pos.y + marioArray.height - marioArray.speed.y <= this.pos.y)){
 					this.lowerzone = false;
 			}
-
-			if(!this.lowerzone && marioArray.speed.y > 0 
+			if(!this.lowerzone
+				&& !marioArray.underGround  
+				&& marioArray.speed.y > 0 
 				&& marioArray.pos.x + marioArray.width  > this.pos.x  
 				&& marioArray.pos.x < this.pos.x + this.width 
 			){				
-				if(marioArray.pos.y >= this.pos.y - marioArray.height){
+				if(marioArray.pos.y > this.pos.y - marioArray.height){
 					marioArray.pos.y = this.pos.y - marioArray.height;
 					marioArray.speed.y = 0;
 					marioArray.isOnBrick = true;
@@ -169,9 +155,8 @@ class QuestionBrick{
 				}
 			}
 		}
-
 	}
-
+	
 	flashing(){
 		this.frameIndex = ++this.frameIndex % 36 ;
 		return this.framesRun[this.frameIndex];
@@ -182,30 +167,14 @@ class QuestionBrick{
 		brickSound.play();
 	}
 
-
-
 	draw(context,questionBrickSprite,marioArray){
-		if(!this.isUseLess){
 			if(marioArray.pos.x < 450){
-				questionBrickSprite.drawSprite(this.flashing(),context,this.pos.x,this.pos.y);
+				questionBrickSprite.drawSprite(!this.isUseLess?this.flashing():"uselessBrick",context,this.pos.x,this.pos.y);
 			}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 ){
-				questionBrickSprite.drawSprite(this.flashing(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+				questionBrickSprite.drawSprite(!this.isUseLess?this.flashing():"uselessBrick",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
 			}else if(marioArray.pos.x >= 5000 ){
-				questionBrickSprite.drawSprite(this.flashing(),context,this.pos.x  - 4550 ,this.pos.y);
-			}
-		}
-
-		if(this.isUseLess){
-			if(marioArray.pos.x < 450){
-				questionBrickSprite.drawSprite("uselessBrick",context,this.pos.x,this.pos.y);
-			}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 ){
-				questionBrickSprite.drawSprite("uselessBrick",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-			}else if(marioArray.pos.x >= 5000 ){
-				questionBrickSprite.drawSprite("uselessBrick",context,this.pos.x  - 4550 ,this.pos.y);
-			}
-		}
-		
-	
+				questionBrickSprite.drawSprite(!this.isUseLess?this.flashing():"uselessBrick",context,this.pos.x  - 4550 ,this.pos.y);
+			}	
 	}
 }
 
