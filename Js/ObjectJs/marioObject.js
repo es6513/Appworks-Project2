@@ -91,14 +91,10 @@ class Mario{
 		];
 
 		this.BacktoSmallFramesRunArray = [
-			"BigOpacity","BigOpacity","BigOpacity",
-			"BigOpacity","BigOpacity","BigOpacity",
-			"BigOpacity","BigOpacity","BigOpacity",	
-			"BigOpacity","BigOpacity","BigOpacity",	
-			"SmallOpacity","SmallOpacity","SmallOpacity",
-			"SmallOpacity","SmallOpacity","SmallOpacity",
-			"SmallOpacity","SmallOpacity","SmallOpacity",
-			"SmallOpacity","SmallOpacity","SmallOpacity"
+			"BigOpacity","BigOpacity","BigOpacity","BigOpacity","BigOpacity","BigOpacity",
+			"BigOpacity","BigOpacity","BigOpacity",	"BigOpacity","BigOpacity","BigOpacity",	
+			"SmallOpacity","SmallOpacity","SmallOpacity","SmallOpacity","SmallOpacity","SmallOpacity",
+			"SmallOpacity","SmallOpacity","SmallOpacity","SmallOpacity","SmallOpacity","SmallOpacity"
 		];
 
 		this.ChangeBigFramesRunArray = [
@@ -107,7 +103,8 @@ class Mario{
 			"Bmario","Bmario","Bmario","Bmario","Bmario","Bmario","Bmario","Bmario","Bmario"
 		];
 
-		this.BigFramesRunArray = ["BrunRight-1","BrunRight-1","BrunRight-1",
+		this.BigFramesRunArray = [
+			"BrunRight-1","BrunRight-1","BrunRight-1",
 			"BrunRight-2","BrunRight-2","BrunRight-2",
 			"BrunRight-3","BrunRight-3","BrunRight-3",
 			"Bmario"
@@ -119,246 +116,24 @@ class Mario{
 		];
 		
 		this.BacktoBigFramesRunArray = [
-			"FireOpacity","FireOpacity","FireOpacity",
-			"FireOpacity","FireOpacity","FireOpacity",
-			"FireOpacity","FireOpacity","FireOpacity",
-			"FireOpacity","FireOpacity","FireOpacity",
-			"BigOpacity","BigOpacity","BigOpacity",
-			"BigOpacity","BigOpacity","BigOpacity",
-			"BigOpacity","BigOpacity","BigOpacity",	
-			"BigOpacity","BigOpacity","BigOpacity",	
+			"FireOpacity","FireOpacity","FireOpacity","FireOpacity","FireOpacity","FireOpacity",
+			"FireOpacity","FireOpacity","FireOpacity","FireOpacity","FireOpacity","FireOpacity",
+			"BigOpacity","BigOpacity","BigOpacity","BigOpacity","BigOpacity","BigOpacity",
+			"BigOpacity","BigOpacity","BigOpacity",	"BigOpacity","BigOpacity","BigOpacity",	
 		];
 
-		this.FireFramesRunArray = ["FrunRight-1","FrunRight-1","FrunRight-1",
+		this.FireFramesRunArray = [
+			"FrunRight-1","FrunRight-1","FrunRight-1",
 			"FrunRight-2","FrunRight-2","FrunRight-2",
 			"FrunRight-3","FrunRight-3","FrunRight-3",
 			"Fmario"
 		];
 	}
 
-	update(screen,tubeJson,highTubeJson,highestTubeJson,
-		poleJson,castleJson,flagArray,
-		brickJson,oddBrickJson,questionBrickJson,
-		flowerBrickJson,mushroomBrickJson,undergroundTubeJson,undergroundBrickJson){
+	update(screen,tubeJson,highestTubeJson,
+		poleJson,castleJson,flagArray,undergroundTubeJson,undergroundBrickJson){
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
-		// // 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
-		// ------------ 解決各個磚塊橫向穿越的問題---------------
-		questionBrickJson.Pos[0].ranges.forEach(([x,y])=>{
-			if(!this.underGround 
-				&& this.isJump 
-				&& !this.isBigMario 
-				&& !this.isFireMario
-				&& this.pos.x == x + questionBrickJson.width 
-				&& this.pos.y + this.height  >= y  
-				&& this.pos.y + this.height / 2 <= y + questionBrickJson.height)
-			{
-				this.pos.x = x + questionBrickJson.width ;
-				this.stopX = true;
-				this.touchBrickBorderByJumping = true;
-			}
-
-			if(!this.underGround 
-				&& this.isJump 
-				&& (this.isBigMario || this.isFireMario)
-				&& this.pos.x == x + questionBrickJson.width 
-				&& this.pos.y + this.height  >= y
-				&& this.pos.y  <= y + questionBrickJson.height)
-			{
-				this.pos.x = x + questionBrickJson.width ;
-				this.stopX = true;
-				this.touchBrickBorderByJumping = true;
-			} 
-
-			if(!this.underGround 
-				&& this.isJump
-				&& !this.isBigMario 
-				&& !this.isFireMario
-				&& this.pos.x + this.width == x 
-				&& this.pos.y + this.height  >= y
-				&& this.pos.y + this.height / 2 <= y + questionBrickJson.height)
-			{
-				this.pos.x = x -this.width ;
-				this.stopX = true;
-				this.touchBrickBorderByJumping = true;
-			}
-
-			if(!this.underGround 
-				&& this.isJump 
-				&& (this.isBigMario || this.isFireMario)
-				&& this.pos.x + this.width == x 
-				&& this.pos.y + this.height  >= y
-				&& this.pos.y  <= y + questionBrickJson.height)
-			{
-				this.pos.x = x -this.width ;
-				this.stopX = true;
-				this.touchBrickBorderByJumping = true;
-			} 
-
-			if(this.touchBrickBorderByJumping && this.isOnGround){
-				this.stopX = false;
-				this.touchBrickBorderByJumping = false;
-			} // BUG 若鄰近水管太近的時候，落地後剛好在水管旁邊，有機會穿越過去
-
-			// if( this.pos.x + this.width == x
-			// 	&& this.pos.y + this.height > y 
-			// 	&& this.pos.y + this.height / 2  < y + questionBrickJson.height)
-			// { 
-			// 	this.pos.x = x + questionBrickJson.width ;
-			// 	// this.stopX = true;  //控制跑回來會上去的問題
-			// }	
-
-			// if( this.pos.x  == x + questionBrickJson.width
-			// 	&& this.pos.y + this.height > y 
-			// 	&& this.pos.y + this.height / 2  < y + questionBrickJson.height)
-			// { 
-			// 	this.pos.x = x + questionBrickJson.width ;
-			// 	// this.stopX = true;  //控制跑回來會上去的問題
-			// }	
-
-			// if(!this.isOnBrick && this.stopX && this.pos.x + this.width == x && 
-			// 	(keys.left || keys.right)){
-			// 	this.stopX = false;
-			// }
-
-			// if(!this.isOnBrick && this.stopX && 	this.pos.x == x + questionBrickJson.width && 
-			// 	(keys.left || keys.right)){
-			// 	this.stopX = false;   //這行會造成水管可以穿越 BUG 
-			// }
-		});
-
-		brickJson.Pos[0].ranges.forEach(([x,y])=>{
-
-			if(!this.underGround 
-				&& this.isJump
-				&& !this.isBigMario 
-				&& !this.isFireMario
-				&& this.pos.x == x + brickJson.width 
-				&& this.pos.y + this.height  >= y
-				&& this.pos.y + this.height / 2 <= y + brickJson.height)
-			{
-				this.pos.x = x + brickJson.width ;
-				this.stopX = true;
-				this.touchBrickBorderByJumping = true;
-			}
-
-			if(!this.underGround 
-				&& this.isJump 
-				&& (this.isBigMario || this.isFireMario)
-				&& this.pos.x == x + brickJson.width 
-				&& this.pos.y + this.height  >= y
-				&& this.pos.y  <= y + brickJson.height)
-			{
-				this.pos.x = x + brickJson.width ;
-				this.stopX = true;
-				this.touchBrickBorderByJumping = true;
-			} 
-
-			if(!this.underGround 
-				&& this.isJump
-				&& !this.isBigMario 
-				&& !this.isFireMario
-				&& this.pos.x + this.width == x 
-				&& this.pos.y + this.height  >= y
-				&& this.pos.y + this.height / 2 <= y + brickJson.height)
-			{
-				this.pos.x = x -this.width ;
-				this.stopX = true;
-				this.touchBrickBorderByJumping = true;
-			}
-
-			
-			if(!this.underGround 
-				&& this.isJump 
-				&& (this.isBigMario || this.isFireMario)
-				&& this.pos.x + this.width == x 
-				&& this.pos.y + this.height  >= y
-				&& this.pos.y  <= y + brickJson.height)
-			{
-				this.pos.x = x -this.width ;
-				this.stopX = true;
-				this.touchBrickBorderByJumping = true;
-			} 
-
-			if(this.touchBrickBorderByJumping && this.isOnGround){
-				// this.stopX = false;
-				this.touchBrickBorderByJumping = false;
-			}
-
-
-
-			// if(!this.isOnBrick && this.stopX && this.pos.x + this.width == x && 
-			// 	(keys.left || keys.right)){
-			// 	// this.speed.x = 4;
-			// 	this.stopX = false;
-			// }
-
-			// if(!this.isOnBrick && this.stopX && 	this.pos.x == x + brickJson.width 
-			// 	&& !this.isOnGround 
-			// 	&& (keys.left || keys.right)){
-			// 	// this.speed.x = 4;
-			// 	this.stopX = false; //這行會造成水管可以穿越 BUG 
-			// }
-
-			//-----------------end  測試中------------------	
-		});
-
-		flowerBrickJson.Pos[0].ranges.forEach(([x,y])=>{
-			if(!this.underGround && this.isJump
-				&& this.pos.x == x + brickJson.width 
-					&& this.pos.y + this.height  >= y
-					&& this.pos.y + this.height / 2 <= y + flowerBrickJson.height)
-			{
-				this.pos.x = x + flowerBrickJson.width ;
-				this.stopX = true;
-				this.touchBrickBorderByJumping = true;
-			}
-
-			if(!this.underGround && this.isJump
-				&& this.pos.x + this.width == x 
-					&& this.pos.y + this.height  >= y
-					&& this.pos.y + this.height / 2 <= y + flowerBrickJson.height)
-			{
-				this.pos.x = x -this.width ;
-				this.stopX = true;
-				this.touchBrickBorderByJumping = true;
-			}
-
-			if(this.touchBrickBorderByJumping && this.isOnGround){
-				this.stopX = false;
-				this.touchBrickBorderByJumping = false;
-			}
-			
-		});	
-
-		mushroomBrickJson.Pos[0].ranges.forEach(([x,y])=>{
-			if(!this.underGround && this.isJump
-				&& this.pos.x == x + brickJson.width 
-					&& this.pos.y + this.height  >= y
-					&& this.pos.y + this.height / 2 <= y + mushroomBrickJson.height)
-			{
-				this.pos.x = x + mushroomBrickJson.width ;
-				this.stopX = true;
-				this.touchBrickBorderByJumping = true;
-			}
-
-			if(!this.underGround && this.isJump
-				&& this.pos.x + this.width == x 
-					&& this.pos.y + this.height  >= y
-					&& this.pos.y + this.height / 2 <= y + mushroomBrickJson.height)
-			{
-				this.pos.x = x -this.width ;
-				this.stopX = true;
-				this.touchBrickBorderByJumping = true;
-			}
-
-			if(this.touchBrickBorderByJumping && this.isOnGround){
-				this.stopX = false;
-				this.touchBrickBorderByJumping = false;
-			}
-
-		});
-
-		//------------ end of 解決各個磚塊橫向穿越的問題---------------
+		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
 
 		// ---------無敵以及死亡的處理---------
 	
@@ -390,8 +165,6 @@ class Mario{
 		// }
 
 		// End 用來控制大馬力歐變回小馬力歐的無敵狀態
-
-		// ------End 控制馬力歐變大之後的高度------
 
 		// -------控制馬力歐移動-----
 
@@ -483,11 +256,9 @@ class Mario{
 				this.isSquat = false;
 			}			
 
-			//-----------END OF 控制蹲下---------------------
-
+		//-----------END OF 控制蹲下---------------------
 
 		 // --------跳躍的設定 ---------------
-
 
 			if(!this.canPlayPassMusic 
 				&& !this.backToBig 
@@ -576,113 +347,14 @@ class Mario{
 					this.goWrongTube = false;
 				} //從水管出來之後將所有的 flag 重設為預設值
 
-				
 				if(this.goThroughTube && 	this.goWrongTube && this.isOnGround){
 					this.PowerDownSound();
 					this.pos.x = 552;
 					this.goThroughTube = false;
 					this.getDestinationTube = true;
 				}
-					
 				// -----------end 下錯水管---------------
-
-				//----------小馬力歐過水管-----------
-				if( this.pos.x + this.width == x
-					&& this.pos.y + this.height > y
-					&& this.pos.y + this.height / 2 < y + tubeJson.height )
-				{ //從左側碰到水管
-					this.pos.x = x - this.width ;
-					this.stopX = true;  //控制跑回來會回到水管上去的問題
-					this.stopBesideTube = true;
-					// this.speed.x = 0;
-					if(keys.left && !keys.right){
-						// this.speed.x = 4;
-						this.stopX = false;
-					}
-				}
-				else if(this.pos.x == x + tubeJson.width
-					&& this.pos.y + this.height > y
-					&& this.pos.y + this.height / 2 < y + tubeJson.height )
-				{	// 從右側碰到水管
-					this.pos.x = x + tubeJson.width ;
-					this.stopX = true;
-					this.stopBesideTube = true;
-					// this.speed.x = 0;
-					if(keys.right && !keys.left){
-						this.stopX = false;
-					}
-				}
-				else if(this.pos.y + this.height < y  && keys.left 
-					|| this.pos.y + this.height < y  && keys.right){
-					this.stopX = false;
-				} //修正會斜向穿越水管的問題，讓馬力歐身高高過它才可以移動。
-				else {
-					this.stopBesideTube = false;  // 為了讓水管跟 oddbrick 卡住時不能移動
-				}
-				// ------end of 小馬力歐過水管---------
-
-				// ------------控制站在水管上--------------
-				if(this.speed.y > 0 
-					&& this.pos.x + this.width > x
-					&& this.pos.x < x + tubeJson.width ){
-					if(this.pos.y >= y - this.height){
-						this.isJump = false;
-						this.isOnGround = false; //為了控制從水管上下來採怪物不會死掉
-						this.onTube = true;
-						if(!this.goWrongTube && !this.getDestinationTube){
-							this.pos.y = y - this.height;	
-						}
-						this.speed.y = 0;
-					}	
-					this.speed.y += 0.5;
-				}					
-				// ------------end of 控制站在水管上-----------------
-			});
-
-			highTubeJson.Pos[0].ranges.forEach(([x,y])=>{
 				
-				//----------小馬力歐過水管-----------
-				if( this.pos.x + this.width == x
-					&& this.pos.y + this.height > y
-					&& this.pos.y + this.height / 2 < y + highTubeJson.height )
-				{ //從左側碰到水管
-					this.pos.x = x - this.width ;
-					this.stopX = true;
-					if(keys.left && !keys.right){
-						this.stopX = false;
-					}
-				}
-				else if(this.pos.x == x + highTubeJson.width
-					&& this.pos.y + this.height > y
-					&& this.pos.y + this.height / 2 < y + highTubeJson.height )
-				{	// 從右側碰到水管
-					this.pos.x = x + highTubeJson.width ;
-					this.stopX = true;				
-					if(keys.right && !keys.left){
-						this.stopX = false;
-					}
-				}
-				else if(this.pos.y + this.height  < y && keys.left 
-					|| this.pos.y + this.height < y  && keys.right){;
-					this.stopX = false;
-				} //修正會斜向穿越水管的問題，讓馬力歐身高高過它才可以移動。
-
-				// ------end of 小馬力歐過水管---------
-
-				// ------------控制站在水管上--------------
-				if(this.speed.y > 0 
-					&& this.pos.x + this.width > x
-					&& this.pos.x < x + highTubeJson.width ){
-					if(this.pos.y >= y - this.height){
-						this.isJump = false;
-						this.onTube = true;
-						this.isOnGround = false; //為了控制從水管上下來採怪物不會死掉
-						this.pos.y = y - this.height;
-						this.speed.y = 0;
-					}	
-					this.speed.y += 0.5;
-				}					
-				// ------------end of 控制站在水管上-----------------
 			});
 
 			highestTubeJson.Pos[0].ranges.forEach(([x,y])=>{
@@ -706,58 +378,7 @@ class Mario{
 				}		
 			
 				// --------------end  下水管-----------------
-
-				//----------小馬力歐過水管-----------
-				if( this.pos.x + this.width == x
-					&& this.pos.y + this.height > y
-					&& this.pos.y + this.height / 2 < y + highestTubeJson.height )
-				{ //從左側碰到水管
-					this.pos.x = x - this.width ;
-					this.stopX = true;
-					// this.speed.x = 0;
-					if(keys.left && !keys.right){
-						// this.speed.x = 4;
-						this.stopX = false;
-					}
-				}
-				else if(this.pos.x == x + highestTubeJson.width
-					&& this.pos.y + this.height > y
-					&& this.pos.y + this.height / 2 < y + highestTubeJson.height )
-				{	// 從右側碰到水管
-					
-					this.pos.x = x + highestTubeJson.width ;
-					this.stopX = true;
-					// this.speed.x = 0;
 			
-					if(keys.right && !keys.left){
-					// this.speed.x = 4;
-						this.stopX = false;
-					}
-				}
-				else if(this.pos.y + this.height < y && keys.left 
-					|| this.pos.y + this.height < y  && keys.right){ 
-					this.stopX = false;
-				} //修正會斜向穿越水管的問題，讓馬力歐身高高過它才可以移動。
-
-				// ------end of 小馬力歐過水管---------
-
-				// ------------控制站在水管上--------------
-				if(this.speed.y > 0 
-					&& this.pos.x + this.width > x
-					&& this.pos.x < x + highestTubeJson.width ){
-					if(this.pos.y >= y - this.height){
-						this.isJump = false;
-						this.onTube = true;
-						this.isOnGround = false; //為了控制從水管上下來採怪物不會死掉
-						if(!this.goThroughTube && !this.getDestinationTube){
-							this.pos.y = y - this.height;
-						}			
-							
-						this.speed.y = 0;
-					}	
-					this.speed.y += 0.5;
-				}					
-				// ------------end of 控制站在水管上-----------------
 			});
 		}
 
@@ -880,57 +501,6 @@ class Mario{
 	
 		//-------------------end of下水道---------------------
 
-		// ---------------控制 oddBrick 障礙---------------
-
-		if(!this.isDie && this.isRunning && !this.underGround){
-			oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{	
-				//----------小馬力歐-----------
-
-				//-----------bug -this.speed.y 為了在磚塊頂端不能移動
-				if( this.pos.x + this.width == x
-					&& this.pos.y + this.height - this.speed.y > y  
-					&& this.pos.y + this.height / 2  - this.speed.y < y + oddBrickJson.height)
-				{ //從左側碰到
-					this.pos.x = x - this.width ;
-					this.stopX = true;
-					if(!this.stopBesideTube
-						&& keys.left 
-						&& !keys.right){
-						this.stopX = false;
-					}
-				}
-				else if(this.pos.x == x + oddBrickJson.width
-					&& this.pos.y + this.height - this.speed.y > y
-					&& this.pos.y + this.height / 2 - this.speed.y  < y + oddBrickJson.height)
-				{	// 從右側碰到
-					
-					this.pos.x = x + oddBrickJson.width ;
-					this.stopX = true;
-					if( keys.right && !keys.left){
-						this.stopX = false;
-					}
-				}
-
-				// ------end of 小馬力歐---------
-
-				// ------------控制站上--------------
-				if(this.speed.y > 0 
-					&& this.pos.x + this.width > x
-					&& this.pos.x < x + oddBrickJson.width ){
-					if(this.pos.y >= y - this.height){
-						this.onOddbrick = true;
-						this.isJump = false;
-						this.pos.y = y - this.height;
-						this.speed.y = 0;
-					}	
-
-				}					
-				// ------------end of 控制站上-----------------
-			});
-		}
-
-		// ---------------end of 控制 oddBrick 障礙-------
-
 		// ---------------End of 控制磚塊障礙---------------
 
 		// -----------------馬力歐過關---------------------
@@ -1011,7 +581,6 @@ class Mario{
 				this.pos.x = x + 72 - this.width / 2;
 			}
 		});
-
 
 		// End -----走到城堡中間消失-----
 
@@ -1113,7 +682,6 @@ class Mario{
 		let backgroundMusic = new Audio("../music/TitleBGM.mp3");
 		backgroundMusic.play();
 	}
-
 
 	moveRight(){
 		this.pos.x += this.speed.x;

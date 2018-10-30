@@ -16,7 +16,7 @@ class Mushroom{
 		this.appear = false;
 	}
 	
-	update(marioArray,screen,questionBrickArray,brickJson,oddBrickJson,tubeJson,highTubeJson,highestTubeJson){
+	update(marioArray,screen,oddBrickJson,tubeJson,highTubeJson,highestTubeJson){
 
 		if(!this.appear){
 			this.previousY = this.pos.y;

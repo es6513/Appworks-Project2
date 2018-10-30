@@ -1,4 +1,5 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
+import {keys} from "../keyEvent.js";
 
 class FlowerBrick{
 	constructor(){
@@ -19,8 +20,8 @@ class FlowerBrick{
 	}
 	
 	update(marioArray,flowerArray,flowerBrickArray){
-		// X 軸判定要再調整一下
-		//---------------小馬力歐-----------------
+
+		//------------------從磚塊的下方及上方碰到--------------------
 	
 		if(flowerArray.length != 0){
 			for(let j = 0;j < flowerBrickArray.length;j += 1){
@@ -29,6 +30,10 @@ class FlowerBrick{
 				}
 			}
 		}
+
+		//------------------從磚塊的下方及上方碰到--------------------
+
+		//---------------小馬力歐-----------------
 		
 		if(!marioArray.isBigMario 
 			&& !marioArray.isFireMario
@@ -132,6 +137,64 @@ class FlowerBrick{
 				}
 			}
 		}
+
+		//------------------end  從磚塊的下方及上方碰到--------------------
+
+		if(!marioArray.underGround 
+			&& marioArray.isJump
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x == this.pos.x + this.width 
+				&& marioArray.pos.y + marioArray.height  >= this.pos.y
+				&& marioArray.pos.y + marioArray.height / 2 <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x + this.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		}
+		
+		if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& marioArray.pos.x == this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height  >= this.pos.y
+			&& marioArray.pos.y  <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x + this.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		} 
+
+		if(!marioArray.underGround 
+			&& marioArray.isJump
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x + marioArray.width == this.pos.x 
+				&& marioArray.pos.y + marioArray.height  >= this.pos.y
+				&& marioArray.pos.y + marioArray.height / 2 <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x -marioArray.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		}
+
+		if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& marioArray.pos.x + marioArray.width == this.pos.x 
+			&& marioArray.pos.y + marioArray.height  >= this.pos.y
+			&& marioArray.pos.y  <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x - marioArray.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		} 
+
+		if(marioArray.touchBrickBorderByJumping && marioArray.isOnGround){
+			marioArray.stopX = false;
+			marioArray.touchBrickBorderByJumping = false;
+		}	
+
 	}
 
 	flashing(){

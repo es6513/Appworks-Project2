@@ -1,4 +1,5 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
+import {keys} from "../keyEvent.js";
 
 class Brick{
 	constructor(){
@@ -39,6 +40,9 @@ class Brick{
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
+
+		//------------------從磚塊的下方及上方碰到--------------------
+		// -------------小馬力歐--------------------
 
 		if(!marioArray.isBigMario 
 			&& !marioArray.isFireMario 
@@ -140,6 +144,76 @@ class Brick{
 				}
 			}
 		}
+
+		//-------------end 從磚塊的下方及上方碰到------------------
+
+		if(!marioArray.underGround 
+			&& marioArray.isJump
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x == this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height  >= this.pos.y
+			&& marioArray.pos.y + marioArray.height / 2 <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x + this.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		}
+
+		if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& marioArray.pos.x == this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height  >= this.pos.y
+			&& marioArray.pos.y  <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x + this.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		} 
+
+		if(!marioArray.underGround 
+			&& marioArray.isJump
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x + marioArray.width == this.pos.x 
+			&& marioArray.pos.y + marioArray.height  >= this.pos.y
+			&& marioArray.pos.y + marioArray.height / 2 <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x - marioArray.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		}
+
+		
+		if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& marioArray.pos.x + marioArray.width == this.pos.x 
+			&& marioArray.pos.y + marioArray.height  >= this.pos.y
+			&& marioArray.pos.y  <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x -marioArray.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		} 
+
+		if(marioArray.touchBrickBorderByJumping && marioArray.isOnGround){
+			marioArray.stopX = false;
+			marioArray.touchBrickBorderByJumping = false;
+		}
+		// if(!this.isOnBrick && this.stopX && this.pos.x + this.width == x && 
+		// 	(keys.left || keys.right)){
+		// 	// this.speed.x = 4;
+		// 	this.stopX = false;
+		// }
+
+		// if(!this.isOnBrick && this.stopX && 	this.pos.x == x + brickJson.width 
+		// 	&& !this.isOnGround 
+		// 	&& (keys.left || keys.right)){
+		// 	// this.speed.x = 4;
+		// 	this.stopX = false; //這行會造成水管可以穿越 BUG 
+		// }
 
 	}
 

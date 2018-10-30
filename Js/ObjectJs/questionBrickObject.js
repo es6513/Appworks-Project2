@@ -1,4 +1,5 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
+import {keys} from "../keyEvent.js";
 
 class QuestionBrick{
 	constructor(){
@@ -19,7 +20,9 @@ class QuestionBrick{
 	}
 	
 	update(marioArray,flycoinArray,questionBrickArray){
-		//---------------小馬力歐-----------------
+
+		//------------------從磚塊的下方及上方碰到--------------------
+		
 		// -------------下方----------------
 
 		if(flycoinArray.length != 0){
@@ -70,12 +73,6 @@ class QuestionBrick{
 					this.lowerzone = false;
 			}
 
-			
-			// if(marioArray.speed.y == 0 && marioArray.isJump){
-			// 	marioArray.prvioxusY = marioArray.pos.y
-			// }else if(marioArray.isOnBrick || marioArray.onTube || marioArray.isOnGround){
-			// 	marioArray.prvioxusY = marioArray.pos.y
-			// }
 			if(!this.lowerzone  
 			&& !marioArray.underGround  
 			&& marioArray.speed.y > 0 
@@ -131,22 +128,23 @@ class QuestionBrick{
 			}
 	
 			// -------------上方----------------
-			if(marioArray.pos.x + marioArray.width > this.pos.x  
-				&& marioArray.pos.x < this.pos.x + this.width 
+			if(marioArray.pos.x + marioArray.width >= this.pos.x  
+				&& marioArray.pos.x <=this.pos.x + this.width 
 				&& marioArray.pos.y >= this.pos.y + this.height) {
 					this.lowerzone = true;
-			}else if(marioArray.pos.x + marioArray.width > this.pos.x  
-				&& marioArray.pos.x < this.pos.x + this.width 
+			}else if(marioArray.pos.x + marioArray.width >= this.pos.x  
+				&& marioArray.pos.x <= this.pos.x + this.width 
 				&& (marioArray.pos.y + marioArray.height <= this.pos.y ||
 					marioArray.pos.y + marioArray.height - marioArray.speed.y <= this.pos.y)){
 					this.lowerzone = false;
 			}
+
 			if(!this.lowerzone
 				&& !marioArray.underGround  
 				&& marioArray.speed.y > 0 
 				&& marioArray.pos.x + marioArray.width  > this.pos.x  
 				&& marioArray.pos.x < this.pos.x + this.width 
-			){				
+			){	
 				if(marioArray.pos.y > this.pos.y - marioArray.height){
 					marioArray.pos.y = this.pos.y - marioArray.height;
 					marioArray.speed.y = 0;
@@ -155,6 +153,90 @@ class QuestionBrick{
 				}
 			}
 		}
+
+
+		//-------------end 從磚塊的下方及上方碰到------------------
+
+		if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x == this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height  >= this.pos.y  
+			&& marioArray.pos.y + marioArray.height / 2 <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x + this.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		}
+
+		if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& marioArray.pos.x == this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height  >= this.pos.y
+			&& marioArray.pos.y  <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x + this.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		} 
+
+		if(!marioArray.underGround 
+			&& marioArray.isJump
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x + marioArray.width == this.pos.x 
+			&& marioArray.pos.y + marioArray.height  >= this.pos.y
+			&& marioArray.pos.y + marioArray.height / 2 <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x - marioArray.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		}
+
+		if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& marioArray.pos.x + marioArray.width == this.pos.x 
+			&& marioArray.pos.y + marioArray.height  >= this.pos.y
+			&& marioArray.pos.y  <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x -marioArray.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		} 
+
+		if(marioArray.touchBrickBorderByJumping && marioArray.isOnGround){
+			marioArray.stopX = false;
+			marioArray.touchBrickBorderByJumping = false;
+		} // BUG 若鄰近水管太近的時候，落地後剛好在水管旁邊，有機會穿越過去
+
+			// if( this.pos.x + this.width == x
+			// 	&& this.pos.y + this.height > y 
+			// 	&& this.pos.y + this.height / 2  < y + questionBrickJson.height)
+			// { 
+			// 	this.pos.x = x + questionBrickJson.width ;
+			// 	// this.stopX = true;  //控制跑回來會上去的問題
+			// }	
+
+			// if( this.pos.x  == x + questionBrickJson.width
+			// 	&& this.pos.y + this.height > y 
+			// 	&& this.pos.y + this.height / 2  < y + questionBrickJson.height)
+			// { 
+			// 	this.pos.x = x + questionBrickJson.width ;
+			// 	// this.stopX = true;  //控制跑回來會上去的問題
+			// }	
+
+			// if(!this.isOnBrick && this.stopX && this.pos.x + this.width == x && 
+			// 	(keys.left || keys.right)){
+			// 	this.stopX = false;
+			// }
+
+			// if(!this.isOnBrick && this.stopX && 	this.pos.x == x + questionBrickJson.width && 
+			// 	(keys.left || keys.right)){
+			// 	this.stopX = false;   //這行會造成水管可以穿越 BUG 
+			// }
 	}
 	
 	flashing(){
