@@ -11,7 +11,7 @@ import {UndergroundBrick} from "../Js/ObjectJs/undergroundBrickObject.js";
 import {OddBrick} from "../Js/ObjectJs/oddBrickObject.js";
 import {Turtle} from "../Js/ObjectJs/turtleObject.js";
 import {Goomba} from "../Js/ObjectJs/goombaObject.js";
-import {BadPlant} from "../Js/ObjectJs/badPlantObject.js"
+import {BadPlant} from "../Js/ObjectJs/badPlantObject.js";
 import {Pole} from "../Js/ObjectJs/poleObject.js";
 import {Flag} from "../Js/ObjectJs/flagObject.js";
 import {Castle} from "../Js/ObjectJs/castleObject.js";
@@ -35,7 +35,7 @@ let fps = 100;
 // -------------------音效--------------------
 let backgroundMusic = new Audio("../music/TitleBGM.mp3");
 
-let undergroundMuscic = new Audio("../music/underworld.mp3")
+let undergroundMuscic = new Audio("../music/underworld.mp3");
 let powerupSound = new Audio("/music/maro-powerup-sound.wav");
 
 // -------------------end 音效--------------------
@@ -405,7 +405,7 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 	createTurtleArray("badPlant"),
 
 
-		// ------------tube object--------------
+	// ------------tube object--------------
 
 	drawObjects("tube"),
 	createTubeArray("tube"),
@@ -432,7 +432,7 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 	drawObjects("goomba"),
 	createGoombaArray("goomba"),
 
-		// ------------final object--------------
+	// ------------final object--------------
 	drawObjects("pole"),
 	createPoleArray("pole"),
 	loadJson("pole"),
@@ -442,10 +442,10 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 	createCastleArray("highCastle"),
 	loadJson("highCastle"),
 
-		// ------------final object--------------
+	// ------------final object--------------
 
 
-		// ------------brick object--------------
+	// ------------brick object--------------
 
 	drawObjects("brick"),
 	createBrickArray("brick"),
@@ -463,7 +463,7 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 	createFlowerBrickArray("flowerBrick"),  //這邊複製貼上的話，常常會忘記改函示名稱
 	loadJson("flowerBrick"),
 
-		// ------------brick object--------------
+	// ------------brick object--------------
 
 
 	loadMarioImage("marioRedder"),
@@ -481,7 +481,7 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 	createFlowerArray("flower"),
 	loadJson("flower"),
 
-		// ------------powerup object--------------
+	// ------------powerup object--------------
 ]).then(([
 	screen,
 	backgroundSprite,
@@ -722,12 +722,12 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 		}
 
 		if(marioArray[0].underGround){
-			document.querySelector("canvas").style.position  = "absolute"
-			document.querySelector("canvas").style.left  = "-250px"
-			document.querySelector("canvas").style.top  = "-600px"
+			document.querySelector("canvas").style.position  = "absolute";
+			document.querySelector("canvas").style.left  = "-250px";
+			document.querySelector("canvas").style.top  = "-600px";
 		}else if(!marioArray[0].underGround){
 			document.querySelector("canvas").style.left = "0";
-			document.querySelector("canvas").style.top  = "0"
+			document.querySelector("canvas").style.top  = "0";
 		}
 
 
@@ -961,11 +961,11 @@ Promise.all([                //產出 groundSprite, 用來傳進 mario object �
 
 		// -----------------文字區--------------------------
 
-				let brickcoinPoint = questionBrickArray.filter(function (item) {
-					return item.isUseLess == true;
-				})
+		let brickcoinPoint = questionBrickArray.filter(function (item) {
+			return item.isUseLess == true;
+		});
 		
-				let coinPoint = (31 - coinArray.length) *100
+		let coinPoint = (31 - coinArray.length) * 100;
 
 		// context.font = "30px Courier New";
 		// context.fillText("Score:" + (brickcoinPoint.length*200 + coinPoint),10,50);

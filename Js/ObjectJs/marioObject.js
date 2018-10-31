@@ -8,7 +8,6 @@ class Mario{
 		this.speed = new PositionAndSpeed(0,0);
 		this.width = 16;
 		this.height = 32;
-		this.bigHeight = 32;
 		this.direction = 0;
 		this.isRunning = false;
 		this.faceDirection = 1;
@@ -130,7 +129,7 @@ class Mario{
 		];
 	}
 
-	update(screen,tubeJson,highestTubeJson,
+	update(backgroundJson,tubeJson,highestTubeJson,
 		poleJson,castleJson,flagArray,undergroundTubeJson,undergroundBrickJson){
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
@@ -240,12 +239,12 @@ class Mario{
 
 		// -------控制馬力歐落地時參數回復原狀---------
 
-		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
-			if(this.pos.x < x2 * screen.width + screen.width
-				&& this.pos.x + this.width > x1 * screen.width){
+		backgroundJson.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+			if(this.pos.x < x2 * backgroundJson.width + backgroundJson.width
+				&& this.pos.x + this.width > x1 * backgroundJson.width){
 				this.falling = false;
-			}else if(this.pos.x > x2 * 16 + screen.width
-				&& this.pos.y > y1 * screen.height - 32){
+			}else if(this.pos.x > x2 * 16 + backgroundJson.width
+				&& this.pos.y > y1 * backgroundJson.height - 32){
 				this.falling = true;
 			}
 			//--------------控制蹲下 --------------------
@@ -256,7 +255,7 @@ class Mario{
 				this.isSquat = false;
 			}			
 
-		//-----------END OF 控制蹲下---------------------
+			//-----------END OF 控制蹲下---------------------
 
 		 // --------跳躍的設定 ---------------
 
@@ -282,6 +281,8 @@ class Mario{
 				this.speed.y -= 10;  //起始跳躍速度，這個速度加上馬力歐的身高，剛好可以跳到最高的水管上面
 				this.speed.x = 4;	
 				this.isOnGround = false;
+				this.isOnBrick = false;
+				this.isBottomBrick = false;
 				this.onTube = false;
 				if( !this.isBigMario && !this.isFireMario){
 					this.jumpSound();
@@ -298,17 +299,17 @@ class Mario{
 				&& this.speed.y > 0 
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16
-				&& this.pos.y >= y1 * screen.height - this.height)
+				&& this.pos.y >= y1 * backgroundJson.height - this.height)
 			{
 				this.isJump = false;
 				this.onTube = false;
 				this.isOnBrick = false;
 				this.isOnGround = true;
-				this.pos.y = y1 * screen.height - this.height; //落地
+				this.pos.y = y1 * backgroundJson.height - this.height; //落地
 				this.isBottomBrick = false;
 				this.isOnBrick = false;
 				this.speed.y = 0;
-			}else if(!this.getDestinationTube && !this.underGround && !this.isDie && this.pos.y >= y1 * screen.height + 256){
+			}else if(!this.getDestinationTube && !this.underGround && !this.isDie && this.pos.y >= y1 * backgroundJson.height + 256){
 				//---------------------------懸崖---------
 				// ---------掉下懸崖一段才死掉---------------
 				this.speed.x = 0;
@@ -378,7 +379,6 @@ class Mario{
 				}		
 			
 				// --------------end  下水管-----------------
-			
 			});
 		}
 
@@ -387,19 +387,19 @@ class Mario{
 		//-------------------下水道---------------------
 
 		//-----------------下水道控制馬力歐位置------------
-		screen.underbackgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+		backgroundJson.underbackgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
 			if(!this.isDie 
 				&& this.underGround
 				&& this.speed.y > 0 
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16
-				&& this.pos.y >= y1 * screen.height - this.height)
+				&& this.pos.y >= y1 * backgroundJson.height - this.height)
 			{
 				this.isJump = false;
 				this.onTube = false;
 				this.isOnBrick = false;
 				this.isOnGround = true;
-				this.pos.y = y1 * screen.height - this.height; //落地
+				this.pos.y = y1 * backgroundJson.height - this.height; //落地
 				this.fallingToUnder = false;
 				this.isBottomBrick = false;
 				this.isOnBrick = false;
@@ -777,13 +777,13 @@ class Mario{
 
 	//每張圖片的切割大小存在 mario.json,其中 runRight-2 跟 runRight-3 並沒有從16的倍數切(因為圖片會有點卡住所以選了一些特殊的切割點) 
 
-	draw(context,marioSprite,screen,fireballSprite,goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
+	draw(context,marioSprite,backgroundJson,fireballSprite,goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
 		//呼叫 SpriteSet 的 draw 方法
 
 		// ----------將陣列中的火焰球清除---------
 		for(let j = 0;j < this.fireArray.length;j += 1){
 			this.fireArray[j].draw(context,fireballSprite,this);
-			this.fireArray[j].update(this,screen,goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
+			this.fireArray[j].update(this,backgroundJson,goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
 			let fire = this.fireArray[j];
 			if(fire.show == false || fire.pos.y > 1080){
 				this.fireArray.splice(j,1);

@@ -14,7 +14,7 @@ class UndergroundTube{
 		if(marioArray.pos.x < 450 ){
 			undergroundTubeSprite.drawSprite("undergroundTube",context,this.pos.x,this.pos.y);
 		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000){
-			undergroundTubeSprite.drawSprite("undergroundTube",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+			undergroundTubeSprite.drawSprite("undergroundTube",context,this.pos.x - marioArray.pos.x + 450  ,this.pos.y);
 		}else if(marioArray.pos.x >= 5000 ){
 			undergroundTubeSprite.drawSprite("undergroundTube",context,this.pos.x  - 4550 ,this.pos.y);
 		}

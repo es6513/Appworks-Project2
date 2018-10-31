@@ -40,9 +40,14 @@ class Tube{
 					marioArray.stopX = false;
 				}
 			}
-			else if(marioArray.pos.y + marioArray.height < this.pos.y  && keys.left 
-				|| marioArray.pos.y + marioArray.height < this.pos.y  && keys.right){
-				marioArray.stopX = false;
+			else if(marioArray.pos.x == this.pos.x + this.width 
+				&& marioArray.pos.y + marioArray.height  < this.pos.y 
+				&& (keys.left || keys.right)){
+					marioArray.stopX = false;
+			}else if(marioArray.pos.x + marioArray.width == this.pos.x 
+				&& marioArray.pos.y + marioArray.height < this.pos.y  
+				&& (keys.left || keys.right)){
+					marioArray.stopX = false;
 			} //修正會斜向穿越水管的問題，讓馬力歐身高高過它才可以移動。
 			else {
 				marioArray.stopBesideTube = false;  // 為了讓水管跟 oddbrick 卡住時不能移動

@@ -12,7 +12,6 @@ class OddBrick{
 
 		if(!marioArray.isDie && marioArray.isRunning && !marioArray.underGround){
 
-
 			//-----------bug -marioArray.speed.y 為了在磚塊頂端不能移動
 
 			//從左側碰到
@@ -40,6 +39,18 @@ class OddBrick{
 					marioArray.stopX = false;
 				}
 			}
+
+			else if(
+				(marioArray.pos.x == this.pos.x + this.width 
+				&& marioArray.pos.y + marioArray.height  < this.pos.y 
+				&& keys.left)
+				|| 
+				(marioArray.pos.x + marioArray.width == this.pos.x 
+				&& marioArray.pos.y + marioArray.height < this.pos.y  
+				&& keys.right))
+			{
+				marioArray.stopX = false;
+			} 
 
 			// ------end of 小馬力歐---------
 

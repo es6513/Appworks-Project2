@@ -35,14 +35,14 @@ class Fireball{
 		];
 	}
 	
-	update(marioArray,screen,goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
+	update(marioArray,backgroundJson,goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
 		this.faceDirection = marioArray.faceDirection;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
 		//	&& shape.pos.x < this.pos.x + this.width 右
 		//	&& shape.pos.y + shape.height > this.pos.y 上
 		//	&& shape.pos.y < this.pos.y + this.height 下
 		if(this.recordSwitch){
-			this.previousPos.x = this.pos.x
+			this.previousPos.x = this.pos.x;
 		}
 
 		let timeoutId2;
@@ -159,28 +159,28 @@ class Fireball{
 		}
 
 		//-------------end of 火球打死goomba-----------
-		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
-			if(this.pos.x < x2 * 16 + screen.width
+		backgroundJson.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+			if(this.pos.x < x2 * 16 + backgroundJson.width
 				&& this.pos.x + this.width > x1 * 16){
 				this.falling = false;
-			}else if(this.pos.x > x2 * 16 + screen.width
-				&& this.pos.y > y1 * screen.height - 16){
+			}else if(this.pos.x > x2 * 16 + backgroundJson.width
+				&& this.pos.y > y1 * backgroundJson.height - 16){
 				this.falling = true;
 			}
 
 
 			// this.height / 4 為了配合圖片大小而調整
 			if(!this.isExplosion 
-				&& this.pos.y >= y1 * screen.height - this.height + this.height / 4
-				&& this.pos.x + this.width > x1 * screen.width 
-				&& this.pos.x < x2 * screen.width){
+				&& this.pos.y >= y1 * backgroundJson.height - this.height + this.height / 4
+				&& this.pos.x + this.width > x1 * backgroundJson.width 
+				&& this.pos.x < x2 * backgroundJson.width){
 				this.speed.y *= -1;
 				this.canBounce = true;
 			}
 
 			if(this.canBounce 
-				&& this.pos.x + this.width > x1 * screen.width 
-				&& this.pos.x < x2 * screen.width 
+				&& this.pos.x + this.width > x1 * backgroundJson.width 
+				&& this.pos.x < x2 * backgroundJson.width 
 				&& this.pos.y <= 224 ){
 				this.speed.y *= -1;
 			}

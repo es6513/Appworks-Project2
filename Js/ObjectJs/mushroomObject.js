@@ -16,7 +16,7 @@ class Mushroom{
 		this.appear = false;
 	}
 	
-	update(marioArray,screen,oddBrickJson,tubeJson,highTubeJson,highestTubeJson){
+	update(marioArray,backgroundJson,oddBrickJson,tubeJson,highTubeJson,highestTubeJson){
 
 		if(!this.appear){
 			this.previousY = this.pos.y;
@@ -36,7 +36,7 @@ class Mushroom{
 			this.pos.x += this.speed.x;
 		}
 
-		if( this.pos.x >=  this.previousX + this.width*5){
+		if( this.pos.x >=  this.previousX + this.width * 5){
 			this.pos.y += this.speed.y;
 		}
 
@@ -81,20 +81,20 @@ class Mushroom{
 		});	
 
 		//-----------------香菇在地面上的移動-----------
-		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
-			if(this.pos.x < x2 * 16 + screen.width
+		backgroundJson.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+			if(this.pos.x < x2 * 16 + backgroundJson.width
 				&& this.pos.x + this.width > x1 * 16){
 				this.falling = false;
-			}else if(this.pos.x > x2 * 16 + screen.width
-				&& this.pos.y > y1 * screen.height - 32){
+			}else if(this.pos.x > x2 * 16 + backgroundJson.width
+				&& this.pos.y > y1 * backgroundJson.height - 32){
 				this.falling = true;
 			}
 
-			if(this.pos.y >= y1 * screen.height - this.height
+			if(this.pos.y >= y1 * backgroundJson.height - this.height
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
 				this.onGround = true;
-				this.pos.y = y1 * screen.height - this.height;
+				this.pos.y = y1 * backgroundJson.height - this.height;
 				this.pos.x += this.speed.x;
 			}
 	
@@ -103,7 +103,7 @@ class Mushroom{
 				this.pos.y += this.speed.y;
 			}
 
-			if(this.pos.y >= y2 * screen.height + 1600){
+			if(this.pos.y >= y2 * backgroundJson.height + 1600){
 				this.show = false;
 			}
 

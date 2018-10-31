@@ -31,7 +31,7 @@ class BadPlant{
 
 		// ------bug----- 已經消失的怪物需要清除掉(preffered) 或是讓她不能再移動，否則會有bug
 		if(!this.goUp){
-			this.previousY = this.pos.y
+			this.previousY = this.pos.y;
 		}
 
 		if(!this.isDie && !this.falling ){
@@ -48,7 +48,7 @@ class BadPlant{
 		let timeoutId;
 		if(this.goDown && !this.clearTimeout){
 			timeoutId = setTimeout(() => {
-				this.speed.y = - 0.2
+				this.speed.y = - 0.2;
 				this.goDown = false;
 				this.clearTimeout = null;
 			}, 2000);
@@ -56,8 +56,8 @@ class BadPlant{
 		}  //到達最高點後停止兩秒再回去
 
 
-		if(this.pos.y > this.previousY + this.height/2){
-			 this.speed.y *=-1;
+		if(this.pos.y > this.previousY + this.height / 2){
+			 this.speed.y *= -1;
 		} //下去一段距離跑回
 		
 		
@@ -113,7 +113,7 @@ class BadPlant{
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
 			&& marioArray.pos.y < this.pos.y + this.height)	
-			{
+		{
 			marioArray.isInvincible = true;
 			marioArray.backToBig = true; 
 			this.marioPipeSound();
@@ -125,7 +125,7 @@ class BadPlant{
 		// -------End 馬力歐碰到壞花死掉-------
 
 
-			// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
+		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
@@ -155,8 +155,8 @@ class BadPlant{
 	}
 
 	running(){
-			this.frameIndex = ++this.frameIndex % 20;
-			return this.framesRun[this.frameIndex];
+		this.frameIndex = ++this.frameIndex % 20;
+		return this.framesRun[this.frameIndex];
 	}
 
 	draw(context,BadPlantSprite,marioArray){

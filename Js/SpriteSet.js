@@ -73,22 +73,7 @@ class Sprites {
 		context.drawImage(sprite,x * this.width,y * this.height);
 	}
 	
-	drawCoinSprite(name,context,x,y){
-		let sprite = this.tiles.get(name)[0];
-		context.drawImage(sprite,x,y);
-	}
-
-	drawTubeSprite(name,context,x,y){
-		let sprite = this.tiles.get(name)[0];
-		context.drawImage(sprite,x,y);
-	}
-
 	drawSprite(name,context,x,y){
-		let sprite = this.tiles.get(name)[0];
-		context.drawImage(sprite,x,y);
-	}
-
-	drawGoombaSprite(name,context,x,y){
 		let sprite = this.tiles.get(name)[0];
 		context.drawImage(sprite,x,y);
 	}
@@ -97,7 +82,6 @@ class Sprites {
 		let sprite = this.tiles.get(name)[reverse ? 1 : 0];
 		context.drawImage(sprite,x,y);
 	}
-
 
 	drawFireBallSprite(name,context,x,y,reverse = false){
 		let sprite = this.tiles.get(name)[reverse ? 1 : 0];

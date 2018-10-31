@@ -12,10 +12,9 @@ class HighestTube{
 
 		if(!marioArray.isDie && marioArray.isRunning && !marioArray.underGround){
 
-				//----------小馬力歐過水管-----------
+			//----------小馬力歐過水管-----------
 
-
-				//從左側碰到水管
+			//從左側碰到水管
 			if( marioArray.pos.x + marioArray.width == this.pos.x
 				&& marioArray.pos.y + marioArray.height > this.pos.y
 				&& marioArray.pos.y + marioArray.height / 2 < this.pos.y + this.height )
@@ -34,16 +33,20 @@ class HighestTube{
 			{	
 				marioArray.pos.x = this.pos.x + this.width ;
 				marioArray.stopX = true;
-		
 				if(keys.right && !keys.left){
 					marioArray.stopX = false;
 				}
 			}
 
-			else if(marioArray.pos.y + marioArray.height < this.pos.y && keys.left 
-				|| marioArray.pos.y + marioArray.height < this.pos.y  && keys.right){ 
+			else if(marioArray.pos.x == this.pos.x + this.width 
+				&& marioArray.pos.y + marioArray.height  < this.pos.y 
+				&& (keys.left || keys.right)){
 				marioArray.stopX = false;
-			} //修正會斜向穿越水管的問題，讓馬力歐身高高過它才可以移動。
+			}else if(marioArray.pos.x + marioArray.width == this.pos.x 
+				&& marioArray.pos.y + marioArray.height < this.pos.y  
+				&& (keys.left || keys.right)){
+				marioArray.stopX = false;
+			}   //修正會斜向穿越水管的問題，讓馬力歐身高高過它才可以移動。
 
 			// ------end of 小馬力歐過水管---------
 
@@ -63,20 +66,17 @@ class HighestTube{
 				marioArray.speed.y += 0.5;
 			}					
 		}
-			
-
-
 	}
 
 
-	draw(context,tubeSprite,marioArray){
+	draw(context,highestTubeSprite,marioArray){
 				
 		if(marioArray.pos.x < 450 ){
-			tubeSprite.drawSprite("highestTube",context,this.pos.x,this.pos.y);
+			highestTubeSprite.drawSprite("highestTube",context,this.pos.x,this.pos.y);
 		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000){
-			tubeSprite.drawSprite("highestTube",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+			highestTubeSprite.drawSprite("highestTube",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
 		}else if(marioArray.pos.x >= 5000 ){
-			tubeSprite.drawSprite("highestTube",context,this.pos.x  - 4550 ,this.pos.y);
+			highestTubeSprite.drawSprite("highestTube",context,this.pos.x  - 4550 ,this.pos.y);
 		}
 	
 	}

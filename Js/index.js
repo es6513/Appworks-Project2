@@ -11,7 +11,7 @@ import {UndergroundBrick} from "../Js/ObjectJs/undergroundBrickObject.js";
 import {OddBrick} from "../Js/ObjectJs/oddBrickObject.js";
 import {Turtle} from "../Js/ObjectJs/turtleObject.js";
 import {Goomba} from "../Js/ObjectJs/goombaObject.js";
-import {BadPlant} from "../Js/ObjectJs/badPlantObject.js"
+import {BadPlant} from "../Js/ObjectJs/badPlantObject.js";
 import {Pole} from "../Js/ObjectJs/poleObject.js";
 import {Flag} from "../Js/ObjectJs/flagObject.js";
 import {Castle} from "../Js/ObjectJs/castleObject.js";
@@ -22,29 +22,50 @@ import {MushroomBrick} from "../Js/ObjectJs/mushroomBrickObject.js";
 import {FlowerBrick} from "../Js/ObjectJs/flowerBrickObject.js";
 import {Flower} from "../Js/ObjectJs/flowerObject.js";
 import {Mushroom} from "../Js/ObjectJs/mushroomObject.js";
-
-
 import {keys} from "../Js/keyEvent.js";
 import { Fireball } from "./ObjectJs/fireballObject.js";
 let snippet = new Array();
 let firesnippet = new Array();
 
+// let canvas = document.querySelector("#cvs");
+// let context = canvas.getContext("2d");
+
+
 let fps = 100;
 
-// window.onload = startGame;
+// ----------------裝置偵測------------------------
+
+let device = document.querySelector("#deviceDetect");
+let isMobile = false;
+
+function deviceDetect() {
+	if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) 
+    || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) { 
+		isMobile = true;
+	}
+}
+deviceDetect();
+
+// ---------------開頭畫面---------------
+// if(!isMobile){
+// 	device.style.width = "100%";
+// 	device.style.height = "100%";
+// 	device.style.backgroundColor = "black";
+// }
+
+// ---------------開頭畫面---------------
+
+// ------------end 裝置測試-----------------------
 
 // -------------------音效--------------------
 let backgroundMusic = new Audio("../music/TitleBGM.mp3");
 
-let undergroundMuscic = new Audio("../music/underworld.mp3")
+let undergroundMuscic = new Audio("../music/underworld.mp3");
 let powerupSound = new Audio("/music/maro-powerup-sound.wav");
 
 // -------------------end 音效--------------------
 
-
-//-----測試區---------
-
-function createObjectArray(name,objectName) {
+export function createObjectArray(name,objectName) {
 	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(Sprite=>{
@@ -58,7 +79,11 @@ function createObjectArray(name,objectName) {
 		});
 }
 
-function createMarioArray(name) {
+export function sum(a, b) {
+	return a + b;
+}
+
+export function createMarioArray(name) {
 	return fetch(`../marioJSON/${name}.json`)
 		.then(r =>r.json())
 		.then(marioSprite=>{
@@ -73,9 +98,12 @@ function createMarioArray(name) {
 		});
 }
 
+
 //-------測試區---------
 
 Promise.all([ 
+	loadMarioImage("marioRedder"),
+	createMarioArray("marioRedder"),
 	loadJson("background"),
 	drawBackground("background"),
 
@@ -92,7 +120,7 @@ Promise.all([
 	drawObjects("badPlant"),
 	createObjectArray("badPlant",BadPlant),
 
-		// ------------tube object--------------
+	// ------------tube object--------------
 
 	drawObjects("tube"),
 	createObjectArray("tube",Tube),
@@ -117,7 +145,7 @@ Promise.all([
 	createObjectArray("oddBrick",OddBrick),
 	loadJson("oddBrick"),
 
-		// ------------final object--------------
+	// ------------final object--------------
 	drawObjects("pole"),
 	createObjectArray("pole",Pole),
 	loadJson("pole"),
@@ -127,10 +155,10 @@ Promise.all([
 	createObjectArray("highCastle",Castle),
 	loadJson("highCastle"),
 
-		// ------------final object--------------
+	// ------------final object--------------
 
 
-		// ------------brick object--------------
+	// ------------brick object--------------
 
 	drawObjects("brick"),
 	createObjectArray("brick",Brick),
@@ -148,11 +176,8 @@ Promise.all([
 	createObjectArray("flowerBrick",FlowerBrick),  //這邊複製貼上的話，常常會忘記改函示名稱
 	loadJson("flowerBrick"),
 
-		// ------------brick object--------------
+	// ------------brick object--------------
 
-
-	loadMarioImage("marioRedder"),
-	createMarioArray("marioRedder"),
 	drawObjects("fireballset"),
 	createObjectArray("fireballset",Fireball),
 	loadJson("fireballset"),
@@ -166,9 +191,10 @@ Promise.all([
 	createObjectArray("flower",Flower),
 	loadJson("flower"),
 
-		// ------------powerup object--------------
+	// ------------powerup object--------------
 ]).then(([
-	screen,
+	marioSpriteSet,marioArray,
+	backgroundJson,
 	backgroundSprite,
 	coinSpriteSet,coinArray,
 	flycoinSprite,flycoinArray,
@@ -205,7 +231,7 @@ Promise.all([
 	flowerBrickSprite,flowerBrickArray,flowerBrickJson,
 
 	// ------brick object-------
-	marioSpriteSet,marioArray,
+
 	fireballSprite,fireballArray,fireballJson,
 	mushroomSprite,mushroomArray,mushroomJson,
 	flowerSprite,flowerArray,flowerJson])=>{
@@ -402,12 +428,12 @@ Promise.all([
 		}
 
 		if(marioArray[0].underGround){
-			document.querySelector("canvas").style.position  = "absolute"
-			document.querySelector("canvas").style.left  = "-250px"
-			document.querySelector("canvas").style.top  = "-700px"
+			document.querySelector("canvas").style.position  = "absolute";
+			document.querySelector("canvas").style.left  = "-250px";
+			document.querySelector("canvas").style.top  = "-700px";
 		}else if(!marioArray[0].underGround){
 			document.querySelector("canvas").style.left = "0";
-			document.querySelector("canvas").style.top  = "0"
+			document.querySelector("canvas").style.top  = "0";
 		}
 
 		// --------end of 音樂播放----------------
@@ -416,18 +442,17 @@ Promise.all([
 
 		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
-		for(let i = 0;i < marioArray.length;i += 1){
-			if(	marioArray[i].pos.x < 450){
-				context.drawImage(backgroundSprite,0,0,context.canvas.width,2160,0,0,context.canvas.width,2160);
-			}else if(	marioArray[i].pos.x >= 450 && marioArray[i].pos.x < 5000) {
-				context.drawImage(backgroundSprite,	marioArray[i].pos.x - 450,0,context.canvas.width,2160,0,0,context.canvas.width,2160);
-			}else if(	marioArray[i].pos.x >= 5000){
-				context.drawImage(backgroundSprite, 4550,0,context.canvas.width,2160,0,0,context.canvas.width,2160);
-			} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
-			if(marioArray[i].isDie && marioArray[i].pos.y > 3600){
-				restart();
-			}
-		}		
+		if(	marioArray[0].pos.x < 450){
+			context.drawImage(backgroundSprite,0,0,context.canvas.width,2160,0,0,context.canvas.width,2160);
+		}else if(		marioArray[0].pos.x  >= 450 && 	marioArray[0].pos.x  < 5000) {
+			context.drawImage(backgroundSprite,	marioArray[0].pos.x  - 450 ,0,context.canvas.width,2160,0,0,context.canvas.width,2160);
+		}else if(		marioArray[0].pos.x  >= 5000){
+			context.drawImage(backgroundSprite, 4550,0,context.canvas.width,2160,0,0,context.canvas.width,2160);
+		} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
+		if(	marioArray[0].isDie && 	marioArray[0].pos.y > 3600){
+			restart();
+		}
+			
 
 		for(let j = 0;j < coinArray.length;j += 1){
 			coinArray[j].draw(context,coinSpriteSet,marioArray[0]);
@@ -455,24 +480,23 @@ Promise.all([
 			// }
 		}
 
-
 		// --------------------怪物區---------------------
-		for(let j = 0;j < turtleArray.length;j += 1){
-			turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
-			turtleArray[j].update(screen,tubeJson,highTubeJson,highestTubeJson,marioArray[0],oddBrickJson);
-			let turtle = turtleArray[j];
-			if(turtle.isDie){
-				turtleArray.splice(j,1);
-				j--;
-			}
-			if(turtleArray.length == 0){
-				break;
-			}
-		}			
+		// for(let j = 0;j < turtleArray.length;j += 1){
+		// 	turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
+		// 	turtleArray[j].update(backgroundJson,tubeJson,highTubeJson,highestTubeJson,marioArray[0],oddBrickJson);
+		// 	let turtle = turtleArray[j];
+		// 	if(turtle.isDie){
+		// 		turtleArray.splice(j,1);
+		// 		j--;
+		// 	}
+		// 	if(turtleArray.length == 0){
+		// 		break;
+		// 	}
+		// }			
 				
 		for(let j = 0;j < goombaArray.length;j += 1){
 			goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
-			goombaArray[j].update(tubeJson,highTubeJson,highestTubeJson,turtleArray,marioArray[0],screen,oddBrickJson);
+			goombaArray[j].update(tubeJson,highTubeJson,highestTubeJson,turtleArray,marioArray[0],backgroundJson,oddBrickJson);
 			let goomba = goombaArray[j];
 			if(!goomba.show){
 				goombaArray.splice(j,1);
@@ -499,24 +523,8 @@ Promise.all([
 		// --------------end 怪物區---------------------
 
 
-		// ---------------障礙區-----------------
-			
-
-		for(let j = 0;j < highTubeArray.length;j += 1){
-			highTubeArray[j].draw(context,highTubeSprite,marioArray[0]);
-			highTubeArray[j].update(marioArray[0]);
-		}		
-
-
-		for(let j = 0;j < oddBrickArray.length;j += 1){
-			oddBrickArray[j].draw(context,oddBrickSprite,marioArray[0]);
-			oddBrickArray[j].update(marioArray[0]);
-		}	
-
-		// ---------------end of 障礙區-----------------
-
 		//--------------終點物件-------------------
-		
+
 		for(let j = 0;j < poleArray.length;j += 1){
 			poleArray[j].draw(context,poleSprite,marioArray[0]);
 			poleArray[j].update(marioArray[0]);
@@ -530,7 +538,6 @@ Promise.all([
 		for(let j = 0;j < castleArray.length;j += 1){
 			castleArray[j].draw(context,castleSprite,marioArray[0]);
 		}	
-
 
 		//--------------end   終點物件-------------------
 
@@ -549,7 +556,7 @@ Promise.all([
 
 		for(let j = 0;j < mushroomArray.length;j += 1){
 			mushroomArray[j].draw(context,mushroomSprite,marioArray[0]);
-			mushroomArray[j].update(marioArray[0],screen,oddBrickJson
+			mushroomArray[j].update(marioArray[0],backgroundJson,oddBrickJson
 				,tubeJson,highTubeJson,highestTubeJson);
 			let mushroom = mushroomArray[j];
 			if(mushroom.show == false){
@@ -578,7 +585,7 @@ Promise.all([
 
 		for(let j = 0;j < fragmentArray.length;j += 1){
 			fragmentArray[j].draw(context,fragmentSprite,marioArray[0]);
-			fragmentArray[j].update(screen,brickArray,fragmentArray);
+			fragmentArray[j].update(backgroundJson,brickArray,fragmentArray);
 			// let fragment = fragmentArray[j];
 			// if(fragment.underground ){
 			// 	fragmentArray.splice(j,1);
@@ -599,59 +606,74 @@ Promise.all([
 			flowerBrickArray[j].update(marioArray[0],flowerArray,flowerBrickArray);
 		}	
 
-
 		for(let j = 0;j < questionBrickArray.length;j += 1){
 			questionBrickArray[j].draw(context,questionBrickSprite,marioArray[0]);
 			questionBrickArray[j].update(marioArray[0],flycoinArray,questionBrickArray);
 		}	
 
-
 		//-----------------end of 各種磚塊------------------
+
+
+		// ---------------障礙區-----------------
+
+		for(let j = 0;j < oddBrickArray.length;j += 1){
+			oddBrickArray[j].draw(context,oddBrickSprite,marioArray[0]);
+			oddBrickArray[j].update(marioArray[0]);
+		}		
 	
-		for(let j = 0;j < marioArray.length;j += 1){
-			marioArray[j].draw(context, marioSpriteSet,
-				screen,fireballSprite,
-				goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
+		for(let j = 0;j < undergroundBrickArray.length;j += 1){
+			undergroundBrickArray[j].draw(context,undergroundBrickSprite,marioArray[0]);
+		}
 
-			marioArray[j].update(screen,tubeJson,highestTubeJson,
-				poleJson,	castleJson,flagArray,undergroundTubeJson,undergroundBrickJson);
+		for(let j = 0;j < highTubeArray.length;j += 1){
+			highTubeArray[j].draw(context,highTubeSprite,marioArray[0]);
+			highTubeArray[j].update(marioArray[0]);
 		}	
+		
 
-		for(let j = 0;j < highestTubeArray.length;j += 1){
-			highestTubeArray[j].draw(context,highestTubeSprite,marioArray[0]);
-			highestTubeArray[j].update(marioArray[0])
-		}	
-
-		for(let j = 0;j < tubeArray.length;j += 1){
-			tubeArray[j].draw(context,tubeSprite,marioArray[0]);
-			tubeArray[j].update(marioArray[0]);
-		}	
-
+		marioArray[0].draw(context, marioSpriteSet,backgroundJson,fireballSprite,
+			goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
+		marioArray[0].update(backgroundJson,tubeJson,highestTubeJson,
+			poleJson,	castleJson,flagArray,undergroundTubeJson,undergroundBrickJson);
+		
 		for(let j = 0;j < undergroundTubeArray.length;j += 1){
 			undergroundTubeArray[j].draw(context,undergroundTubeSprite,marioArray[0]);
 		}	
 
-		for(let j = 0;j < undergroundBrickArray.length;j += 1){
-			undergroundBrickArray[j].draw(context,undergroundBrickSprite,marioArray[0]);
-		}	;
 
-		// -----------------文字區--------------------------
+		for(let j = 0;j < highestTubeArray.length;j += 1){
+			highestTubeArray[j].draw(context,highestTubeSprite,marioArray[0]);
+			highestTubeArray[j].update(marioArray[0]);
+		}	
+	
+		for(let j = 0;j < tubeArray.length;j += 1){
+			tubeArray[j].draw(context,tubeSprite,marioArray[0]);
+			tubeArray[j].update(marioArray[0]);
+		}	
+	
+		// ---------------end of 障礙區-----------------
 
-				let brickcoinPoint = questionBrickArray.filter(function (item) {
-					return item.isUseLess == true;
-				})
+	
+		// -----------------計分區--------------------------
+
+		let brickcoinPoint = questionBrickArray.filter(function (item) {
+			return item.isUseLess == true;
+		});
 		
-				let coinPoint = (31 - coinArray.length) *100
+		let coinPoint = (31 - coinArray.length) * 100;
 
 		// context.font = "30px Courier New";
 		// context.fillText("Score:" + (brickcoinPoint.length*200 + coinPoint),10,50);
-		
 
 		// -----------------end of 文字區-----------------
 		
 	};
-	startGame();
+	if(!isMobile){
+		startGame();
+	}
+	
 });
+
 
 
 

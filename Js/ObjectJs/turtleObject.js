@@ -43,7 +43,7 @@ class Turtle{
 		];
 	}
 	
-	update(screen,tubeJson,highTubeJson,highestTubeJson,marioArray,oddBrickJson){
+	update(backgroundJson,tubeJson,highTubeJson,highestTubeJson,marioArray,oddBrickJson){
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
@@ -115,7 +115,7 @@ class Turtle{
 			&& !this.hitByFire
 			&& !this.quickToDie
 			&& !this.backToLive
-			){
+		){
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
 			marioArray.willDie = true;
@@ -161,7 +161,7 @@ class Turtle{
 			&& !this.hitByFire
 			&& !this.quickToDie
 			&& !this.backToLive
-			){
+		){
 			this.marioPipeSound();
 			marioArray.isInvincible = true;
 			marioArray.backToSmall = true;  
@@ -230,7 +230,7 @@ class Turtle{
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
 				
-				this.speed.x = 10;
+				this.speed.x = 8;
 				this.isRotating = true;
 				if(!marioArray.isOnGround){
 					marioArray.speed.y = -6;
@@ -252,7 +252,7 @@ class Turtle{
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y > this.pos.y -  marioArray.height){
 			{
-				this.speed.x = 10;
+				this.speed.x = 8;
 				this.isRotating = true;
 				if(!marioArray.isOnGround){
 					marioArray.speed.y = -6;
@@ -306,7 +306,6 @@ class Turtle{
 			}
 		});
 
-
 		// ----------------Case 2: oddBrick ---------------------
 
 		oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{
@@ -316,17 +315,14 @@ class Turtle{
 				this.speed.x *= -1;
 				this.direction *= -1;
 			}
-			
 		});
 				
-
 		// -------End 烏龜與障礙物之間的碰撞-------
 
 	
 		// -------馬力歐跳躍攻擊烏龜-----------
 
 		// ------------------1.小馬力歐的狀況-------------
-
 		if( !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
 			&& !marioArray.underGround
@@ -342,8 +338,6 @@ class Turtle{
 				this.quickToDie = true;
 				marioArray.speed.y = -10;
 				this.turtleDieSound();
-				// marioArray.pos.y = this.pos.y - 16 + 8;
-				// this.speed.x = 0;
 			}		
 		}
 
@@ -393,30 +387,28 @@ class Turtle{
 			this.speed.x = 0;
 		}//  hitByFire 的狀態轉換在 fireballObject 檔案裡
 	
-		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+		backgroundJson.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
 
-			if(this.pos.x < x2 * 16 + screen.width
+			if(this.pos.x < x2 * 16 + backgroundJson.width
 				&& this.pos.x + this.width > x1 * 16){
 				this.falling = false;
-			}else if(this.pos.x > x2 * 16 + screen.width){
+			}else if(this.pos.x > x2 * 16 + backgroundJson.width){
 				this.falling = true;
 			}
 			if(!this.hitByFire
-				&& this.pos.y >= y1 * screen.height - this.height
+				&& this.pos.y >= y1 * backgroundJson.height - this.height
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
-				this.pos.y = y1 * screen.height - this.height;
+				this.pos.y = y1 * backgroundJson.height - this.height;
 			}
 			if(this.falling){
 				this.pos.y += this.speed.y; 
 			}
 			
-			if(this.pos.y >= y2 * screen.height + 1200 
+			if(this.pos.y >= y2 * backgroundJson.height + 1200 
 				|| this.pos.x >= 6000){
 				this.isDie = true;
 			}
-
-		
 		});
 	
 		// -----------end被火力歐的火球打到--------------
@@ -436,8 +428,6 @@ class Turtle{
 					this.backToLive = true;
 					this.quickToDie = false;
 				}				
-				// this.speed.x = 1;
-				// this.direction = 1;
 				this.clearTimeout = null;
 			}, 3500);
 			this.clearTimeout = timeoutId;
@@ -452,16 +442,11 @@ class Turtle{
 				if(!this.isRotating){
 					this.backToLive = false;
 				}				
-				// this.speed.x = 1;
-				// this.direction = 1;
 				this.clearTimeout3 = null;
 			}, 3500);
 			this.clearTimeout3 = timeoutId3;
 		}	
-
 		// ------------End of 烏龜復活----------------
-		
-
 	}
 
 	turtleDieSound(){
