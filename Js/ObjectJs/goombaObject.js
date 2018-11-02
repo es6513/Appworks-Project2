@@ -1,5 +1,4 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-// import {marioArray} from "../marioArrayTest.js";
 
 
 class Goomba{
@@ -29,16 +28,14 @@ class Goomba{
 		];
 	}
 	
-	update(tubeJson,turtleArray,marioArray,screen,oddBrickJson){
+	update(tubeJson,highTubeJson,highestTubeJson,turtleArray,marioArray,backgroundJson,oddBrickJson){
 		this.faceDirection = this.direction;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-		// console.log(this.speed.x);
-
 		// ------bug----- 已經消失的怪物需要清除掉(preffered) 或是讓她不能再移動，否則會有bug
-		if(!this.isDie){
+		if(!this.isDie && !this.falling){
 			this.move();	
 		}	
 		
@@ -48,10 +45,13 @@ class Goomba{
 		// X軸的判定 用 width/2 比較好一點,
 
 		//------1.小馬力歐的死亡-------
+
 		if(!marioArray.isInvincible 
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario 
-			&& !marioArray.isDie 
+			&& !marioArray.willDie 
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& !this.isDie
 			&& !this.hitByFire
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
@@ -63,17 +63,19 @@ class Goomba{
 		{
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
-			marioArray.isDie = true;
-			marioArray.speed.y = -10;
-			marioArray.pos.y += marioArray.speed.y;
+			marioArray.willDie = true;
+			// marioArray.speed.y = -10;
+			// marioArray.pos.y += marioArray.speed.y;
 		}
 
-
 		//------2.大馬力歐死亡變小馬力歐-------
+		
 		if(!marioArray.isInvincible 
 			&& marioArray.isBigMario 
 			&& !this.isDie
 			&& !this.hitByFire
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -81,9 +83,9 @@ class Goomba{
 			&& !marioArray.isJump
 			&& marioArray.isOnGround	)
 		{
-			marioArray.speed.y = -10;
 			marioArray.isInvincible = true;
-			marioArray.isBigMario = false; 
+			marioArray.backToSmall = true; 
+			this.marioPipeSound();
 		}
 
 
@@ -93,6 +95,8 @@ class Goomba{
 			&& marioArray.isFireMario 
 			&& !this.isDie
 			&& !this.hitByFire
+			&& !marioArray.falling 
+			&& !marioArray.underGround
 			&& marioArray.pos.x + marioArray.width  > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y + marioArray.height > this.pos.y
@@ -100,10 +104,9 @@ class Goomba{
 			&& !marioArray.isJump
 			&& marioArray.isOnGround	)
 		{
-			marioArray.speed.y = -10;
 			marioArray.isInvincible = true;
-			marioArray.isFireMario = false;
-			marioArray.isBigMario = true; 
+			marioArray.backToBig = true; 
+			this.marioPipeSound();
 		}
 
 	
@@ -124,6 +127,25 @@ class Goomba{
 				this.direction *= -1;
 			}
 		});
+
+		highTubeJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  this.width > x  
+				&& this.pos.x  < x + highTubeJson.width )
+			{	
+				this.speed.x *= -1;
+				this.direction *= -1;
+			}
+		});
+
+		highestTubeJson.Pos[0].ranges.forEach(([x,y])=>{
+			if(this.pos.x +  this.width > x  
+				&& this.pos.x  < x + highestTubeJson.width)
+			{	
+				this.speed.x *= -1;
+				this.direction *= -1;
+			}
+		});
+
 
 		// ----------------Case 2: oddBrick ---------------------
 
@@ -149,14 +171,20 @@ class Goomba{
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-		// console.log(this.speed.x);
-
 
 		// ------------------1.小馬力歐的狀況-------------
-		if( !marioArray.isBigMario && !marioArray.isDie && !this.isDie && marioArray.speed.y > 0 
-			&& marioArray.pos.x + marioArray.height > this.pos.x 
+		if( !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& !marioArray.isDie 
+			&& !this.isDie 
+			&& !marioArray.falling
+			&& marioArray.canmoveFromUnder
+			&& !marioArray.willDie 
+			&& !marioArray.underGround
+			&& marioArray.speed.y > 0 
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
-			&& marioArray.pos.y > this.pos.y - marioArray.height){
+			&& marioArray.pos.y  > this.pos.y - marioArray.height){
 			{
 				this.goombaDieSound();
 				this.isDie = true;
@@ -166,7 +194,32 @@ class Goomba{
 
 
 		// ------------------2.大馬力歐的狀況-------------
-		if(marioArray.isBigMario && !marioArray.isDie && !this.isDie && marioArray.speed.y > 0 
+		if(marioArray.isBigMario 
+			&& !marioArray.isDie 
+			&& !this.isDie 
+			&& !marioArray.falling
+			&& marioArray.canmoveFromUnder
+			&& !marioArray.underGround
+			&& marioArray.speed.y > 0 
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
+			&& marioArray.pos.x < this.pos.x + this.width
+			&& marioArray.pos.y > this.pos.y - marioArray.height){
+			{
+				this.goombaDieSound();
+				this.isDie = true;
+				marioArray.speed.y = -4;
+			}		
+		}
+		
+
+		// ------------------2.大馬力歐的狀況-------------
+		if(marioArray.isFireMario 
+			&& !marioArray.isDie 
+			&& !this.isDie 
+			&& !marioArray.falling
+			&& marioArray.canmoveFromUnder
+			&& !marioArray.underGround
+			&& marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.height > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
@@ -188,51 +241,31 @@ class Goomba{
 
 
 
-		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
-			if(!this.hitByFire && this.pos.y >= y1 * screen.height - this.height
+		backgroundJson.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+			if(this.pos.x < x2 * 16 + backgroundJson.width
+				&& this.pos.x + this.width > x1 * 16){
+				this.falling = false;
+			}else if(this.pos.x > x2 * 16 + backgroundJson.width){
+				this.falling = true;
+			}
+			if(!this.hitByFire
+				&& this.pos.y >= y1 * backgroundJson.height - this.height
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
-				this.pos.y = y1 * screen.height - this.height;
+				this.pos.y = y1 * backgroundJson.height - this.height;
 			}
-
-			if(this.faceDirection == 1 
-				&&	this.falling == true 
-				&& this.pos.x + this.width == x1 * 16 ){
-				this.speed.x *= -1;
-			} //讓 goomba 掉下懸崖時會左右彈
-
-			if(this.faceDirection == -1 
-				&&	this.falling == true
-				 && this.pos.x + this.width == x1 * 16 - 32 ){
-				this.speed.x *= -1;
-			} 
-
-			if( this.faceDirection == 1 
-				&& this.pos.x > x2 * 16 + 16){
-				this.falling = true;
-				this.pos.y += this.speed.y;
+			if(this.falling){
+				this.pos.y += this.speed.y; 
 			}
-
-			if(this.faceDirection == -1 
-				&&	this.falling == true 
-				&& this.pos.x + this.width == x1 * 16  ){
-				this.speed.x *= -1;
-			} 
-
-			// if( this.pos.x > x2 * 16 + 16){
-			// 	this.falling = true;
-			// 	this.pos.y += this.speed.y;
-			// }			
-		
 			
-			if( this.faceDirection == -1 
-				&& this.pos.x < x1 * 16 - 16 ){
-				this.falling = true;
-				this.pos.y += this.speed.y;
+			if(!this.hitByFire && this.pos.y >= y1 * backgroundJson.height - this.height
+				&& this.pos.x + this.width > x1 * 16
+				&& this.pos.x < x2 * 16 + 16){
+				this.pos.y = y1 * backgroundJson.height - this.height;
 			}
 
 			//超越畫面上一定距離就死掉並清除陣列
-			if(this.pos.y >= y2 * screen.height + 176 
+			if(this.pos.y >= y2 * backgroundJson.height + 1200 
 				|| this.pos.x >= 6000){
 				this.isDie = true;
 			}
@@ -283,6 +316,11 @@ class Goomba{
 	goombaDieSound(){
 		let dieSound = new Audio("/music/mario-kick-sound.wav");
 		dieSound.play();
+	}
+
+	marioPipeSound(){
+		let marioPipeSound = new 	Audio("/music/mario-pipe-sound.wav");
+		marioPipeSound.play();
 	}
 
 	running(){

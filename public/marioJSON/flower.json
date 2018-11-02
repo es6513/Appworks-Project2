@@ -1,0 +1,44 @@
+{
+  "frames": [
+    {
+      "name": "flower-1",
+      "ranges": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "flower-2",
+      "ranges": [
+        16,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "flower-3",
+      "ranges": [
+        32,
+        0,
+        16,
+        16
+      ]
+    }
+  ],
+  "Pos": [
+    {
+      "tile": "flower",
+      "ranges": [
+        [
+          2160,
+          192
+        ]
+      ]
+    }
+  ],
+  "width": 16,
+  "height": 16
+}

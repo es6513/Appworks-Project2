@@ -1,0 +1,80 @@
+{
+  "frames": [
+    {
+      "name": "bullet-1",
+      "ranges": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "bullet-2",
+      "ranges": [
+        16,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "bullet-3",
+      "ranges": [
+        32,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "bullet-4",
+      "ranges": [
+        48,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "explosion1",
+      "ranges": [
+        64,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "explosion2",
+      "ranges": [
+        80,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "name": "explosion3",
+      "ranges": [
+        96,
+        0,
+        16,
+        16
+      ]
+    }
+  ],
+  "Pos": [
+    {
+      "tile": "bullet",
+      "ranges": [
+        [
+          1600,
+          208
+        ]
+      ]
+    }
+  ],
+  "width": 16,
+  "height": 16
+}

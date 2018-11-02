@@ -1,6 +1,5 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-// import {mario} from "../marioTest.js";
-
+import {keys} from "../keyEvent.js";
 
 class Flag{
 	constructor(){

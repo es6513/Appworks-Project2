@@ -1,5 +1,4 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-// import {marioArray} from "../marioArrayTest.js";
 
 
 class Coin{
@@ -30,11 +29,11 @@ class Coin{
 		//	&& shape.pos.y + shape.height > this.pos.y 上
 		//	&& shape.pos.y < this.pos.y + this.height 下
 
-		if(this.show && this.pos.x <= marioArray.pos.x + 8 
-			&& this.pos.x + 8 >=  marioArray.pos.x   
-			&& this.pos.y <= marioArray.pos.y + marioArray.height
-			&& this.pos.y >=  marioArray.pos.y  
-		
+		if(this.show 
+			&& this.pos.x < marioArray.pos.x  + marioArray.width
+			&& this.pos.x + this.width  >  marioArray.pos.x   
+			&& this.pos.y < marioArray.pos.y + marioArray.height 
+			&& this.pos.y + this.height >  marioArray.pos.y   + marioArray.height / 2 
 		){		
 			this.show = false;
 			this.coinSound();

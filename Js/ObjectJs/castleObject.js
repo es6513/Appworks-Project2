@@ -9,10 +9,6 @@ class Castle{
 		this.height = 176;
 	}
 	
-	update(marioArray){
-
-	}
-
 	draw(context,castleSprite,marioArray){
 				
 		if(marioArray.pos.x < 450 ){

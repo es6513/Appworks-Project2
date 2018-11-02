@@ -1,0 +1,31 @@
+#deviceDetect{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#startBtn{
+  width: 20%;
+  height: 10%;
+}
+
+#deviceNotice{
+  color: pink;
+  font-size: 20px;
+  display: none;
+  font-family: monospace;
+  width: 60%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+html {
+  min-height: 100% !important;
+  height: 100%;
+}
+
