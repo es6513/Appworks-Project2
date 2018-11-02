@@ -6,7 +6,8 @@ keys = {
 	bottom:false,
 	space:false,
 	zbutton: false,
-	abutton:false
+	abutton:false,
+	enter:false
 };
 
 let pressed;
@@ -33,8 +34,11 @@ function keyup(e){
 		keys.zbutton = false;
 	}else if(code === 65){
 		keys.abutton = false;
+	}else if(code === 13){
+		keys.enter = false;
 	}
 }
+
 function keydown(e){
 	pressed = true;
 	let code = window.event ? e.keyCode : e.which; 
@@ -61,6 +65,8 @@ function keypress(e){
 		keys.zbutton = true;
 	}else if(code === 65){
 		keys.abutton = true;
+	}else if(code === 13){
+		keys.enter = true;
 	}
 }
 

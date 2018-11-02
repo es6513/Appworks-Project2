@@ -5,6 +5,7 @@ import {Fireball} from "../ObjectJs/fireballObject.js";
 class Mario{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);
+		this.previousPos = new PositionAndSpeed(0,0);
 		this.speed = new PositionAndSpeed(0,0);
 		this.width = 16;
 		this.height = 32;
@@ -34,10 +35,6 @@ class Mario{
 		this.isBottomBrick = false;
 		this.touchBrickBorderByJumping = false;
 
-		this.stuckByBrick;
-
-		this.previousX;
-		this.prvioxusY;
 
 		// ----------控制撞到磚塊狀態----------
 
@@ -65,6 +62,7 @@ class Mario{
 		this.willDie = false;
 		this.isDie = false;
 		this.isOnGround = false;
+		this.onObstacles = false;
 		this.passStage = false;
 		this.falling = false;
 		this.canPlayPassMusic = false;
@@ -133,6 +131,7 @@ class Mario{
 		poleJson,castleJson,flagArray,undergroundTubeJson,undergroundBrickJson){
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
+
 
 		// ---------無敵以及死亡的處理---------
 	
@@ -225,7 +224,7 @@ class Mario{
 		// ------End of 控制馬力歐移動-----
 
 		 // --------跳躍的設定 ---------------
-		 				
+		 	
 		if(!this.canPlayPassMusic ){
 			this.speed.y += 0.5;  //gravity
 			if(!this.getDestinationTube){
@@ -307,7 +306,6 @@ class Mario{
 				this.isOnGround = true;
 				this.pos.y = y1 * backgroundJson.height - this.height; //落地
 				this.isBottomBrick = false;
-				this.isOnBrick = false;
 				this.speed.y = 0;
 			}else if(!this.getDestinationTube && !this.underGround && !this.isDie && this.pos.y >= y1 * backgroundJson.height + 256){
 				//---------------------------懸崖---------
@@ -380,6 +378,8 @@ class Mario{
 			
 				// --------------end  下水管-----------------
 			});
+
+			
 		}
 
 		// ------------------End of 控制水管障礙----------
@@ -398,11 +398,10 @@ class Mario{
 				this.isJump = false;
 				this.onTube = false;
 				this.isOnBrick = false;
+				this.isBottomBrick = false;
 				this.isOnGround = true;
 				this.pos.y = y1 * backgroundJson.height - this.height; //落地
 				this.fallingToUnder = false;
-				this.isBottomBrick = false;
-				this.isOnBrick = false;
 				this.speed.y = 0;
 			}
 			

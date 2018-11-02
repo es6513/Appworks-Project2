@@ -9,7 +9,7 @@ class OddBrick{
 	}
 
 	update(marioArray){
-
+		
 		if(!marioArray.isDie && marioArray.isRunning && !marioArray.underGround){
 
 			//-----------bug -marioArray.speed.y 為了在磚塊頂端不能移動
@@ -62,11 +62,11 @@ class OddBrick{
 					marioArray.onOddbrick = true;
 					marioArray.isJump = false;
 					marioArray.pos.y = this.pos.y - marioArray.height;
+					marioArray.onObstacles = true;
 					marioArray.speed.y = 0;
 				}
 			}	
 		}
-
 	}
 	
 	draw(context,oddBrickSprite,marioArray){

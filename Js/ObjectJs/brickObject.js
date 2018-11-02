@@ -76,15 +76,15 @@ class Brick{
 				this.lowerzone = true;
 			}else if(marioArray.pos.x + marioArray.width >= this.pos.x  
 				&& marioArray.pos.x <= this.pos.x + this.width 
-				&& marioArray.pos.y + marioArray.height / 2  < this.pos.y ){
+				&& marioArray.pos.y + marioArray.height / 2  <= this.pos.y ){
 				this.lowerzone = false;
 			}
 
 			if(!this.lowerzone 
 				&& !marioArray.underGround  
 				&&  marioArray.speed.y > 0 
-				&& marioArray.pos.x + marioArray.width  >= this.pos.x 
-				&& marioArray.pos.x <= this.pos.x + this.width 
+				&& marioArray.pos.x + marioArray.width  > this.pos.x 
+				&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				if(marioArray.pos.y > this.pos.y - marioArray.height){
 					marioArray.pos.y = this.pos.y - marioArray.height;
@@ -120,11 +120,11 @@ class Brick{
 			// -------------上方----------------
 
 			if(marioArray.pos.x + marioArray.width > this.pos.x  
-				&& marioArray.pos.x < this.pos.x + this.width 
+				&& marioArray.pos.x <= this.pos.x + this.width 
 				&& marioArray.pos.y  >= this.pos.y + this.height) {
 				this.lowerzone = true;
-			}else if(marioArray.pos.x + marioArray.width > this.pos.x  
-				&& marioArray.pos.x < this.pos.x + this.width 
+			}else if(marioArray.pos.x + marioArray.width >= this.pos.x  
+				&& marioArray.pos.x <= this.pos.x + this.width 
 				&& (marioArray.pos.y + marioArray.height <= this.pos.y ||
 					marioArray.pos.y + marioArray.height - marioArray.speed.y <= this.pos.y) ){
 				this.lowerzone = false;
