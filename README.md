@@ -17,8 +17,8 @@
     * 如果只想直接衝去終點，可以找找一些捷徑(例如下水道)
 
 ## Screenshot
-<img src="https://github.com/es6513/Mario-Game/blob/master/imgs/MarioGif2.gif" width="320" height="160">
-<img src="https://github.com/es6513/Mario-Game/blob/master/imgs/MarioGif1.gif" width="320" height="160">
+<img src="https://github.com/es6513/Mario-Game/blob/master/imgs/MarioGif2.gif" width="640" height="360">
+<img src="https://github.com/es6513/Mario-Game/blob/master/imgs/MarioGif1.gif" width="640" height="360">
 
 ## Requirement
 * 需要鍵盤操作，建議使用筆電或是桌電
