@@ -32,7 +32,7 @@ class Coin{
 		if(this.show 
 			&& this.pos.x < marioArray.pos.x  + marioArray.width
 			&& this.pos.x + this.width  >  marioArray.pos.x   
-			&& this.pos.y < marioArray.pos.y + marioArray.height 
+			&& this.pos.y < marioArray.pos.y + marioArray.height - marioArray.speed.y
 			&& this.pos.y + this.height >  marioArray.pos.y   + marioArray.height / 2 
 		){		
 			this.show = false;

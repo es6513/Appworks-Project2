@@ -27,30 +27,45 @@ import { Fireball } from "./ObjectJs/fireballObject.js";
 let snippet = new Array();
 let firesnippet = new Array();
 
-// let canvas = document.querySelector("#cvs");
-// let context = canvas.getContext("2d");
-
-
-let fps = 100;
 
 // ----------------解析度偵測------------------------
 
-let device = document.querySelector("#deviceDetect");
+let openBackground = document.querySelector("#openBackground");
+let notWorkingInfo = document.querySelector("#notWorkingInfo");
+let smallresolution = document.querySelector("#smaller1366");
+let bigresolution = document.querySelector("#bigger1366");
+let safariNotWorking = document.querySelector("#safariNotWorkingInfo");
 let screenWidth = screen.width;
 
 // ---------------開頭畫面---------------
-if(screenWidth >= 1024){
-	device.style.width = "100%";
-	device.style.height = "100%";
-	device.style.backgroundColor = "black";
-}else if(screenWidth < 1024){
-	startBtn.style.display = "none";
-	deviceNotice.style.display = "block";
+if(screenWidth < 1024){
+	openBackground.style.display = "none";
+	notWorkingInfo.style.display = "flex";
+	notWorkingInfoDetail.style.display = "flex";
+}else if(screenWidth >= 1024 && screenWidth <= 1366){
+	smallresolution.style.display = "block";
+	bigresolution.style.display = "none";
+}else if(screenWidth > 1366){
+	smallresolution.style.display = "none";
+	bigresolution.style.display = "block";
 }
 
 // ---------------end 開頭畫面---------------
 
 // ------------end -解析度偵測-----------------------
+
+// ------------Sfari 偵測---------------------
+var is_chrome = !!window.chrome && !is_opera;
+var is_explorer = typeof document !== "undefined" && !!document.documentMode && !isEdge;
+var is_firefox = typeof window.InstallTrigger !== "undefined";
+var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+var is_opera = !!window.opera || navigator.userAgent.indexOf(" OPR/") >= 0;
+
+if (is_safari) {
+	safariNotWorking.style.display = "flex";
+}
+
+// ------------Sfari 偵測---------------------
 
 
 
@@ -350,9 +365,9 @@ Promise.all([
 		startGame();
 	}
 
-	// document.querySelector("#stop").addEventListener("click", function() {
-	// 	start();
-	// });
+	document.querySelector("#stop").addEventListener("click", function() {
+		myGameArea.stop();
+	});
 
 	// document.querySelector("#start").addEventListener("click", function() {
 	// 	restart();
@@ -478,18 +493,18 @@ Promise.all([
 		}
 
 		// --------------------怪物區---------------------
-		// for(let j = 0;j < turtleArray.length;j += 1){
-		// 	turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
-		// 	turtleArray[j].update(backgroundJson,tubeJson,highTubeJson,highestTubeJson,marioArray[0],oddBrickJson);
-		// 	let turtle = turtleArray[j];
-		// 	if(turtle.isDie){
-		// 		turtleArray.splice(j,1);
-		// 		j--;
-		// 	}
-		// 	if(turtleArray.length == 0){
-		// 		break;
-		// 	}
-		// }			
+		for(let j = 0;j < turtleArray.length;j += 1){
+			turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
+			turtleArray[j].update(backgroundJson,tubeJson,highTubeJson,highestTubeJson,marioArray[0],oddBrickJson);
+			let turtle = turtleArray[j];
+			if(turtle.isDie){
+				turtleArray.splice(j,1);
+				j--;
+			}
+			if(turtleArray.length == 0){
+				break;
+			}
+		}			
 				
 		for(let j = 0;j < goombaArray.length;j += 1){
 			goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
@@ -628,7 +643,6 @@ Promise.all([
 			oddBrickArray[j].draw(context,oddBrickSprite,marioArray[0]);
 			oddBrickArray[j].update(marioArray[0]);
 		}	
-
 			
 
 		marioArray[0].draw(context, marioSpriteSet,backgroundJson,fireballSprite,
@@ -668,12 +682,19 @@ Promise.all([
 		// -----------------end of 文字區-----------------
 		
 	};
-
+	// startGame();
 	document.querySelector("#startBtn").addEventListener("click",function (e){
 		startGame();
-		device.style.display = "none";
+		openBackground.style.display = "none";
 	});
-	// startGame();
+
+	document.querySelector(".container").addEventListener("keypress", function (e) {
+		var key = e.which || e.keyCode;
+		if (key === 13) { 
+			startGame();
+		}
+	});
+	
 });
 
 

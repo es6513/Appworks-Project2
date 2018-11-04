@@ -1,5 +1,4 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-// import {marioArray} from "../marioArrayTest.js";
 
 
 class Turtle{
@@ -94,9 +93,6 @@ class Turtle{
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
 			marioArray.willDie = true;
-			
-			// marioArray.speed.y = -10;
-			// marioArray.pos.y += marioArray.speed.y;
 		}
 
 		// Case 2 : 走路中的烏龜打死馬力歐
@@ -119,8 +115,6 @@ class Turtle{
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
 			marioArray.willDie = true;
-			// marioArray.speed.y = -10;  
-			// marioArray.pos.y += marioArray.speed.y;
 		}		
 
 		//------2.大馬力歐死亡變小馬力歐-------
@@ -478,8 +472,6 @@ class Turtle{
 		}
 		return"turtleRun-1";
 
-		// this.frameIndex = ++this.frameIndex % 20 ;
-		// return this.framesRun[this.frameIndex];
 	}
 
 	backToLiving(){

@@ -11,19 +11,55 @@
 </head>
 
 <body>
+  <div id="openBackground">
+    <img id="marioRunImg" src="./imgs/marioRun.gif" alt="marioRun">
+    <button id="startBtn">Click HERE to start game !!!</button>
+    <div id="resolutionhint">
+      <p id="smaller1366">
+        Your screen resolution is smaller than 1366 pixels,<br />
+        suggest you zoom to 125%.</p>
+      <p id="bigger1366">
+        Your screen resolution is bigger than 1366 pixels,<br />
+        suggest you zoom to more than 150%.</p>
+    </div>
+    <div id="gameInstruction">
+      <p id="InstructionsTitle">Game Instructions: </p>
+      <div id="arrow">
+        <img id="arrowImage" src="./imgs/arrowKeys.png" alt="">
+        <p>
+          Up Arrow: Jump <br />
+          Right Arrow : Move Right<br />
+          Down Arrow : Squat<br />
+          Left Arrow : Move Left<br />
+        </p>
+      </div>
+      <div id="space">
+        <img id="spacebarImage" src="./imgs/key_SpaceBar.png" alt="spaceBar">
+        <p>
+          Space Bar: Throw FireBall (when in FireMario)
+        </p>
+      </div>
 
-  <!-- <canvas id="cvs" width="8000" height=" 2160"></canvas> -->
-  <div id="deviceDetect">
-    <button id="startBtn">Click the Running Mario to start game</button>
-    <p id="deviceNotice">
-      We find you are using mobile device to open this game.
-      Because using a keyboard to control this game is required, we suggest you to open this game in laptop or desktop
-      computer.
+    </div>
+  </div>
+
+
+
+  <div id="notWorkingInfo">
+    <img id="marioDeath" src="./imgs/marioDeath.jpg" alt="marioDeath">
+    <p id="notWorkingInfoDetail">
+      Sorry, we find you are using mobile device to open this game.<br />
+      Because using a keyboard to control this game is required, <br />
+      we suggest you to open this game in laptop or desktop computer.
     </p>
-    <p id="safariDetetion">
-
+    <p id="safariNotWorkingInfo">
+      Sorry, we find you are using Safari to open this game.<br />
+      Because this game still can not work on Safari, <br />
+      we suggest you to open this game in Chrome, Firefox, Opera, or Edge browser.
     </p>
   </div>
+  <button id="stop">Stop</button>
+
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>

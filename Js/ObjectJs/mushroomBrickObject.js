@@ -21,8 +21,6 @@ class MushroomBrick{
 	
 	update(marioArray,mushroomArray,mushroomBrickArray){
 
-	
-
 		if(mushroomArray.length != 0){
 			for(let j = 0;j < mushroomBrickArray.length;j += 1){
 				if(mushroomBrickArray[j].isUseLess == true){
@@ -65,7 +63,8 @@ class MushroomBrick{
 				this.lowerzone = true;
 			}else if(marioArray.pos.x + marioArray.width >= this.pos.x  
 				&& marioArray.pos.x <= this.pos.x + this.width 
-				&& marioArray.pos.y + marioArray.height  <= this.pos.y ){
+				&& marioArray.pos.y + marioArray.height / 2  <= this.pos.y ||
+				marioArray.pos.y + marioArray.height - marioArray.speed.y <= this.pos.y ){
 				this.lowerzone = false;
 			}
 
@@ -82,6 +81,8 @@ class MushroomBrick{
 					marioArray.isJump = false;
 				}
 			}
+
+			
 		}
 
 		//---------------大馬力歐-----------------
@@ -134,10 +135,11 @@ class MushroomBrick{
 					marioArray.isJump = false;
 				}
 			}
+
 		}
 
 		//-------------end 從磚塊的下方及上方碰到------------------
-
+		// ----------------小馬力歐--------------------
 		if(!marioArray.underGround 
 			&& marioArray.isJump
 			&& !marioArray.isBigMario 
@@ -149,7 +151,36 @@ class MushroomBrick{
 			marioArray.pos.x = this.pos.x + this.width ;
 			marioArray.stopX = true;
 			marioArray.touchBrickBorderByJumping = true;
+		}else if(!marioArray.underGround 
+			&& marioArray.isJump
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x + marioArray.width == this.pos.x 
+			&& marioArray.pos.y + marioArray.height  >= this.pos.y
+			&& marioArray.pos.y + marioArray.height / 2 <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x - marioArray.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		}else if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x == this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height < this.pos.y ){
+			marioArray.stopX = false;
 		}
+		else if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x + marioArray.width == this.pos.x 
+			&& marioArray.pos.y + marioArray.height < this.pos.y ){
+			marioArray.stopX = false;
+		}
+
+
+		// ----------------大馬力歐--------------------
 		
 		if(!marioArray.underGround 
 			&& marioArray.isJump 
@@ -161,20 +192,7 @@ class MushroomBrick{
 			marioArray.pos.x = this.pos.x + this.width ;
 			marioArray.stopX = true;
 			marioArray.touchBrickBorderByJumping = true;
-		} 
-
-		if(!marioArray.underGround 
-			&& marioArray.isJump
-			&& marioArray.pos.x + marioArray.width == this.pos.x 
-			&& marioArray.pos.y + marioArray.height  >= this.pos.y
-			&& marioArray.pos.y + marioArray.height / 2 <= this.pos.y + this.height)
-		{
-			marioArray.pos.x = this.pos.x - marioArray.width ;
-			marioArray.stopX = true;
-			marioArray.touchBrickBorderByJumping = true;
-		}
-		
-		if(!marioArray.underGround 
+		} else	if(!marioArray.underGround 
 			&& marioArray.isJump 
 			&& (marioArray.isBigMario || marioArray.isFireMario)
 			&& marioArray.pos.x + marioArray.width == this.pos.x 
@@ -184,7 +202,30 @@ class MushroomBrick{
 			marioArray.pos.x = this.pos.x - marioArray.width ;
 			marioArray.stopX = true;
 			marioArray.touchBrickBorderByJumping = true;
-		} 
+		} else if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& marioArray.pos.x == this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height < this.pos.y ){
+			marioArray.stopX = false;
+		}
+		else if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& marioArray.pos.x + marioArray.width == this.pos.x  
+			&& marioArray.pos.y + marioArray.height < this.pos.y ){
+			marioArray.stopX = false;
+		}
+
+		// if(marioArray.pos.x == this.pos.x + this.width 
+		// 	&& marioArray.pos.y + marioArray.height  < this.pos.y 
+		// 	&& (keys.left || keys.right)){
+		// 	marioArray.stopX = false;
+		// }else if(marioArray.pos.x + marioArray.width == this.pos.x 
+		// 	&& marioArray.pos.y + marioArray.height < this.pos.y  
+		// 	&& (keys.left || keys.right)){
+		// 	marioArray.stopX = false;
+		// }
 
 		if(marioArray.touchBrickBorderByJumping && 
 			(marioArray.isOnGround || marioArray.isOnBrick)){

@@ -29,7 +29,7 @@ class Goomba{
 		];
 	}
 	
-	update(tubeJson,highTubeJson,highestTubeJson,turtleArray,marioArray,screen,oddBrickJson){
+	update(tubeJson,highTubeJson,highestTubeJson,turtleArray,marioArray,backgroundJson,oddBrickJson){
 		this.faceDirection = this.direction;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
@@ -246,27 +246,27 @@ class Goomba{
 
 
 
-		screen.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
-			if(this.pos.x < x2 * 16 + screen.width
+		backgroundJson.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
+			if(this.pos.x < x2 * 16 + backgroundJson.width
 				&& this.pos.x + this.width > x1 * 16){
 				this.falling = false;
-			}else if(this.pos.x > x2 * 16 + screen.width){
+			}else if(this.pos.x > x2 * 16 + backgroundJson.width){
 				this.falling = true;
 			}
 			if(!this.hitByFire
-				&& this.pos.y >= y1 * screen.height - this.height
+				&& this.pos.y >= y1 * backgroundJson.height - this.height
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
-				this.pos.y = y1 * screen.height - this.height;
+				this.pos.y = y1 * backgroundJson.height - this.height;
 			}
 			if(this.falling){
 				this.pos.y += this.speed.y; 
 			}
 			
-			if(!this.hitByFire && this.pos.y >= y1 * screen.height - this.height
+			if(!this.hitByFire && this.pos.y >= y1 * backgroundJson.height - this.height
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
-				this.pos.y = y1 * screen.height - this.height;
+				this.pos.y = y1 * backgroundJson.height - this.height;
 			}
 
 			// if(this.faceDirection == 1 
@@ -306,7 +306,7 @@ class Goomba{
 			// }  // 這一段 bug 怪物會有點向下跑
 
 			//超越畫面上一定距離就死掉並清除陣列
-			if(this.pos.y >= y2 * screen.height + 1200 
+			if(this.pos.y >= y2 * backgroundJson.height + 1200 
 				|| this.pos.x >= 6000){
 				this.isDie = true;
 			}

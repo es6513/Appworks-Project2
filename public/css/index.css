@@ -9,6 +9,7 @@
 }
 
 #gameInstruction{
+  margin-top: 5%;
   display: flex;
   width: 40%;
   flex-direction: column;
@@ -19,6 +20,7 @@
 #InstructionsTitle{
   display: flex;
   margin-right: 10%;
+  justify-content: end;
 }
 
 #arrowImage{
@@ -87,17 +89,7 @@
 }
 
 #notWorkingInfoDetail{
-  display: none;
-  justify-content: center;
-  color: yellow;
-  font-size: 20px;
-  line-height: 3rem;
-  font-family: monospace;
-  width: 80%;
-}
-
-#safariNotWorkingInfo{
-  display: none;
+  display: flex;
   justify-content: center;
   color: yellow;
   font-size: 20px;
@@ -159,7 +151,7 @@ html {
 
 
 @media screen and (min-width:320px) and (max-width:480px){
-  #notWorkingInfoDetail, #safariNotWorkingInfo{
+  #notWorkingInfoDetail{
     font-size: 12px;
   }
  
@@ -171,7 +163,7 @@ html {
 
 
 @media screen and (min-width:481px) and (max-width:640px){
-  #notWorkingInfoDetail, #safariNotWorkingInfo{
+  #notWorkingInfoDetail{
     font-size: 16px;
   }
  
@@ -182,7 +174,7 @@ html {
 }
 
 @media screen and (min-width:641px) and (max-width:1024px){
-  #notWorkingInfoDetail, #safariNotWorkingInfo{
+  #notWorkingInfoDetail{
     font-size: 20px;
   }
  

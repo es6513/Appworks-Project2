@@ -284,16 +284,7 @@ class Fireball{
 			}
 		}
 
-		// if(this.show && this.goLeft && !this.goRight  && marioArray.isRunning && this.faceDirection == -1){
-		// 	if(this.pos.x < 450){
-		// 		fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x,this.pos.y,this.faceDirection < 0);
-		// 	}else if(this.pos.x >= 450 && this.pos.x < 5000 ){
 
-		// 		fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x - marioArray.pos.x  + 450 ,this.pos.y,this.faceDirection < 0);
-		// 	}else if(this.pos.x >= 5000 ){
-		// 		fireballSprite.drawFireBallSprite(this.firing(),context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
-		// 	}
-		// }
 	}
 }
 

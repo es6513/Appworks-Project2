@@ -117,8 +117,8 @@ function loadBigMarioImage(name) {
 function drawBackground(name) {
 	return fetch(`/marioJSON/${name}.json`)
 		.then(r =>r.json())
-		.then(screen=> Promise.all([
-			screen,
+		.then(backgroundJson=> Promise.all([
+			backgroundJson,
 			loadSky(),
 			loadGround(),
 			loadClouds(),
@@ -131,7 +131,7 @@ function drawBackground(name) {
 			loadDecorations(48,32,"smallMountain","smallMountain4832"),
 			loadDecorations(80,48,"bigMountain","bigMountain8048"),
 		]))
-		.then(([screen,skySprite,groundSprite,cloudSprite,
+		.then(([backgroundJson,skySprite,groundSprite,cloudSprite,
 			undergroundSprite,underskySprite,undergroundBrickSprite,
 			smallGrassSprite,mediumGrassSprite,bigGrassSprite,
 			smallMountainSprite,bigMountainSprite,
@@ -139,18 +139,18 @@ function drawBackground(name) {
 			let backgroundSprite = document.createElement("canvas");
 			backgroundSprite.width = 8000;
 			backgroundSprite.height = 2160;
-			drawScreen(screen.backgrounds[0],backgroundSprite.getContext("2d"),skySprite);
-			drawScreen(screen.backgrounds[1],backgroundSprite.getContext("2d"),groundSprite);
-			drawClouds(screen.clouds[0],backgroundSprite.getContext("2d"),cloudSprite);
-			drawScreen(screen.underbackgrounds[0],backgroundSprite.getContext("2d"),undergroundSprite);
-			drawScreen(screen.underbackgrounds[1],backgroundSprite.getContext("2d"),underskySprite);
-			drawScreen(screen.underbackgrounds[2],backgroundSprite.getContext("2d"),undergroundBrickSprite);
+			drawScreen(backgroundJson.backgrounds[0],backgroundSprite.getContext("2d"),skySprite);
+			drawScreen(backgroundJson.backgrounds[1],backgroundSprite.getContext("2d"),groundSprite);
+			drawClouds(backgroundJson.clouds[0],backgroundSprite.getContext("2d"),cloudSprite);
+			drawScreen(backgroundJson.underbackgrounds[0],backgroundSprite.getContext("2d"),undergroundSprite);
+			drawScreen(backgroundJson.underbackgrounds[1],backgroundSprite.getContext("2d"),underskySprite);
+			drawScreen(backgroundJson.underbackgrounds[2],backgroundSprite.getContext("2d"),undergroundBrickSprite);
 
-			drawDecorations(screen.smallGrass[0],backgroundSprite.getContext("2d"),smallGrassSprite);
-			drawDecorations(screen.mediumGrass[0],backgroundSprite.getContext("2d"),mediumGrassSprite);
-			drawDecorations(screen.bigGrass[0],backgroundSprite.getContext("2d"),bigGrassSprite);
-			drawDecorations(screen.smallMountain[0],backgroundSprite.getContext("2d"),smallMountainSprite);
-			drawDecorations(screen.bigMountain[0],backgroundSprite.getContext("2d"),bigMountainSprite);
+			drawDecorations(backgroundJson.smallGrass[0],backgroundSprite.getContext("2d"),smallGrassSprite);
+			drawDecorations(backgroundJson.mediumGrass[0],backgroundSprite.getContext("2d"),mediumGrassSprite);
+			drawDecorations(backgroundJson.bigGrass[0],backgroundSprite.getContext("2d"),bigGrassSprite);
+			drawDecorations(backgroundJson.smallMountain[0],backgroundSprite.getContext("2d"),smallMountainSprite);
+			drawDecorations(backgroundJson.bigMountain[0],backgroundSprite.getContext("2d"),bigMountainSprite);
 			return backgroundSprite;
 		});
 	;
