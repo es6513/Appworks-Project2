@@ -26,11 +26,7 @@ import { Fireball } from "./ObjectJs/fireballObject.js";
 let snippet = new Array();
 let firesnippet = new Array();
 
-// let canvas = document.querySelector("#cvs");
-// let context = canvas.getContext("2d");
 
-
-let fps = 100;
 
 // var is_chrome = !!window.chrome && !is_opera;
 // var is_explorer = typeof document !== "undefined" && !!document.documentMode && !isEdge;
@@ -44,23 +40,28 @@ let fps = 100;
 
 // ----------------解析度偵測------------------------
 
-let device = document.querySelector("#deviceDetect");
+let openBackgroundContainer = document.querySelector(".container");
+let gameinstruction = document.querySelector("#gameInstruction");
+let notWorkingInfo = document.querySelector("#notWorkingInfo");
+let smallresolution = document.querySelector("#smaller1366");
+let bigresolution = document.querySelector("#bigger1366");
 let screenWidth = screen.width;
 
 // ---------------開頭畫面---------------
-// if(screenWidth >= 1024){
-// 	device.style.width = "100%";
-// 	device.style.height = "100%";
-// 	device.style.backgroundColor = "black";
-// }else if(screenWidth < 1024){
-// 	startBtn.style.display = "none";
-// 	deviceNotice.style.display = "block";
-// }
+if(screenWidth < 1024){
+	openBackgroundContainer.style.display = "none";
+	notWorkingInfo.style.display = "flex";
+}else if(screenWidth >= 1024 && screenWidth <= 1366){
+	smallresolution.style.display = "block";
+	bigresolution.style.display = "none";
+}else if(screenWidth > 1366){
+	smallresolution.style.display = "none";
+	bigresolution.style.display = "block";
+}
 
 // ---------------end 開頭畫面---------------
 
 // ------------end -解析度偵測-----------------------
-
 
 
 // -------------------音效--------------------
@@ -662,14 +663,12 @@ Promise.all([
 		// -----------------end of 文字區-----------------
 		
 	};
-	startGame();
-	// document.querySelector("#startBtn").addEventListener("click",function (e){
-	// 	startGame();
-	// 	device.style.display = "none";
-	// });
-	
-
 	// startGame();
+	document.querySelector("#startBtn").addEventListener("click",function (e){
+		startGame();
+		openBackground.style.display = "none";
+	});
+
 });
 
 
