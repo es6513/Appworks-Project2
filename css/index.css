@@ -1,27 +1,135 @@
-#deviceDetect{
+#openBackground{
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
+  background-color: black;
+  width: 100%;
+  height: 100%;
+}
+
+#gameInstruction{
+  margin-top: 5%;
+  display: flex;
+  width: 40%;
+  flex-direction: column;
+  justify-content: center;
+  font-family: monospace;
+}
+
+#InstructionsTitle{
+  display: flex;
+  margin-right: 10%;
+  justify-content: end;
+}
+
+#arrowImage{
+  max-width: 150px;
+  max-height: 75px;
+}
+
+#spacebarImage{
+  max-width: 160px;
+  max-height: 32px;
+}
+
+#arrow p{
+  line-height: 1rem;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 5%; 
+}
+
+#arrow{
+  display: flex;
+  justify-content: center;
+}
+
+#space{
+  display: flex;
+  margin-top: 2%;
+  justify-content: center;
+}
+
+#space p{
+  display: flex;
+  align-items: center;
+  line-height: 1rem;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 5%;
 }
 
 #startBtn{
-  width: 20%;
+  width: 30%;
   height: 10%;
+  margin-top:5%;
+  background-color:black;
+  border-radius: 10px;
+  border: solid 5px white;
+  color:white;
+  outline: 0px;
+  font-family: monospace;
+  cursor: pointer;
 }
 
-#deviceNotice{
-  color: pink;
-  font-size: 20px;
+#startBtn:hover{
+  color: firebrick;
+  border:solid 5px firebrick;;
+}
+
+#notWorkingInfo{
   display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+#notWorkingInfoDetail{
+  display: flex;
+  justify-content: center;
+  color: yellow;
+  font-size: 20px;
+  line-height: 3rem;
   font-family: monospace;
-  width: 60%;
+  width: 80%;
+}
+
+#marioRunImg{
+  margin-top: 2%;
+  width: 20%;
+  height: 20%;
+}
+
+#resolutionhint{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#resolutionhint p{
+  display: flex;
+  justify-content: center;
+}
+
+#smaller1366{
+  display: none;
+  color: yellow;
+}
+
+#bigger1366{
+  display: none;
+  color: yellow;
 }
 
 body {
   height: 100%;
   margin: 0;
   overflow: hidden;
+  color: white;
 }
 
 html {
@@ -29,3 +137,53 @@ html {
   height: 100%;
 }
 
+
+@media screen and (max-height:768px){
+  #marioRunImg{
+    width: 20%;
+    height: 20%;
+  }
+
+  #gameInstruction p{
+    font-size: 12px;
+  }
+}
+
+
+@media screen and (min-width:320px) and (max-width:480px){
+  #notWorkingInfoDetail{
+    font-size: 12px;
+  }
+ 
+  #marioDeath{
+    width: 40%;
+    height: 20%;
+  }
+}
+
+
+@media screen and (min-width:481px) and (max-width:640px){
+  #notWorkingInfoDetail{
+    font-size: 16px;
+  }
+ 
+  #marioDeath{
+    width: 40%;
+    height: 40%;
+  }
+}
+
+@media screen and (min-width:641px) and (max-width:1024px){
+  #notWorkingInfoDetail{
+    font-size: 20px;
+  }
+ 
+  #marioDeath{
+    width: 50%;
+    height: 50%;
+  }
+}
+
+@media screen and (min-width:1024px) and (max-width:1366px){
+  
+}

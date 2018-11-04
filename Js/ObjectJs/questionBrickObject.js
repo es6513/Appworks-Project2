@@ -69,7 +69,8 @@ class QuestionBrick{
 				this.lowerzone = true;
 			}else if(marioArray.pos.x + marioArray.width >= this.pos.x  
 				&& marioArray.pos.x <= this.pos.x + this.width 
-				&& marioArray.pos.y + marioArray.height / 2  <= this.pos.y ){
+				&& marioArray.pos.y + marioArray.height / 2  <= this.pos.y ||
+				marioArray.pos.y + marioArray.height - marioArray.speed.y <= this.pos.y){
 				this.lowerzone = false;
 			}
 
@@ -86,7 +87,7 @@ class QuestionBrick{
 					marioArray.isJump = false;
 				}
 			}
-
+		
 			// if(marioArray.isOnBrick 
 			// 	&& marioArray.speed.y > 0.5)
 			// 	// && marioArray.pos.x >= this.pos.x+this.width 
@@ -166,7 +167,6 @@ class QuestionBrick{
 			&& marioArray.pos.y + marioArray.height  >= this.pos.y  
 			&& marioArray.pos.y + marioArray.height / 2 <= this.pos.y + this.height)
 		{
-			console.log("123");
 			marioArray.pos.x = this.pos.x + this.width ;
 			marioArray.stopX = true;
 			marioArray.touchBrickBorderByJumping = true;
@@ -181,6 +181,14 @@ class QuestionBrick{
 			marioArray.pos.x = this.pos.x - marioArray.width ;
 			marioArray.stopX = true;
 			marioArray.touchBrickBorderByJumping = true;
+		}
+		else if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x + marioArray.width == this.pos.x 
+			&& marioArray.pos.y + marioArray.height < this.pos.y ){
+			marioArray.stopX = false;
 		}
 
 		// ----------------大馬力歐--------------------
@@ -206,17 +214,30 @@ class QuestionBrick{
 			marioArray.pos.x = this.pos.x - marioArray.width ;
 			marioArray.stopX = true;
 			marioArray.touchBrickBorderByJumping = true;
-		} 
-
-		if(marioArray.pos.x == this.pos.x + this.width 
-			&& marioArray.pos.y + marioArray.height  < this.pos.y 
-			&& (keys.left || keys.right)){
-			marioArray.stopX = false;
-		}else if(marioArray.pos.x + marioArray.width == this.pos.x 
-			&& marioArray.pos.y + marioArray.height < this.pos.y  
-			&& (keys.left || keys.right)){
+		}else if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& marioArray.pos.x == this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height < this.pos.y ){
 			marioArray.stopX = false;
 		}
+		else if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& marioArray.pos.x + marioArray.width == this.pos.x  
+			&& marioArray.pos.y + marioArray.height < this.pos.y ){
+			marioArray.stopX = false;
+		}
+
+		// if(marioArray.pos.x == this.pos.x + this.width 
+		// 	&& marioArray.pos.y + marioArray.height  < this.pos.y 
+		// 	&& (keys.left || keys.right)){
+		// 	marioArray.stopX = false;
+		// }else if(marioArray.pos.x + marioArray.width == this.pos.x 
+		// 	&& marioArray.pos.y + marioArray.height < this.pos.y  
+		// 	&& (keys.left || keys.right)){
+		// 	marioArray.stopX = false;
+		// }
 
 		if(marioArray.touchBrickBorderByJumping 
 			&& (marioArray.isOnGround || marioArray.isOnBrick)){

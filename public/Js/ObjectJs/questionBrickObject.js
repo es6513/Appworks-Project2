@@ -71,7 +71,7 @@ class QuestionBrick{
 				&& marioArray.pos.x + marioArray.width > this.pos.x  
 				&& marioArray.pos.x < this.pos.x + this.width ){
 					
-				}
+			}
 
 
 			if(!marioArray.isBottomBrick && marioArray.speed.y > 0 

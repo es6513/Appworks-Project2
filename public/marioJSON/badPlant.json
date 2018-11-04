@@ -1,0 +1,35 @@
+{
+  "frames": [
+    {
+      "name": "badPlantOpen",
+      "ranges": [
+        0,
+        0,
+        16,
+        24
+      ]
+    },
+    {
+      "name": "badPlantClose",
+      "ranges": [
+        16,
+        0,
+        16,
+        24
+      ]
+    }
+  ],
+  "Pos": [
+    {
+      "tile": "badPlant",
+      "ranges": [
+        [
+          920,
+          192
+        ]
+      ]
+    }
+  ],
+  "width": 16,
+  "height": 24
+}

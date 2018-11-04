@@ -184,7 +184,7 @@ class Goomba{
 			&& marioArray.speed.y > 0 
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
-			&& marioArray.pos.y  > this.pos.y - marioArray.height){
+			&& marioArray.pos.y + marioArray.height  > this.pos.y) {
 			{
 				this.goombaDieSound();
 				this.isDie = true;
