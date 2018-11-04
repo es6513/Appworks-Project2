@@ -365,9 +365,9 @@ Promise.all([
 		startGame();
 	}
 
-	// document.querySelector("#stop").addEventListener("click", function() {
-	// 	start();
-	// });
+	document.querySelector("#stop").addEventListener("click", function() {
+		myGameArea.stop();
+	});
 
 	// document.querySelector("#start").addEventListener("click", function() {
 	// 	restart();
