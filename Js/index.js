@@ -31,22 +31,20 @@ let firesnippet = new Array();
 // ----------------解析度偵測------------------------
 
 let openBackground = document.querySelector("#openBackground");
-let notWorkingInfo = document.querySelector("#notWorkingInfo");
 let smallresolution = document.querySelector("#smaller1366");
 let bigresolution = document.querySelector("#bigger1366");
+let marioDeath = document.querySelector("#marioDeath");
 let safariNotWorking = document.querySelector("#safariNotWorkingInfo");
 let screenWidth = screen.width;
 
 // ---------------開頭畫面---------------
-if(screenWidth < 1024){
+if(screenWidth < 1024 && !is_safari){
 	openBackground.style.display = "none";
-	notWorkingInfo.style.display = "flex";
 	notWorkingInfoDetail.style.display = "flex";
+	marioDeath.style.display = "block";
 }else if(screenWidth >= 1024 && screenWidth <= 1366){
 	smallresolution.style.display = "block";
-	bigresolution.style.display = "none";
 }else if(screenWidth > 1366){
-	smallresolution.style.display = "none";
 	bigresolution.style.display = "block";
 }
 
@@ -62,11 +60,11 @@ var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 var is_opera = !!window.opera || navigator.userAgent.indexOf(" OPR/") >= 0;
 
 if (is_safari) {
+	marioDeath.style.display = "block";
 	safariNotWorking.style.display = "flex";
 }
 
 // ------------Sfari 偵測---------------------
-
 
 
 // -------------------音效--------------------
@@ -365,9 +363,6 @@ Promise.all([
 		startGame();
 	}
 
-	document.querySelector("#stop").addEventListener("click", function() {
-		myGameArea.stop();
-	});
 
 	// document.querySelector("#start").addEventListener("click", function() {
 	// 	restart();

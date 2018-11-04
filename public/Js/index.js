@@ -26,42 +26,43 @@ import { Fireball } from "./ObjectJs/fireballObject.js";
 let snippet = new Array();
 let firesnippet = new Array();
 
-
-
-// var is_chrome = !!window.chrome && !is_opera;
-// var is_explorer = typeof document !== "undefined" && !!document.documentMode && !isEdge;
-// var is_firefox = typeof window.InstallTrigger !== "undefined";
-// var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-// var is_opera = !!window.opera || navigator.userAgent.indexOf(" OPR/") >= 0;
-
-// if (is_safari) {
-// 	alert("Safari");
-// }
-
 // ----------------解析度偵測------------------------
 
-let openBackgroundContainer = document.querySelector(".container");
-let gameinstruction = document.querySelector("#gameInstruction");
-let notWorkingInfo = document.querySelector("#notWorkingInfo");
+let openBackground = document.querySelector("#openBackground");
 let smallresolution = document.querySelector("#smaller1366");
 let bigresolution = document.querySelector("#bigger1366");
+let marioDeath = document.querySelector("#marioDeath");
+let safariNotWorking = document.querySelector("#safariNotWorkingInfo");
 let screenWidth = screen.width;
 
 // ---------------開頭畫面---------------
-if(screenWidth < 1024){
-	openBackgroundContainer.style.display = "none";
-	notWorkingInfo.style.display = "flex";
+if(screenWidth < 1024 && !is_safari){
+	openBackground.style.display = "none";
+	notWorkingInfoDetail.style.display = "flex";
+	marioDeath.style.display = "block";
 }else if(screenWidth >= 1024 && screenWidth <= 1366){
 	smallresolution.style.display = "block";
-	bigresolution.style.display = "none";
 }else if(screenWidth > 1366){
-	smallresolution.style.display = "none";
 	bigresolution.style.display = "block";
 }
 
 // ---------------end 開頭畫面---------------
 
 // ------------end -解析度偵測-----------------------
+
+// ------------Sfari 偵測---------------------
+var is_chrome = !!window.chrome && !is_opera;
+var is_explorer = typeof document !== "undefined" && !!document.documentMode && !isEdge;
+var is_firefox = typeof window.InstallTrigger !== "undefined";
+var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+var is_opera = !!window.opera || navigator.userAgent.indexOf(" OPR/") >= 0;
+
+if (is_safari) {
+	marioDeath.style.display = "block";
+	safariNotWorking.style.display = "flex";
+}
+
+// ------------Sfari 偵測---------------------
 
 
 // -------------------音效--------------------
@@ -359,9 +360,7 @@ Promise.all([
 	// 	start();
 	// });
 
-	// document.querySelector("#start").addEventListener("click", function() {
-	// 	restart();
-	// });
+
   
 	//--------------------遊戲控制流程-----------------------
 	
