@@ -27,9 +27,9 @@
 
 ## Version
 * 1.1 - 2018/11/4
-    *第一版 
+    * 第一版 
 ## Contacts
-Ying-Huan, Jhang 
+Ying-Huan, Jhang <br />
 es6513@gmail.com
 
 
