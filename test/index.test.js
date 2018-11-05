@@ -1,14 +1,8 @@
-import {sum}  from "../Js/index.js";
 import {createMarioArray} from "../Js/index.js";
 import {drawObjects,loadMarioImage} from "../Js/drawImage.js";
 import {loadJson} from "../Js/loadJson.js";
 
 
-describe("sum", function () {
-	it("should return sum of arguments", function () {
-		chai.expect(sum(1,2)).to.equal(4);
-	});
-});
 
 describe("loadJson", function () {
 	it("should return object json data", function () {
