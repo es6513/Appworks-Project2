@@ -642,7 +642,7 @@ Promise.all([
 
 		marioArray[0].draw(context, marioSpriteSet,backgroundJson,fireballSprite,
 			goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
-		marioArray[0].update(backgroundJson,tubeJson,highestTubeJson,
+		marioArray[0].update(backgroundJson,tubeJson,highestTubeJson,oddBrickJson,
 			poleJson,	castleJson,flagArray,undergroundTubeJson,undergroundBrickJson);
 			
 		

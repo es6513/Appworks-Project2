@@ -696,26 +696,6 @@ class Mario{
 					}	
 				}		
 
-				//-------------這一段目前可以穿越水管到終點前----------
-				// let timeoutId7;
-				// if(this.isOnGround 
-				// 	&& this.goThroughTube 
-				// 	&& !this.clearTimeout7){
-				// 	timeoutId7 = setTimeout(() => {
-				// 		this.PowerDownSound();
-				// 		this.pos.x = 4308;
-				// 		this.goThroughTube = false;
-				// 		this.getDestinationTube = true;
-				// 		this.clearTimeout7 = null;
-				// 	}, 500);
-				// 	this.clearTimeout7 = timeoutId7;
-				// }
-
-				// //-------------end  這一段目前可以穿越水管到終點前----------
-				// console.log(this.pos.y);
-				// console.log(this.isOnGround);
-		
-
 				if(	this.getDestinationTube && this.pos.y <= y - 32){
 					this.getDestinationTube = false;
 					this.playDownTubeMusic = false;
@@ -778,8 +758,6 @@ class Mario{
 		}
 
 
-
-	
 
 		// ------------------End of 控制水管障礙----------
 
@@ -890,16 +868,7 @@ class Mario{
 					this.canmoveFromUnder = false;
 				}
 				
-			// if(this.speed.y > 0 
-			// 	&& this.pos.x + this.width > x +16
-			// 	&& this.pos.x < x + 50 ){
-			// 	if(this.pos.y >= y - 32){
-			// 		this.isJump = false; //為了控制從水管上下來採怪物不會死掉
-			// 		this.onTube = true;
-			// 		this.pos.y = y - 32;	
-			// 		this.speed.y = 0;
-			// 	}	
-			// }	
+
 			});
 
 		}
@@ -922,13 +891,7 @@ class Mario{
 		}
 	
 
-
-	
-
-
-
 		//-------------------end of下水道---------------------
-
 
 
 		// ---------------控制 oddBrick 障礙---------------

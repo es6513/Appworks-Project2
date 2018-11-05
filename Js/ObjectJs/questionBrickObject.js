@@ -87,7 +87,22 @@ class QuestionBrick{
 					marioArray.isJump = false;
 				}
 			}
-		
+
+			// ----------------控制從邊界掉下去的時候不能往回走-----------------
+			if(marioArray.isOnBrick 
+				&& marioArray.pos.x == this.pos.x + this.width &&  marioArray.speed.y > 0.5)
+			{
+				marioArray.fallingFromRightBorder = true;
+			}else if(marioArray.isOnBrick 
+					&& marioArray.pos.x + marioArray.width == this.pos.x 
+				 	&&  marioArray.speed.y > 0.5)
+			{
+				marioArray.fallingFromLeftBorder = true;
+			}
+
+			// ----------------End 控制從邊界掉下去的時候不能往回走-----------------
+
+
 			// if(marioArray.isOnBrick 
 			// 	&& marioArray.speed.y > 0.5)
 			// 	// && marioArray.pos.x >= this.pos.x+this.width 
@@ -153,6 +168,21 @@ class QuestionBrick{
 					marioArray.isJump = false;
 				}
 			}
+
+			// ----------------控制從邊界掉下去的時候不能往回走-----------------
+
+			if(marioArray.isOnBrick 
+				&& marioArray.pos.x == this.pos.x + this.width &&  marioArray.speed.y > 0.5)
+			{
+				marioArray.fallingFromRightBorder = true;
+			}else if(marioArray.isOnBrick 
+					&& marioArray.pos.x + marioArray.width == this.pos.x 
+				 	&&  marioArray.speed.y > 0.5)
+			{
+				marioArray.fallingFromLeftBorder = true;
+			}
+
+			// ----------------END 控制從邊界掉下去的時候不能往回走-----------------
 		}
 
 		//-------------end 從磚塊的下方及上方碰到------------------
@@ -181,8 +211,14 @@ class QuestionBrick{
 			marioArray.pos.x = this.pos.x - marioArray.width ;
 			marioArray.stopX = true;
 			marioArray.touchBrickBorderByJumping = true;
-		}
-		else if(!marioArray.underGround 
+		}else if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x == this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height < this.pos.y ){
+			marioArray.stopX = false;
+		}	else if(!marioArray.underGround 
 			&& marioArray.isJump 
 			&& !marioArray.isBigMario 
 			&& !marioArray.isFireMario
@@ -190,7 +226,7 @@ class QuestionBrick{
 			&& marioArray.pos.y + marioArray.height < this.pos.y ){
 			marioArray.stopX = false;
 		}
-
+		
 		// ----------------大馬力歐--------------------
 
 
@@ -238,7 +274,7 @@ class QuestionBrick{
 		// 	&& (keys.left || keys.right)){
 		// 	marioArray.stopX = false;
 		// }
-
+		
 		if(marioArray.touchBrickBorderByJumping 
 			&& (marioArray.isOnGround || marioArray.isOnBrick)){
 			marioArray.stopX = false;

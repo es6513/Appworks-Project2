@@ -24,6 +24,7 @@ class Tube{
 				marioArray.stopX = true;  //控制跑回來會回到水管上去的問題
 				marioArray.stopBesideTube = true;
 				if(keys.left && !keys.right){
+					console.log("789");
 					marioArray.stopX = false;
 				}
 			}
@@ -43,10 +44,12 @@ class Tube{
 			else if(marioArray.pos.x == this.pos.x + this.width 
 				&& marioArray.pos.y + marioArray.height  < this.pos.y 
 				&& (keys.left || keys.right)){
+				console.log("456");
 				marioArray.stopX = false;
 			}else if(marioArray.pos.x + marioArray.width == this.pos.x 
 				&& marioArray.pos.y + marioArray.height < this.pos.y  
 				&& (keys.left || keys.right)){
+				console.log("123");
 				marioArray.stopX = false;
 			} //修正會斜向穿越水管的問題，讓馬力歐身高高過它才可以移動。
 			else {
@@ -64,6 +67,8 @@ class Tube{
 					marioArray.onTube = true;
 					if(!marioArray.goWrongTube && !marioArray.getDestinationTube){
 						marioArray.pos.y = this.pos.y - marioArray.height;	
+						marioArray.fallingFromRightBorder = false;
+						marioArray.fallingFromLeftBorder = false;
 					}
 					marioArray.speed.y = 0;
 				}	
