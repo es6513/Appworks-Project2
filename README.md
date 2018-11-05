@@ -1,6 +1,6 @@
 # Mario Game
 
-**Mario Game** <span style =“font-family："Microsoft JhengHei">是款模擬經典遊戲 Super Mario Bros. 的簡易版網頁遊戲，你可以在這裡吃金幣、打烏龜或是跳下懸崖讓馬力歐死掉。</span><br />
+**Mario Game** <span style =“font-family：'Microsoft JhengHei';">是款模擬經典遊戲 Super Mario Bros. 的簡易版網頁遊戲，你可以在這裡吃金幣、打烏龜或是跳下懸崖讓馬力歐死掉。</span><br />
 [遊戲連結](https://mario-project-55480.firebaseapp.com)
 ## Feature
 * 金幣
