@@ -30,7 +30,8 @@ class Coin{
 		//	&& shape.pos.y + shape.height > this.pos.y 上
 		//	&& shape.pos.y < this.pos.y + this.height 下
 
-		if(this.show && this.pos.x < marioArray.pos.x  + marioArray.width
+		if(!marioArray.isDie
+			&& this.show && this.pos.x < marioArray.pos.x  + marioArray.width
 			&& this.pos.x + this.width  >  marioArray.pos.x   
 			&& this.pos.y < marioArray.pos.y + marioArray.height
 			&& this.pos.y >  marioArray.pos.y  

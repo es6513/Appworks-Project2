@@ -24,7 +24,6 @@ class Tube{
 				marioArray.stopX = true;  //控制跑回來會回到水管上去的問題
 				marioArray.stopBesideTube = true;
 				if(keys.left && !keys.right){
-					console.log("789");
 					marioArray.stopX = false;
 				}
 			}

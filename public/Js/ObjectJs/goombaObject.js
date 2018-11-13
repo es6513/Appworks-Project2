@@ -35,7 +35,6 @@ class Goomba{
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-		// console.log(this.speed.x);
 
 		// ------bug----- 已經消失的怪物需要清除掉(preffered) 或是讓她不能再移動，否則會有bug
 		if(!this.isDie && !this.falling){
@@ -174,7 +173,6 @@ class Goomba{
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-		// console.log(this.speed.x);
 
 
 		// ------------------1.小馬力歐的狀況-------------

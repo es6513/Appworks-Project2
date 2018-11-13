@@ -13,7 +13,6 @@ class Mario{
 		this.isRunning = false;
 		this.faceDirection = 1;
 
-
 		// --------------穿越下水道-------------------
 
 		this.goThroughTube = false;
@@ -39,10 +38,6 @@ class Mario{
 		this.fallingFromBrick = false;
 
 
-		this.previousX;
-		this.prvioxusY;
-
-
 		// ----------控制撞到磚塊狀態----------
 
 		//--------控制不同型態的馬力歐------------
@@ -60,6 +55,7 @@ class Mario{
 		this.fireArray = new Array();
 
 		//----------控制不同型態的馬力歐---------
+		this.stopJump = false;
 		this.isInvincible = false;
 		this.isJump = false;
 		this.isSquat = false;
@@ -502,7 +498,13 @@ class Mario{
 
 		 // --------跳躍的設定 ---------------
 
-			if(!this.canPlayPassMusic 
+		 	//  --------按住跳躍鍵不能一直跳-------------
+			 if(!keys.top && this.stopJump){
+				this.stopJump = false;
+			}
+
+			if(!this.stopJump
+				&& !this.canPlayPassMusic 
 				&& !this.backToBig 
 				&& !this.backToSmall 
 				&& !this.changeToBig
@@ -519,6 +521,7 @@ class Mario{
 				&& !this.shot
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
+				this.stopJump = true;
 				this.isJump = true;
 				this.speed.y -= 10;  //起始跳躍速度，這個速度加上馬力歐的身高，剛好可以跳到最高的水管上面
 				this.speed.x = 4;	
@@ -1246,7 +1249,6 @@ class Mario{
 	//每張圖片的切割大小存在 mario.json,其中 runRight-2 跟 runRight-3 並沒有從16的倍數切(因為圖片會有點卡住所以選了一些特殊的切割點) 
 
 	draw(context,marioSprite,backgroundJson,fireballSprite,goombaArray,turtleArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
-		// console.log(marioSprite.image);
 		//呼叫 SpriteSet 的 draw 方法
 		// console.log( windowWidth - mario.pos.x - 8);
 		// // console.log(1920 - mario.pos.x - 8);

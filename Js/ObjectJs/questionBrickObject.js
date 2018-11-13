@@ -81,6 +81,8 @@ class QuestionBrick{
 			&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				if(marioArray.pos.y > this.pos.y - marioArray.height){
+					marioArray.fallingFromLeftBorder = false;
+					marioArray.fallingFromRightBorder = false;
 					marioArray.pos.y = this.pos.y - marioArray.height;
 					marioArray.speed.y = 0;
 					marioArray.isOnBrick = true;

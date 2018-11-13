@@ -19,7 +19,6 @@ class Fragment{
 				this.underground = true;
 			}
 		});
-    
 
 		if(!this.record){
 			this.previousPos.x = this.pos.x;

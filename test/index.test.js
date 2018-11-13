@@ -18,7 +18,6 @@ describe("drawObjects", function () {
 	it("should return object sprite", function () {
 		return drawObjects("badTurtle")
 			.then(turtle=>{
-				console.log(turtle.tiles);
 				chai.expect(turtle.height).to.equal(24);
 			});
 	});

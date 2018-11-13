@@ -53,6 +53,7 @@ class Mario{
 		this.fireArray = new Array();
 
 		//----------控制不同型態的馬力歐---------
+		this.stopJump = false;
 		this.isInvincible = false;
 		this.isJump = false;
 		this.isSquat = false;
@@ -168,7 +169,9 @@ class Mario{
 		// -------控制馬力歐移動-----
 
 		// 過關後用passStage轉換成true，讓玩家不再能透過按鍵控制馬力歐
-		if(!this.backToBig
+		
+
+		if( !this.backToBig
 			&& !this.backToSmall 
 			&& !this.changeToBig
 			&& !this.changeToFire
@@ -259,7 +262,13 @@ class Mario{
 
 		 // --------跳躍的設定 ---------------
 
-			if(!this.canPlayPassMusic 
+			//  --------按住跳躍鍵不能一直跳-------------
+		 if(!keys.top && this.stopJump){
+			 this.stopJump = false;
+		 }
+
+			if(!this.stopJump
+				&& !this.canPlayPassMusic 
 				&& !this.backToBig 
 				&& !this.backToSmall 
 				&& !this.changeToBig
@@ -277,6 +286,7 @@ class Mario{
 				&& !this.shot
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
+				this.stopJump = true;
 				this.isJump = true;
 				this.speed.y -= 10;  //起始跳躍速度，這個速度加上馬力歐的身高，剛好可以跳到最高的水管上面
 				this.speed.x = 4;	
@@ -284,13 +294,14 @@ class Mario{
 				this.isOnBrick = false;
 				this.isBottomBrick = false;
 				this.onTube = false;
+				
 				if( !this.isBigMario && !this.isFireMario){
 					this.jumpSound();
 				}else{
 					this.BjumpSound();
 				}
 			}		
-
+		
 			// -------------end of 跳躍的設定---------------
 
 			//移到這裡(上方)，在有地面的情況下才可跳躍。
