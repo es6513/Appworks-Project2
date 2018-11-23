@@ -91,7 +91,6 @@ export function createObjectArray(name,objectName) {
 		});
 }
 
-
 function createFragmentArray(){
 	return fetch(`../marioJSON/brick.json`)
 		.then(r =>r.json())
@@ -107,7 +106,6 @@ function createFragmentArray(){
 				fragment3.pos.set(brickArray[i][0],brickArray[i][1] + 8);
 				let fragment4 = new Fragment();
 				fragment4.pos.set(brickArray[i][0] + 8,brickArray[i][1] + 8);
-
 				fragmentArray.push(fragment1);
 				fragmentArray.push(fragment2);
 				fragmentArray.push(fragment3);
@@ -116,7 +114,6 @@ function createFragmentArray(){
 			return fragmentArray;
 		});
 }
-// createFragmentArray();
 
 export function createMarioArray(name) {
 	return fetch(`../marioJSON/${name}.json`)
@@ -269,29 +266,6 @@ Promise.all([
 	fireballSprite,fireballArray,fireballJson,
 	mushroomSprite,mushroomArray,mushroomJson,
 	flowerSprite,flowerArray,flowerJson])=>{
-
-	// 根據 brick 產生 fragment 的位置
-	// let fragmentObjectArray = {
-	// 	Pos:[
-	// 		{
-	// 			ranges:[
-				
-	// 			]
-	// 		}
-	// 	]
-	// };
-
-
-	// for(let i = 0;i < brickArray.length;i += 1){
-	// 	fragmentObjectArray.Pos[0].ranges[i * 4] = [brickArray[0].pos.x,brickArray[0].pos.x];
-	// 	fragmentObjectArray.Pos[0].ranges[i * 4 + 1] = [brickArray[0].pos.x + 8,brickArray[0].pos.y];
-	// 	fragmentObjectArray.Pos[0].ranges[i * 4 + 2] = [brickArray[0].pos.x,brickArray[0].pos.y + 8];;
-	// 	fragmentObjectArray.Pos[0].ranges[i * 4 + 3] = [brickArray[0].pos.x + 8,brickArray[0].pos.y + 8];;
-	// }
-	// console.log(fragmentObjectArray.Pos[0]);
-	// console.log(fragmentArray);
-
-
 
 	
 	//--------------------遊戲控制流程-----------------------
@@ -524,6 +498,7 @@ Promise.all([
 				break;
 			}
 		}
+	
 
 		for(let j = 0;j < flycoinArray.length;j += 1){
 			flycoinArray[j].draw(context,flycoinSprite,marioArray[0]);

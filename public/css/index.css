@@ -1,3 +1,7 @@
+*{
+  font-family: monospace;
+}
+
 #openBackground{
   display: flex;
   justify-content: flex-start;
@@ -8,12 +12,12 @@
   height: 100%;
 }
 
+
 #gameInstruction{
   display: flex;
   width: 40%;
   flex-direction: column;
   justify-content: center;
-  font-family: monospace;
 }
 
 #InstructionsTitle{
@@ -68,7 +72,6 @@
   border: solid 5px white;
   color:white;
   outline: 0px;
-  font-family: monospace;
   cursor: pointer;
 }
 
@@ -93,7 +96,6 @@
   color: yellow;
   font-size: 20px;
   line-height: 3rem;
-  font-family: monospace;
   width: 80%;
 }
 
@@ -103,7 +105,6 @@
   color: yellow;
   font-size: 20px;
   line-height: 3rem;
-  font-family: monospace;
   width: 80%;
 }
 
