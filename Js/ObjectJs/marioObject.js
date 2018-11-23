@@ -35,7 +35,8 @@ class Mario{
 		this.isBottomBrick = false;
 		this.touchBrickBorderByJumping = false;
 
-
+		this.fallingFromRightBorder = false;
+		this.fallingFromLeftBorder = false;
 		// ----------控制撞到磚塊狀態----------
 
 		//--------控制不同型態的馬力歐------------
@@ -52,6 +53,7 @@ class Mario{
 		this.fireArray = new Array();
 
 		//----------控制不同型態的馬力歐---------
+		this.stopJump = false;
 		this.isInvincible = false;
 		this.isJump = false;
 		this.isSquat = false;
@@ -127,7 +129,7 @@ class Mario{
 		];
 	}
 
-	update(backgroundJson,tubeJson,highestTubeJson,
+	update(backgroundJson,tubeJson,highestTubeJson,oddBrickJson,
 		poleJson,castleJson,flagArray,undergroundTubeJson,undergroundBrickJson){
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
@@ -167,7 +169,9 @@ class Mario{
 		// -------控制馬力歐移動-----
 
 		// 過關後用passStage轉換成true，讓玩家不再能透過按鍵控制馬力歐
-		if(!this.backToBig
+		
+
+		if( !this.backToBig
 			&& !this.backToSmall 
 			&& !this.changeToBig
 			&& !this.changeToFire
@@ -186,14 +190,14 @@ class Mario{
 			&& !this.isSquat
 		)
 		{
-			if(keys.right && !keys.left && !this.stopX){
+			if(keys.right && !keys.left && !this.stopX && !this.fallingFromLeftBorder){
 				if(this.stopX){
 					this.stopX = false;
 				}	
 				this.moveRight();					
 				this.faceDirection = this.direction;
 			}
-			if(keys.left && !keys.right && !this.stopX ){
+			if(keys.left && !keys.right && !this.stopX && !this.fallingFromRightBorder){
 				// 這邊判斷式必須要寫兩個，一個是按右鍵，一個是沒按左鍵，這樣才能避免兩個按鍵產生衝突，並且完全獨立開
 				if(this.stopX){
 					this.stopX = false;
@@ -225,7 +229,7 @@ class Mario{
 
 		 // --------跳躍的設定 ---------------
 		 	
-		if(!this.canPlayPassMusic ){
+		if(!this.canPlayPassMusic){
 			this.speed.y += 0.5;  //gravity
 			if(!this.getDestinationTube){
 				this.pos.y += this.speed.y; 
@@ -258,7 +262,13 @@ class Mario{
 
 		 // --------跳躍的設定 ---------------
 
-			if(!this.canPlayPassMusic 
+			//  --------按住跳躍鍵不能一直跳-------------
+		 if(!keys.top && this.stopJump){
+			 this.stopJump = false;
+		 }
+
+			if(!this.stopJump
+				&& !this.canPlayPassMusic 
 				&& !this.backToBig 
 				&& !this.backToSmall 
 				&& !this.changeToBig
@@ -276,6 +286,7 @@ class Mario{
 				&& !this.shot
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
+				this.stopJump = true;
 				this.isJump = true;
 				this.speed.y -= 10;  //起始跳躍速度，這個速度加上馬力歐的身高，剛好可以跳到最高的水管上面
 				this.speed.x = 4;	
@@ -283,13 +294,14 @@ class Mario{
 				this.isOnBrick = false;
 				this.isBottomBrick = false;
 				this.onTube = false;
+				
 				if( !this.isBigMario && !this.isFireMario){
 					this.jumpSound();
 				}else{
 					this.BjumpSound();
 				}
 			}		
-
+		
 			// -------------end of 跳躍的設定---------------
 
 			//移到這裡(上方)，在有地面的情況下才可跳躍。
@@ -305,6 +317,8 @@ class Mario{
 				this.isOnBrick = false;
 				this.isOnGround = true;
 				this.pos.y = y1 * backgroundJson.height - this.height; //落地
+				this.fallingFromRightBorder = false;
+				this.fallingFromLeftBorder = false;
 				this.isBottomBrick = false;
 				this.speed.y = 0;
 			}else if(!this.getDestinationTube && !this.underGround && !this.isDie && this.pos.y >= y1 * backgroundJson.height + 256){
@@ -378,8 +392,6 @@ class Mario{
 			
 				// --------------end  下水管-----------------
 			});
-
-			
 		}
 
 		// ------------------End of 控制水管障礙----------
@@ -500,6 +512,55 @@ class Mario{
 	
 		//-------------------end of下水道---------------------
 
+
+		// if(!this.isDie && this.isRunning && !this.underGround){
+		// 	oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{	
+		// 		//----------小馬力歐-----------
+
+		// 		//-----------bug -this.speed.y 為了在磚塊頂端不能移動
+		// 		if( this.pos.x + this.width == x
+		// 			&& this.pos.y + this.height - this.speed.y > y  
+		// 			&& this.pos.y + this.height / 2  - this.speed.y < y + oddBrickJson.height)
+		// 		{ //從左側碰到
+		// 			this.pos.x = x - this.width ;
+		// 			this.stopX = true;
+		// 			if(!this.stopBesideTube
+		// 				&& keys.left 
+		// 				&& !keys.right){
+		// 				this.stopX = false;
+		// 			}
+		// 		}
+		// 		else if(this.pos.x == x + oddBrickJson.width
+		// 			&& this.pos.y + this.height - this.speed.y > y
+		// 			&& this.pos.y + this.height / 2 - this.speed.y  < y + oddBrickJson.height)
+		// 		{	// 從右側碰到
+					
+		// 			this.pos.x = x + oddBrickJson.width ;
+		// 			this.stopX = true;
+		// 			if( keys.right && !keys.left){
+		// 				this.stopX = false;
+		// 			}
+		// 		}
+
+		// 		// ------end of 小馬力歐---------
+
+		// 		// ------------控制站上--------------
+		// 		if(this.speed.y > 0 
+		// 			&& this.pos.x + this.width > x
+		// 			&& this.pos.x < x + oddBrickJson.width ){
+		// 			if(this.pos.y >= y - this.height){
+		// 				this.onOddbrick = true;
+		// 				this.isJump = false;
+		// 				this.pos.y = y - this.height;
+		// 				this.speed.y = 0;
+		// 			}	
+		// 		}					
+		// 		// ------------end of 控制站上-----------------
+		// 	});
+		// }
+
+		// ---------------end of 控制 oddBrick 障礙-------
+		
 		// ---------------End of 控制磚塊障礙---------------
 
 		// -----------------馬力歐過關---------------------
@@ -776,7 +837,8 @@ class Mario{
 
 	//每張圖片的切割大小存在 mario.json,其中 runRight-2 跟 runRight-3 並沒有從16的倍數切(因為圖片會有點卡住所以選了一些特殊的切割點) 
 
-	draw(context,marioSprite,backgroundJson,fireballSprite,goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
+	draw(context,marioSprite,backgroundJson,fireballSprite,goombaArray,turtleArray,
+		badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
 		//呼叫 SpriteSet 的 draw 方法
 
 		// ----------將陣列中的火焰球清除---------

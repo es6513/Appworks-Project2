@@ -60,6 +60,8 @@ class HighestTube{
 					marioArray.isOnGround = false; //為了控制從水管上下來採怪物不會死掉
 					if(!marioArray.goThroughTube && !marioArray.getDestinationTube){
 						marioArray.pos.y = this.pos.y - marioArray.height;
+						marioArray.fallingFromRightBorder = false;
+						marioArray.fallingFromLeftBorder = false;
 					}				
 					marioArray.speed.y = 0;
 				}	

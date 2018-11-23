@@ -13,7 +13,6 @@ class Mario{
 		this.isRunning = false;
 		this.faceDirection = 1;
 
-
 		// --------------穿越下水道-------------------
 
 		this.goThroughTube = false;
@@ -39,10 +38,6 @@ class Mario{
 		this.fallingFromBrick = false;
 
 
-		this.previousX;
-		this.prvioxusY;
-
-
 		// ----------控制撞到磚塊狀態----------
 
 		//--------控制不同型態的馬力歐------------
@@ -60,6 +55,7 @@ class Mario{
 		this.fireArray = new Array();
 
 		//----------控制不同型態的馬力歐---------
+		this.stopJump = false;
 		this.isInvincible = false;
 		this.isJump = false;
 		this.isSquat = false;
@@ -502,7 +498,13 @@ class Mario{
 
 		 // --------跳躍的設定 ---------------
 
-			if(!this.canPlayPassMusic 
+		 	//  --------按住跳躍鍵不能一直跳-------------
+			 if(!keys.top && this.stopJump){
+				this.stopJump = false;
+			}
+
+			if(!this.stopJump
+				&& !this.canPlayPassMusic 
 				&& !this.backToBig 
 				&& !this.backToSmall 
 				&& !this.changeToBig
@@ -519,6 +521,7 @@ class Mario{
 				&& !this.shot
 				&& this.pos.x + this.width > x1 * 16
 				&& this.pos.x < x2 * 16 + 16){
+				this.stopJump = true;
 				this.isJump = true;
 				this.speed.y -= 10;  //起始跳躍速度，這個速度加上馬力歐的身高，剛好可以跳到最高的水管上面
 				this.speed.x = 4;	
@@ -696,26 +699,6 @@ class Mario{
 					}	
 				}		
 
-				//-------------這一段目前可以穿越水管到終點前----------
-				// let timeoutId7;
-				// if(this.isOnGround 
-				// 	&& this.goThroughTube 
-				// 	&& !this.clearTimeout7){
-				// 	timeoutId7 = setTimeout(() => {
-				// 		this.PowerDownSound();
-				// 		this.pos.x = 4308;
-				// 		this.goThroughTube = false;
-				// 		this.getDestinationTube = true;
-				// 		this.clearTimeout7 = null;
-				// 	}, 500);
-				// 	this.clearTimeout7 = timeoutId7;
-				// }
-
-				// //-------------end  這一段目前可以穿越水管到終點前----------
-				// console.log(this.pos.y);
-				// console.log(this.isOnGround);
-		
-
 				if(	this.getDestinationTube && this.pos.y <= y - 32){
 					this.getDestinationTube = false;
 					this.playDownTubeMusic = false;
@@ -778,8 +761,6 @@ class Mario{
 		}
 
 
-
-	
 
 		// ------------------End of 控制水管障礙----------
 
@@ -890,16 +871,7 @@ class Mario{
 					this.canmoveFromUnder = false;
 				}
 				
-			// if(this.speed.y > 0 
-			// 	&& this.pos.x + this.width > x +16
-			// 	&& this.pos.x < x + 50 ){
-			// 	if(this.pos.y >= y - 32){
-			// 		this.isJump = false; //為了控制從水管上下來採怪物不會死掉
-			// 		this.onTube = true;
-			// 		this.pos.y = y - 32;	
-			// 		this.speed.y = 0;
-			// 	}	
-			// }	
+
 			});
 
 		}
@@ -922,13 +894,7 @@ class Mario{
 		}
 	
 
-
-	
-
-
-
 		//-------------------end of下水道---------------------
-
 
 
 		// ---------------控制 oddBrick 障礙---------------
@@ -1283,7 +1249,6 @@ class Mario{
 	//每張圖片的切割大小存在 mario.json,其中 runRight-2 跟 runRight-3 並沒有從16的倍數切(因為圖片會有點卡住所以選了一些特殊的切割點) 
 
 	draw(context,marioSprite,backgroundJson,fireballSprite,goombaArray,turtleArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
-		// console.log(marioSprite.image);
 		//呼叫 SpriteSet 的 draw 方法
 		// console.log( windowWidth - mario.pos.x - 8);
 		// // console.log(1920 - mario.pos.x - 8);

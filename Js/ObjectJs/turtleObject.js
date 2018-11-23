@@ -223,7 +223,6 @@ class Turtle{
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
-				
 				this.speed.x = 8;
 				this.isRotating = true;
 				if(!marioArray.isOnGround){
@@ -496,7 +495,7 @@ class Turtle{
 			turtleSprite.drawTurtleSprite("turtleFireDie",context,this.pos.x  - 4550 ,this.pos.y,this.faceDirection < 0);
 		}	
 
-		if(marioArray.pos.x < 450 && !this.isDie && this.backToLive && this.show && !this.hitByFire){
+		if(marioArray.pos.x < 450 && !this.isDie && this.backToLive  && this.show && !this.hitByFire){
 			turtleSprite.drawTurtleSprite(this.backToLiving(),context,this.pos.x,this.pos.y);
 		}else if(marioArray.pos.x >= 450 && !this.isDie && this.backToLive && marioArray.pos.x < 5000  && this.show && !this.hitByFire){
 			turtleSprite.drawTurtleSprite(this.backToLiving(),context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);

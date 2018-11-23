@@ -61,14 +61,15 @@ class FlowerBrick{
 
 			// -------------上方----------------
 
-			if(marioArray.pos.x + marioArray.width > this.pos.x  
-				&& marioArray.pos.x < this.pos.x + this.width 
+			if(marioArray.pos.x + marioArray.width >= this.pos.x  
+				&& marioArray.pos.x <= this.pos.x + this.width 
 				&& marioArray.pos.y + marioArray.height / 2  >= this.pos.y + this.height) {
-					this.lowerzone = true;
-			}else if(marioArray.pos.x + marioArray.width > this.pos.x  
-				&& marioArray.pos.x < this.pos.x + this.width 
-				&& marioArray.pos.y + marioArray.height / 2  < this.pos.y ){
-					this.lowerzone = false;
+				this.lowerzone = true;
+			}else if(marioArray.pos.x + marioArray.width >= this.pos.x  
+				&& marioArray.pos.x <= this.pos.x + this.width 
+				&& marioArray.pos.y + marioArray.height / 2  <= this.pos.y ||
+				marioArray.pos.y + marioArray.height - marioArray.speed.y <= this.pos.y ){
+				this.lowerzone = false;
 			}
 
 			if(!this.lowerzone  
@@ -85,7 +86,23 @@ class FlowerBrick{
 					marioArray.isJump = false;
 				}
 			}
+
+			// ----------------控制從邊界掉下去的時候不能往回走-----------------
+			if(marioArray.isOnBrick 
+					&& marioArray.pos.x == this.pos.x + this.width &&  marioArray.speed.y > 0.5)
+			{
+				marioArray.fallingFromRightBorder = true;
+			}else if(marioArray.isOnBrick 
+						&& marioArray.pos.x + marioArray.width == this.pos.x 
+						 &&  marioArray.speed.y > 0.5)
+			{
+				marioArray.fallingFromLeftBorder = true;
+			}
+	
+			// ----------------End 控制從邊界掉下去的時候不能往回走-----------------
+	
 		}
+		
 
 		//---------------大馬力歐-----------------
 		
@@ -94,12 +111,12 @@ class FlowerBrick{
 			&& !marioArray.isDie 
 			&& !marioArray.willDie ){
 
-		// -------------下方----------------
+			// -------------下方----------------
 
 			if(marioArray.speed.y < 0 
 				&& marioArray.pos.y >= this.pos.y
 				&& marioArray.pos.y <= this.pos.y + this.height
-				&& marioArray.pos.x + marioArray.width  > this.pos.x 
+				&& marioArray.pos.x + marioArray.width > this.pos.x 
 				&& marioArray.pos.x < this.pos.x + this.width 
 			){
 				if(!this.isUseLess){
@@ -113,14 +130,15 @@ class FlowerBrick{
 	
 			// -------------上方----------------
 
-			if(marioArray.pos.x + marioArray.width > this.pos.x  
-				&& marioArray.pos.x < this.pos.x + this.width 
+			if(marioArray.pos.x + marioArray.width >= this.pos.x  
+				&& marioArray.pos.x <= this.pos.x + this.width 
 				&& marioArray.pos.y  >= this.pos.y + this.height) {
-					this.lowerzone = true;
-			}else if(marioArray.pos.x + marioArray.width > this.pos.x  
-				&& marioArray.pos.x < this.pos.x + this.width 
-				&& marioArray.pos.y + marioArray.height < this.pos.y ){
-					this.lowerzone = false;
+				this.lowerzone = true;
+			}else if(marioArray.pos.x + marioArray.width >= this.pos.x  
+				&& marioArray.pos.x <= this.pos.x + this.width 
+				&& (marioArray.pos.y + marioArray.height <= this.pos.y ||
+					marioArray.pos.y + marioArray.height - marioArray.speed.y <= this.pos.y)){
+				this.lowerzone = false;
 			}
 
 			if(!this.lowerzone
@@ -136,9 +154,27 @@ class FlowerBrick{
 					marioArray.isJump = false;
 				}
 			}
+
+			// ----------------控制從邊界掉下去的時候不能往回走-----------------
+			if(marioArray.isOnBrick 
+					&& marioArray.pos.x == this.pos.x + this.width &&  marioArray.speed.y > 0.5)
+			{
+				marioArray.fallingFromRightBorder = true;
+			}else if(marioArray.isOnBrick 
+						&& marioArray.pos.x + marioArray.width == this.pos.x 
+						 &&  marioArray.speed.y > 0.5)
+			{
+				marioArray.fallingFromLeftBorder = true;
+			}
+	
+			// ----------------End 控制從邊界掉下去的時候不能往回走-----------------
+	
 		}
 
 		//------------------end  從磚塊的下方及上方碰到--------------------
+
+
+		// ----------------小馬力歐--------------------
 
 		if(!marioArray.underGround 
 			&& marioArray.isJump
@@ -151,8 +187,37 @@ class FlowerBrick{
 			marioArray.pos.x = this.pos.x + this.width ;
 			marioArray.stopX = true;
 			marioArray.touchBrickBorderByJumping = true;
+		}else if(!marioArray.underGround 
+			&& marioArray.isJump
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x + marioArray.width == this.pos.x 
+				&& marioArray.pos.y + marioArray.height  >= this.pos.y
+				&& marioArray.pos.y + marioArray.height / 2 <= this.pos.y + this.height)
+		{
+			marioArray.pos.x = this.pos.x - marioArray.width ;
+			marioArray.stopX = true;
+			marioArray.touchBrickBorderByJumping = true;
+		}else if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x == this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height < this.pos.y ){
+			marioArray.stopX = false;
+		}	else if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& !marioArray.isBigMario 
+			&& !marioArray.isFireMario
+			&& marioArray.pos.x + marioArray.width == this.pos.x 
+			&& marioArray.pos.y + marioArray.height < this.pos.y ){
+			marioArray.stopX = false;
 		}
-		
+
+
+		// ----------------大馬力歐--------------------
+
+
 		if(!marioArray.underGround 
 			&& marioArray.isJump 
 			&& (marioArray.isBigMario || marioArray.isFireMario)
@@ -163,22 +228,7 @@ class FlowerBrick{
 			marioArray.pos.x = this.pos.x + this.width ;
 			marioArray.stopX = true;
 			marioArray.touchBrickBorderByJumping = true;
-		} 
-
-		if(!marioArray.underGround 
-			&& marioArray.isJump
-			&& !marioArray.isBigMario 
-			&& !marioArray.isFireMario
-			&& marioArray.pos.x + marioArray.width == this.pos.x 
-				&& marioArray.pos.y + marioArray.height  >= this.pos.y
-				&& marioArray.pos.y + marioArray.height / 2 <= this.pos.y + this.height)
-		{
-			marioArray.pos.x = this.pos.x -marioArray.width ;
-			marioArray.stopX = true;
-			marioArray.touchBrickBorderByJumping = true;
-		}
-
-		if(!marioArray.underGround 
+		} else 	if(!marioArray.underGround 
 			&& marioArray.isJump 
 			&& (marioArray.isBigMario || marioArray.isFireMario)
 			&& marioArray.pos.x + marioArray.width == this.pos.x 
@@ -188,7 +238,20 @@ class FlowerBrick{
 			marioArray.pos.x = this.pos.x - marioArray.width ;
 			marioArray.stopX = true;
 			marioArray.touchBrickBorderByJumping = true;
-		} 
+		} else if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& marioArray.pos.x == this.pos.x + this.width 
+			&& marioArray.pos.y + marioArray.height < this.pos.y ){
+			marioArray.stopX = false;
+		}
+		else if(!marioArray.underGround 
+			&& marioArray.isJump 
+			&& (marioArray.isBigMario || marioArray.isFireMario)
+			&& marioArray.pos.x + marioArray.width == this.pos.x  
+			&& marioArray.pos.y + marioArray.height < this.pos.y ){
+			marioArray.stopX = false;
+		}
 
 		if(marioArray.touchBrickBorderByJumping && marioArray.isOnGround){
 			marioArray.stopX = false;
@@ -208,13 +271,13 @@ class FlowerBrick{
 	}
 
 	draw(context,flowerBrickSprite,marioArray){
-			if(marioArray.pos.x < 450){
-				flowerBrickSprite.drawSprite(!this.isUseLess?this.flashing():"uselessFlowerBrick",context,this.pos.x,this.pos.y);
-			}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 ){
-				flowerBrickSprite.drawSprite(!this.isUseLess?this.flashing():"uselessFlowerBrick",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
-			}else if(marioArray.pos.x >= 5000 ){
-				flowerBrickSprite.drawSprite(!this.isUseLess?this.flashing():"uselessFlowerBrick",context,this.pos.x  - 4550 ,this.pos.y);
-			}
+		if(marioArray.pos.x < 450){
+			flowerBrickSprite.drawSprite(!this.isUseLess ? this.flashing() : "uselessFlowerBrick",context,this.pos.x,this.pos.y);
+		}else if(marioArray.pos.x >= 450 && marioArray.pos.x < 5000 ){
+			flowerBrickSprite.drawSprite(!this.isUseLess ? this.flashing() : "uselessFlowerBrick",context,this.pos.x - marioArray.pos.x + 450 ,this.pos.y);
+		}else if(marioArray.pos.x >= 5000 ){
+			flowerBrickSprite.drawSprite(!this.isUseLess ? this.flashing() : "uselessFlowerBrick",context,this.pos.x  - 4550 ,this.pos.y);
+		}
 	}
 }
 

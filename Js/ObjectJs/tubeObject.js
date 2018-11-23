@@ -64,6 +64,8 @@ class Tube{
 					marioArray.onTube = true;
 					if(!marioArray.goWrongTube && !marioArray.getDestinationTube){
 						marioArray.pos.y = this.pos.y - marioArray.height;	
+						marioArray.fallingFromRightBorder = false;
+						marioArray.fallingFromLeftBorder = false;
 					}
 					marioArray.speed.y = 0;
 				}	

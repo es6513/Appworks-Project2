@@ -1,9 +1,10 @@
-*{
-  font-family: monospace;
+#mocha{
+  z-index: 100;
+  color:black;
 }
 
 #openBackground{
-  display: flex;
+  display: none;
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
@@ -12,12 +13,12 @@
   height: 100%;
 }
 
-
 #gameInstruction{
   display: flex;
   width: 40%;
   flex-direction: column;
   justify-content: center;
+  font-family: monospace;
 }
 
 #InstructionsTitle{
@@ -44,13 +45,13 @@
 
 #arrow{
   display: flex;
-  justify-content: center;
+  margin-left: 150px;
 }
 
 #space{
   display: flex;
   margin-top: 2%;
-  justify-content: center;
+  margin-left: 150px;
 }
 
 #space p{
@@ -72,6 +73,7 @@
   border: solid 5px white;
   color:white;
   outline: 0px;
+  font-family: monospace;
   cursor: pointer;
 }
 
@@ -81,7 +83,7 @@
 }
 
 #notWorkingInfo{
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -95,7 +97,8 @@
   justify-content: center;
   color: yellow;
   font-size: 20px;
-  line-height: 3rem;
+  line-height: 32px;
+  font-family: monospace;
   width: 80%;
 }
 
@@ -104,7 +107,8 @@
   justify-content: center;
   color: yellow;
   font-size: 20px;
-  line-height: 3rem;
+  line-height: 32px;
+  font-family: monospace;
   width: 80%;
 }
 

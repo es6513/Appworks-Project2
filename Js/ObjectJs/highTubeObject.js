@@ -56,6 +56,8 @@ class HighTube{
 					marioArray.onTube = true;
 					marioArray.isOnGround = false; //為了控制從水管上下來採怪物不會死掉
 					marioArray.pos.y = this.pos.y - marioArray.height;
+					marioArray.fallingFromRightBorder = false;
+					marioArray.fallingFromLeftBorder = false;
 					marioArray.speed.y = 0;
 				}	
 				marioArray.speed.y += 0.5;

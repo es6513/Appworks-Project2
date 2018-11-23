@@ -35,7 +35,6 @@ class Goomba{
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-		// console.log(this.speed.x);
 
 		// ------bug----- 已經消失的怪物需要清除掉(preffered) 或是讓她不能再移動，否則會有bug
 		if(!this.isDie && !this.falling){
@@ -174,7 +173,6 @@ class Goomba{
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y
 		//	&& shape.pos.y < this.pos.y + this.height
-		// console.log(this.speed.x);
 
 
 		// ------------------1.小馬力歐的狀況-------------
@@ -187,7 +185,7 @@ class Goomba{
 			&& !marioArray.willDie 
 			&& !marioArray.underGround
 			&& marioArray.speed.y > 0 
-			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
@@ -206,7 +204,7 @@ class Goomba{
 			&& marioArray.canmoveFromUnder
 			&& !marioArray.underGround
 			&& marioArray.speed.y > 0 
-			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
@@ -217,7 +215,7 @@ class Goomba{
 		}
 		
 
-		// ------------------2.大馬力歐的狀況-------------
+		// ------------------2.火馬力歐的狀況-------------
 		if(marioArray.isFireMario 
 			&& !marioArray.isDie 
 			&& !this.isDie 
@@ -225,7 +223,7 @@ class Goomba{
 			&& marioArray.canmoveFromUnder
 			&& !marioArray.underGround
 			&& marioArray.speed.y > 0 
-			&& marioArray.pos.x + marioArray.height > this.pos.x 
+			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{

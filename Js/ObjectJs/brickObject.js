@@ -94,6 +94,19 @@ class Brick{
 					marioArray.isJump = false;
 				}
 			}
+			// ----------------控制從邊界掉下去的時候不能往回走-----------------
+			if(marioArray.isOnBrick 
+					&& marioArray.pos.x == this.pos.x + this.width &&  marioArray.speed.y > 0.5)
+			{
+				marioArray.fallingFromRightBorder = true;
+			}else if(marioArray.isOnBrick 
+						&& marioArray.pos.x + marioArray.width == this.pos.x 
+						 &&  marioArray.speed.y > 0.5)
+			{
+				marioArray.fallingFromLeftBorder = true;
+			}
+	
+			// ----------------End 控制從邊界掉下去的時候不能往回走-----------------
 		}    
 
 		//---------------- 大馬力歐-----
@@ -144,6 +157,20 @@ class Brick{
 					marioArray.isJump = false;
 				}
 			}
+
+			// ----------------控制從邊界掉下去的時候不能往回走-----------------
+			if(marioArray.isOnBrick 
+					&& marioArray.pos.x == this.pos.x + this.width &&  marioArray.speed.y > 0.5)
+			{
+				marioArray.fallingFromRightBorder = true;
+			}else if(marioArray.isOnBrick 
+						&& marioArray.pos.x + marioArray.width == this.pos.x 
+						 &&  marioArray.speed.y > 0.5)
+			{
+				marioArray.fallingFromLeftBorder = true;
+			}
+	
+			// ----------------End 控制從邊界掉下去的時候不能往回走-----------------
 		}
 
 		//-------------end 從磚塊的下方及上方碰到------------------
