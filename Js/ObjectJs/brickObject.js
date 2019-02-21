@@ -259,28 +259,6 @@ class Brick{
 			marioArray.touchBrickBorderByJumping = false;
 		}
 
-		// if(marioArray.pos.x == this.pos.x + this.width 
-		// 	&& marioArray.pos.y + marioArray.height  < this.pos.y 
-		// 	&& (keys.left || keys.right)){
-		// 	marioArray.stopX = false;
-		// }else if(marioArray.pos.x + marioArray.width == this.pos.x 
-		// 	&& marioArray.pos.y + marioArray.height < this.pos.y  
-		// 	&& (keys.left || keys.right)){
-		// 	marioArray.stopX = false;
-		// }
-		// if(!this.isOnBrick && this.stopX && this.pos.x + this.width == x && 
-		// 	(keys.left || keys.right)){
-		// 	// this.speed.x = 4;
-		// 	this.stopX = false;
-		// }
-
-		// if(!this.isOnBrick && this.stopX && 	this.pos.x == x + brickJson.width 
-		// 	&& !this.isOnGround 
-		// 	&& (keys.left || keys.right)){
-		// 	// this.speed.x = 4;
-		// 	this.stopX = false; //這行會造成水管可以穿越 BUG 
-		// }
-
 	}
 
 	bumpkSound(){

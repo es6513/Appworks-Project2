@@ -242,16 +242,6 @@ class MushroomBrick{
 			marioArray.stopX = false;
 		}
 
-		// if(marioArray.pos.x == this.pos.x + this.width 
-		// 	&& marioArray.pos.y + marioArray.height  < this.pos.y 
-		// 	&& (keys.left || keys.right)){
-		// 	marioArray.stopX = false;
-		// }else if(marioArray.pos.x + marioArray.width == this.pos.x 
-		// 	&& marioArray.pos.y + marioArray.height < this.pos.y  
-		// 	&& (keys.left || keys.right)){
-		// 	marioArray.stopX = false;
-		// }
-
 		if(marioArray.touchBrickBorderByJumping && 
 			(marioArray.isOnGround || marioArray.isOnBrick)){
 			marioArray.stopX = false;

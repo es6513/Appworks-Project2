@@ -12,8 +12,6 @@ class OddBrick{
 		
 		if(!marioArray.isDie && marioArray.isRunning && !marioArray.underGround){
 
-			//-----------bug -marioArray.speed.y 為了在磚塊頂端不能移動
-
 			//從左側碰到
 			if( marioArray.pos.x + marioArray.width == this.pos.x
 				&& marioArray.pos.y + marioArray.height - marioArray.speed.y > this.pos.y  
