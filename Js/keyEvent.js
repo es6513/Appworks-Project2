@@ -7,6 +7,8 @@ keys = {
 	space:false,
 	zbutton: false,
 	abutton:false,
+	qbutton:false,
+	wbutton:false,
 	shift:false
 };
 
@@ -36,6 +38,10 @@ function keyup(e){
 		keys.abutton = false;
 	}else if(code === 18){
 		keys.shift = false;
+	}else if(code === 81){
+		keys.qbutton = false;
+	}else if(code === 87){
+		keys.wbutton = false;
 	}
 }
 
@@ -66,6 +72,10 @@ function keypress(e){
 		keys.abutton = true;
 	}else if(code === 18){
 		keys.shift = true;
+	}else if(code === 81){
+		keys.qbutton = true;
+	}else if(code === 87){
+		keys.wbutton = true;
 	}
 }
 

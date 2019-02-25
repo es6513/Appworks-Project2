@@ -65,7 +65,7 @@ class HighestTube{
 					}				
 					marioArray.speed.y = 0;
 				}	
-				marioArray.speed.y += 0.5;
+				// marioArray.speed.y += 0.5;
 			}					
 		}
 	}

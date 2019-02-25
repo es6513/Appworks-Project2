@@ -9,7 +9,7 @@ class Flycoin{
 		this.width = 16;
 		this.height = 16;
 		this.show = false;
-		this.isVanished;
+		this.isVanished = false;
 		this.goUp = false;
 		this.framesRun = [
 			"flycoin-1","flycoin-1","flycoin-1","flycoin-1","flycoin-1","flycoin-1","flycoin-1","flycoin-1","flycoin-1",
@@ -33,7 +33,7 @@ class Flycoin{
 			this.previousY = this.pos.y;
 			this.previousX = this.pos.x;
 		}		
-		if(this.pos.y == this.previousY - this.width * 6){
+		if(this.pos.y == this.previousY - this.height * 6){
 			this.speed.y *= -1;
 		}
     

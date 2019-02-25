@@ -11,7 +11,7 @@ import {UndergroundBrick} from "../Js/ObjectJs/undergroundBrickObject.js";
 import {OddBrick} from "../Js/ObjectJs/oddBrickObject.js";
 import {Turtle} from "../Js/ObjectJs/turtleObject.js";
 import {Goomba} from "../Js/ObjectJs/goombaObject.js";
-import {BadPlant} from "../Js/ObjectJs/badPlantObject.js";
+import {BadPlant} from "./ObjectJs/badPlantObject.js";
 import {Pole} from "../Js/ObjectJs/poleObject.js";
 import {Flag} from "../Js/ObjectJs/flagObject.js";
 import {Castle} from "../Js/ObjectJs/castleObject.js";
@@ -25,6 +25,8 @@ import {Mushroom} from "../Js/ObjectJs/mushroomObject.js";
 import {keys} from "../Js/keyEvent.js";
 import { Fireball } from "./ObjectJs/fireballObject.js";
 let snippet = new Array();
+let backToSmallSnippet = new Array();
+let backToBigSnippet = new Array();
 let firesnippet = new Array();
 
 
@@ -48,16 +50,14 @@ if(screenWidth < 1024 && !is_safari){
 	bigresolution.style.display = "block";
 }
 
+
 // ---------------end 開頭畫面---------------
 
 // ------------end -解析度偵測-----------------------
 
 // ------------Sfari 偵測---------------------
-var is_chrome = !!window.chrome && !is_opera;
-var is_explorer = typeof document !== "undefined" && !!document.documentMode && !isEdge;
-var is_firefox = typeof window.InstallTrigger !== "undefined";
+
 var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-var is_opera = !!window.opera || navigator.userAgent.indexOf(" OPR/") >= 0;
 
 if (is_safari) {
 	marioDeath.style.display = "block";
@@ -74,6 +74,7 @@ let backgroundMusic = new Audio("../music/TitleBGM.mp3");
 
 let undergroundMuscic = new Audio("../music/underworld.mp3");
 let powerupSound = new Audio("/music/maro-powerup-sound.wav");
+let powerdownSound = new Audio("/music/maro-powerdown-sound.wav");
 
 // -------------------end 音效--------------------
 
@@ -367,7 +368,7 @@ Promise.all([
 			this.canvas.width = 8000;
 			this.canvas.height = 2160;
 			this.context = this.canvas.getContext("2d");
-			this.context.scale(1,1);
+			this.context.scale(1.5,1.5);
 			document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 			this.frameNo = 0;
 			this.interval = setInterval(function(){
@@ -437,6 +438,34 @@ Promise.all([
 			return;
 		}
 
+		if(keys.qbutton){
+			let temp = "q";
+			backToSmallSnippet.push(temp);
+		}
+
+		if(backToSmallSnippet.length === 18){
+			backToSmallSnippet = [];
+			if(marioArray[0].isBigMario ){
+				marioArray[0].backToSmall = true;
+				powerdownSound.play();
+			}	
+			return;
+		}
+
+		if(keys.wbutton){
+			let temp = "w";
+			backToBigSnippet.push(temp);
+		}
+
+		if(backToBigSnippet.length === 18){
+			backToBigSnippet = [];
+			if(marioArray[0].isFireMario ){
+				marioArray[0].backToBig = true;
+				powerdownSound.play();
+			}	
+			return;
+		}
+
 		
 		// ------------end 密技區----------
 
@@ -456,16 +485,25 @@ Promise.all([
 			undergroundMuscic.pause();
 		}
 
-		if(marioArray[0].underGround){
-			document.querySelector("canvas").style.position  = "absolute";
-			document.querySelector("canvas").style.left  = "-250px";
-			document.querySelector("canvas").style.top  = "-700px";
-		}else if(!marioArray[0].underGround){
-			document.querySelector("canvas").style.left = "0";
-			document.querySelector("canvas").style.top  = "0";
-		}
+	
 
 		// --------end of 音樂播放----------------
+
+
+		//---------- 進入下水道 canvas 畫布調整位置-----------
+
+		let canvas = document.querySelector("canvas");
+
+		if(marioArray[0].underGround){
+			canvas.style.position  = "absolute";
+			canvas.style.left  = "-375px";
+			canvas.style.top  = "-1050px";
+		}else if( !marioArray[0].underGround){
+			canvas.style.left = "0";
+			canvas.style.top  = "0";
+		}
+
+		//---------- end of 進入下水道 canvas 畫布調整位置-----------
 
 		let context = myGameArea.context;
 
@@ -498,7 +536,6 @@ Promise.all([
 				break;
 			}
 		}
-	
 
 		for(let j = 0;j < flycoinArray.length;j += 1){
 			flycoinArray[j].draw(context,flycoinSprite,marioArray[0]);

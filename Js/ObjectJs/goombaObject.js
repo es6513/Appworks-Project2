@@ -151,9 +151,13 @@ class Goomba{
 
 		oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{
 
-			if(this.pos.x +  this.width > x 
-				&& this.pos.x  < x + oddBrickJson.width )
-			{	
+
+
+			if(this.pos.x +  this.width >= x 
+				&& this.pos.x  <= x + oddBrickJson.width 
+				&& this.pos.y + this.height  >= y  
+				&& this.pos.y + this.height  <= y + oddBrickJson.height)
+			{
 				this.speed.x *= -1;
 				this.direction *= -1;
 			}
