@@ -9,13 +9,11 @@ class Tube{
 	}
 
 	update(marioArray){
-
 		if(!marioArray.isDie && marioArray.isRunning && !marioArray.underGround){
 			
 			//----------小馬力歐過水管-----------
 
 			//從左側碰到水管
-
 			if( marioArray.pos.x + marioArray.width == this.pos.x
 				&& marioArray.pos.y + marioArray.height > this.pos.y
 				&& marioArray.pos.y + marioArray.height / 2 < this.pos.y + this.height )
@@ -31,14 +29,15 @@ class Tube{
 			else if(marioArray.pos.x == this.pos.x + this.width
 				&& marioArray.pos.y + marioArray.height > this.pos.y
 				&& marioArray.pos.y + marioArray.height / 2 < this.pos.y + this.height )
-			{	// 從右側碰到水管
+			{	
 				marioArray.pos.x = this.pos.x + this.width ;
 				marioArray.stopX = true;
 				marioArray.stopBesideTube = true;
 				// marioArray.speed.x = 0;
-				if(keys.right && !keys.left){
+				if(keys.right && !keys.left && !marioArray.onOddBrick){
 					marioArray.stopX = false;
 				}
+				//!marioArray.onOddBrick 是為了在終點前的水管磚塊的間隔處讓馬力歐不能移動。
 			}
 			else if(marioArray.pos.x == this.pos.x + this.width 
 				&& marioArray.pos.y + marioArray.height  < this.pos.y 
@@ -69,7 +68,7 @@ class Tube{
 					}
 					marioArray.speed.y = 0;
 				}	
-				marioArray.speed.y += 0.5;
+				// marioArray.speed.y += 0.5;
 			}
 			// ------------end of 控制站在水管上-----------------
 		}

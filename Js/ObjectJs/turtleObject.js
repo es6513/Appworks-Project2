@@ -89,7 +89,6 @@ class Turtle{
 			&& this.quickToDie
 			&& !this.backToLive
 		){
-			
 			let dieSound = new Audio("/music/mario-die-sound.wav");
 			dieSound.play();
 			marioArray.willDie = true;
@@ -218,19 +217,24 @@ class Turtle{
 			&& !marioArray.falling 
 			&& !this.isRotating
 			&& !marioArray.underGround
-			&& (this.quickToDie   || this.backToLive)
+			&& this.quickToDie 
 			&& marioArray.pos.x + marioArray.width > this.pos.x 
 			&& marioArray.pos.x < this.pos.x + this.width 
 			&& marioArray.pos.y > this.pos.y - marioArray.height){
 			{
 				this.speed.x = 8;
 				this.isRotating = true;
+				if(this.backToLive){
+					this.backToLive = false;
+				}
 				if(!marioArray.isOnGround){
 					marioArray.speed.y = -6;
 				}
 				this.turtleDieSound();
 			}		
 		}
+
+
 
 		// ---------2.大馬力歐的狀況----------------
 	
@@ -303,7 +307,9 @@ class Turtle{
 
 		oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{
 			if(this.pos.x +  this.width > x 
-						&& this.pos.x  < x + oddBrickJson.width )
+				&& this.pos.x  < x + oddBrickJson.width 
+				&& this.pos.y + this.height  >= y  
+				&& this.pos.y + this.height  <= y + oddBrickJson.height)
 			{	
 				this.speed.x *= -1;
 				this.direction *= -1;
@@ -419,7 +425,6 @@ class Turtle{
 
 				if(!this.isRotating){
 					this.backToLive = true;
-					this.quickToDie = false;
 				}				
 				this.clearTimeout = null;
 			}, 3500);
@@ -434,6 +439,7 @@ class Turtle{
 
 				if(!this.isRotating){
 					this.backToLive = false;
+					this.quickToDie = false;
 				}				
 				this.clearTimeout3 = null;
 			}, 3500);

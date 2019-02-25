@@ -33,14 +33,13 @@ class Coin{
 			&& this.show 
 			&& this.pos.x < marioArray.pos.x  + marioArray.width
 			&& this.pos.x + this.width  >  marioArray.pos.x   
-			&& this.pos.y < marioArray.pos.y + marioArray.height - marioArray.speed.y
+			&& this.pos.y < marioArray.pos.y + marioArray.height 
 			&& this.pos.y + this.height >  marioArray.pos.y   + marioArray.height / 2 
 		){		
 			this.show = false;
 			this.coinSound();
 		}
-		//16是金幣的寬度， EX : 160 < marioArray.pos < 176
-		// 前兩行的 +8 +10 => 讓判定範圍更精準，並非真正碰撞
+
 	}
 
 	flashing(){

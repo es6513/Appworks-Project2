@@ -35,6 +35,8 @@ class Mario{
 		this.isBottomBrick = false;
 		this.touchBrickBorderByJumping = false;
 
+		this.onOddBrick = false;
+
 		this.fallingFromRightBorder = false;
 		this.fallingFromLeftBorder = false;
 		// ----------控制撞到磚塊狀態----------
@@ -133,8 +135,7 @@ class Mario{
 		poleJson,castleJson,flagArray,undergroundTubeJson,undergroundBrickJson){
 		this.controlSpeedFactor  = this.speed.x * (this.speed.x / 2 - 1) / (this.speed.x / 2);
 		// 用來控制馬力歐根據不同螢幕解析度，跑到右邊終點都能再往回跑
-
-
+		// console.log(this.onOddBrick);
 		// ---------無敵以及死亡的處理---------
 	
 		// ------------1.無敵----------------
@@ -170,7 +171,6 @@ class Mario{
 
 		// 過關後用passStage轉換成true，讓玩家不再能透過按鍵控制馬力歐
 		
-
 		if( !this.backToBig
 			&& !this.backToSmall 
 			&& !this.changeToBig
@@ -226,22 +226,19 @@ class Mario{
 		}
 
 		// ------End of 控制馬力歐移動-----
-
 		 // --------跳躍的設定 ---------------
-		 	
-		if(!this.canPlayPassMusic){
+		if(!this.canPlayPassMusic ){
 			this.speed.y += 0.5;  //gravity
 			if(!this.getDestinationTube){
 				this.pos.y += this.speed.y; 
 			}else if(this.getDestinationTube && !this.underGround){
-				this.pos.y -= this.speed.y; 
+				this.pos.y -= this.speed.y * 2 ; 
 			}
-		}			
+		}	
 
 		// --------end 跳躍的設定 ---------------
 
 		// -------控制馬力歐落地時參數回復原狀---------
-
 		backgroundJson.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
 			if(this.pos.x < x2 * backgroundJson.width + backgroundJson.width
 				&& this.pos.x + this.width > x1 * backgroundJson.width){
@@ -266,7 +263,6 @@ class Mario{
 		 if(!keys.top && this.stopJump){
 			 this.stopJump = false;
 		 }
-
 			if(!this.stopJump
 				&& !this.canPlayPassMusic 
 				&& !this.backToBig 
@@ -294,7 +290,7 @@ class Mario{
 				this.isOnBrick = false;
 				this.isBottomBrick = false;
 				this.onTube = false;
-				
+				this.onOddBrick = false;
 				if( !this.isBigMario && !this.isFireMario){
 					this.jumpSound();
 				}else{
@@ -315,6 +311,7 @@ class Mario{
 				this.isJump = false;
 				this.onTube = false;
 				this.isOnBrick = false;
+				this.onOddBrick = false;
 				this.isOnGround = true;
 				this.pos.y = y1 * backgroundJson.height - this.height; //落地
 				this.fallingFromRightBorder = false;
@@ -511,7 +508,71 @@ class Mario{
 		}
 	
 		//-------------------end of下水道---------------------
-	
+
+		if(!this.isDie && this.isRunning && !this.underGround){
+		
+			oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{	
+				//----------小馬力歐-----------
+				//speed.y 因為有重力的因素導致 y 的位置都會多0.5，目前只有磚塊相關(包刮其他金幣、花朵)的障礙會需要這樣設定，
+				//-----------bug -this.speed.y 為了在磚塊頂端不能移動
+				if( this.pos.x + this.width == x
+					&& this.pos.y - this.speed.y + this.height  > y  
+					&& this.pos.y - this.speed.y + this.height / 2  < y + oddBrickJson.height)
+				{ //從左側碰到
+					this.pos.x = x - this.width ;
+					this.stopX = true;
+					if(!this.stopBesideTube
+						&& keys.left 
+						&& !keys.right){
+						this.stopX = false;
+					}
+				}// 從右側碰到
+				else if(this.pos.x == x + oddBrickJson.width
+					&& this.pos.y - this.speed.y + this.height  > y
+					&& this.pos.y - this.speed.y + this.height / 2  < y + oddBrickJson.height)
+				{	
+					this.pos.x = x + oddBrickJson.width ;
+					this.stopX = true;
+					if( keys.right && !keys.left){
+						this.stopX = false;
+					}
+				}
+				else if(this.pos.x == x + oddBrickJson.width
+						&& this.pos.y + this.height  < y 
+						&& keys.left)
+				{
+					this.stopX = false;			
+				}else if(this.pos.x + this.width == x 
+						&& this.pos.y  + this.height  < y  
+						&& keys.right ){
+					this.stopX = false;
+					//BUG 快速按的話有機會穿過一格磚塊
+				}
+
+				// ------end of 小馬力歐---------
+
+				// ------------控制站上--------------
+				if(this.speed.y > 0 
+					&& this.pos.x + this.width > x
+					&& this.pos.x < x + oddBrickJson.width ){
+					if(this.pos.y >= y - this.height){
+						this.onOddBrick = true;
+						this.isJump = false;
+						this.pos.y = y - this.height;
+						this.speed.y = 0;
+					}	
+				}	
+				if(this.onOddBrick && this.speed.y > 0.5){
+					this.onOddBrick = false;
+				}	
+
+				//這邊設定當速度大於 0.5 表示下降中，根據這個條件把onOddBrick設定回 flase
+				// ------------end of 控制站上-----------------
+			});
+		}
+
+		// ---------------end of 控制 oddBrick 障礙-------
+		
 		// ---------------End of 控制磚塊障礙---------------
 
 		// -----------------馬力歐過關---------------------
