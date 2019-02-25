@@ -1,6 +1,5 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
 
-
 class Goomba{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);

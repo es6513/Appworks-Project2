@@ -31,26 +31,6 @@ class Sprites {
 			return sprite;
 		});
 		this.tiles.set(name,sprites);
-		// 原本的寫法
-		// let sprite = document.createElement("canvas");
-		// sprite.width = this.width;
-		// sprite.height = this.height;
-		// let context = sprite.getContext("2d");
-		// if(direction == -1){
-		// 	let context = sprite.getContext("2d");
-		// 	context.translate(this.width,0);
-		// 	context.scale(-1,1);
-		// }
-
-		// context
-		// 	.drawImage(		
-		// 		this.image,		
-		// 		x,y,			
-		// 		this.width,this.height,		
-		// 		0,0,			
-		// 		this.width,this.height
-		// 	);  
-		// this.tiles.set(name,sprite);
 	}
 
 	getTileImage(name, x, y,width,height) {
@@ -88,10 +68,7 @@ class Sprites {
 		context.drawImage(sprite,x,y);
 	}
 
-	// drawTile(name,context,x,y){
-		
-	// 	this.draw(name,context,x * this.width,y * this.height);  //將要畫的磚塊直接乘上原始寬度及高度，則畫出來的
-	// }
+
   
 }
 
