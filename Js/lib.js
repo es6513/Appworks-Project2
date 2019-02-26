@@ -1,6 +1,7 @@
 let LibObj = {
 	drawAndUpdateObject:drawAndUpdateObject,
 	spliceObjectArray:spliceObjectArray,
+	snippet:snippet,
 	smallMarioUnderBrick:smallMarioUnderBrick,
 	bigMarioUnderBrick:bigMarioUnderBrick,
 	smallLowerZoneDetect:smallLowerZoneDetect,
@@ -10,6 +11,11 @@ let LibObj = {
 	handleSmallJumpFromBorder:handleSmallJumpFromBorder,
 	handleBigJumpFromBorder:handleBigJumpFromBorder
 };
+
+let snippetArr = new Array();
+let backToSmallSnippetArr = new Array();
+let backToBigSnippetArr = new Array();
+let fireSnippetArr = new Array();
 
 function drawAndUpdateObject(objectArray,context,objectSprite,marioArray,...args) {
 	for(let j = 0;j < objectArray.length;j += 1){
@@ -24,8 +30,8 @@ function drawAndUpdateObject(objectArray,context,objectSprite,marioArray,...args
 
 function spliceObjectArray(objectArray) {
 	for(let j = 0;j < objectArray.length;j += 1){
-		let flower = objectArray[j];
-		if(flower.show == false){
+		let object = objectArray[j];
+		if(object.show == false){
 			objectArray.splice(j,1);
 			j--;
 		}
@@ -33,7 +39,59 @@ function spliceObjectArray(objectArray) {
 			break;
 		}  
 	}	
-	
+}
+
+function snippet(keys,marioArray,powerupSound,powerdownSound) {
+	if(keys.zbutton){
+		let temp = "z";
+		snippetArr.push(temp);
+	}else if(keys.abutton){
+		let temp = "a";
+		fireSnippetArr.push(temp);
+	}else if(keys.qbutton){
+		let temp = "q";
+		backToSmallSnippetArr.push(temp);
+	}else if(keys.wbutton){
+		let temp = "w";
+		backToBigSnippetArr.push(temp);
+	}
+
+	if(snippetArr.length >= 18){
+		snippetArr = [];
+		if(!marioArray[0].isBigMario && !marioArray[0].isFireMario){
+			marioArray[0].changeToBig = true;
+			powerupSound.play();
+		}	
+		return;
+	}
+
+	if(fireSnippetArr.length >= 18){
+		fireSnippetArr = [];
+		if(marioArray[0].isBigMario ){
+			marioArray[0].changeToFire = true;
+			powerupSound.play();
+		}	
+		return;
+	}
+
+	if(backToSmallSnippetArr.length >= 18){
+		backToSmallSnippetArr = [];
+		if(marioArray[0].isBigMario ){
+			marioArray[0].backToSmall = true;
+			powerdownSound.play();
+		}	
+		return;
+	}
+
+	if(backToBigSnippetArr.length >= 18){
+		backToBigSnippetArr = [];
+		if(marioArray[0].isFireMario ){
+			marioArray[0].backToBig = true;
+			powerdownSound.play();
+		}	
+		return;
+	}
+
 }
 
 // 	碰撞公式:shape.pos.x + shape.width > this.pos.x 

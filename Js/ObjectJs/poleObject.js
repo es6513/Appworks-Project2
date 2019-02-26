@@ -1,5 +1,4 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-// import {mario} from "../marioTest.js";
 
 
 class Pole{
@@ -9,9 +8,6 @@ class Pole{
 		this.height = 176;
 	}
 	
-	update(){
-
-	}
 
 	draw(context,poleSprite,marioArray){
 				

@@ -1,6 +1,4 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-// import {marioArray} from "../marioArrayTest.js";
-
 
 class Fireball{
 	constructor(){
