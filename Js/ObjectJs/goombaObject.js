@@ -1,5 +1,6 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
 
+
 class Goomba{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);
@@ -27,7 +28,7 @@ class Goomba{
 		];
 	}
 	
-	update(tubeJson,highTubeJson,highestTubeJson,turtleArray,marioArray,backgroundJson,oddBrickJson){
+	update(marioArray,tubeJson,highTubeJson,highestTubeJson,turtleArray,backgroundJson,oddBrickJson){
 		this.faceDirection = this.direction;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width

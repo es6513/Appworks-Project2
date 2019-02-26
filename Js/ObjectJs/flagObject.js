@@ -1,4 +1,5 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
+import {keys} from "../keyEvent.js";
 
 class Flag{
 	constructor(){
@@ -11,7 +12,7 @@ class Flag{
 		this.isOnBottom = false;
 	}
 	
-	update(poleJson,marioArray){
+	update(marioArray,poleJson){
 		if(!this.isOnBottom && marioArray.canPlayPassMusic){
 			this.moveDown();
 		}

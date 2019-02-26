@@ -1,3 +1,4 @@
+import {LibObj} from "../Js/lib.js";
 import {drawBackground,loadMarioImage,drawObjects} from "../Js/drawImage.js";
 import {loadJson} from "../Js/loadJson.js";
 import {Mario} from "../Js/ObjectJs/marioObject.js";
@@ -29,7 +30,6 @@ let backToSmallSnippet = new Array();
 let backToBigSnippet = new Array();
 let firesnippet = new Array();
 
-
 // ----------------解析度偵測------------------------
 
 let openBackground = document.querySelector("#openBackground");
@@ -49,8 +49,6 @@ if(screenWidth < 1024 && !is_safari){
 }else if(screenWidth > 1366){
 	bigresolution.style.display = "block";
 }
-
-
 // ---------------end 開頭畫面---------------
 
 // ------------end -解析度偵測-----------------------
@@ -64,12 +62,7 @@ if (is_safari) {
 	safariNotWorking.style.display = "flex";
 }
 
-// ------------Sfari 偵測---------------------
-
-
 // -------------------音效--------------------
-
-
 let backgroundMusic = new Audio("../music/TitleBGM.mp3");
 
 let undergroundMuscic = new Audio("../music/underworld.mp3");
@@ -387,28 +380,9 @@ Promise.all([
 		myGameArea.stop();
 		myGameArea.clear();
 		startGame();
-	}
-
-
-	// document.querySelector("#start").addEventListener("click", function() {
-	// 	restart();
-	// });
-  
+	}  
 	//--------------------遊戲控制流程-----------------------
-	
 	function animate() {
-		// setTimeout(function() {
-		// requestAnimationFrame(animate);
-
-		// 	// your draw() stuff goes here
-
-		// }, 1000 / fps)
-
-		// requestAnimationFrame(animate);
-		// if(keys.zbutton){
-		// }
-
-
 		// ------------密技區----------
 		if(keys.zbutton){
 			let temp = "z";
@@ -464,9 +438,7 @@ Promise.all([
 				powerdownSound.play();
 			}	
 			return;
-		}
-
-		
+		}		
 		// ------------end 密技區----------
 
 		//-----------音樂播放---------------
@@ -485,10 +457,7 @@ Promise.all([
 			undergroundMuscic.pause();
 		}
 
-	
-
 		// --------end of 音樂播放----------------
-
 
 		//---------- 進入下水道 canvas 畫布調整位置-----------
 
@@ -502,7 +471,6 @@ Promise.all([
 			canvas.style.left = "0";
 			canvas.style.top  = "0";
 		}
-
 		//---------- end of 進入下水道 canvas 畫布調整位置-----------
 
 		let context = myGameArea.context;
@@ -518,42 +486,19 @@ Promise.all([
 			context.drawImage(backgroundSprite, 4550,0,context.canvas.width,2160,0,0,context.canvas.width,2160);
 		} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 
-
 		if(marioArray[0].isDie && 	marioArray[0].pos.y > 3600){
 			restart();
 		}		
 
-
-		for(let j = 0;j < coinArray.length;j += 1){
-			coinArray[j].draw(context,coinSpriteSet,marioArray[0]);
-			coinArray[j].update(marioArray[0]);
-			let coin = coinArray[j];
-			if(coin.show == false){
-				coinArray.splice(j,1);
-				j--;
-			}	
-			if(coinArray.length == 0){
-				break;
-			}
-		}
-
-		for(let j = 0;j < flycoinArray.length;j += 1){
-			flycoinArray[j].draw(context,flycoinSprite,marioArray[0]);
-			flycoinArray[j].update(marioArray[0],questionBrickJson);
-			let flycoin = flycoinArray[j];
-			// if(flycoin.isVanished == true){
-			// 	flycoinArray.splice(j,1);
-			// 	j--;
-			// }	
-			// if(flycoinArray.length == 0){
-			// 	break;
-			// }
-		}
+		LibObj.drawAndUpdateObject(coinArray,context,coinSpriteSet,marioArray);
+		LibObj.spliceObjectArray(coinArray);
+		LibObj.drawAndUpdateObject(flycoinArray,context,flycoinSprite,marioArray,questionBrickJson);
 
 		// --------------------怪物區---------------------
+		LibObj.drawAndUpdateObject(turtleArray,context,turtleSpriteSet,marioArray,backgroundJson,
+			tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
 		for(let j = 0;j < turtleArray.length;j += 1){
-			turtleArray[j].draw(context,turtleSpriteSet,marioArray[0]);
-			turtleArray[j].update(backgroundJson,tubeJson,highTubeJson,highestTubeJson,marioArray[0],oddBrickJson);
+	
 			let turtle = turtleArray[j];
 			if(turtle.isDie){
 				turtleArray.splice(j,1);
@@ -563,196 +508,58 @@ Promise.all([
 				break;
 			}
 		}			
-				
-		for(let j = 0;j < goombaArray.length;j += 1){
-			goombaArray[j].draw(context,goombaSpriteSet,marioArray[0]);
-			goombaArray[j].update(tubeJson,highTubeJson,highestTubeJson,turtleArray,marioArray[0],backgroundJson,oddBrickJson);
-			let goomba = goombaArray[j];
-			if(!goomba.show){
-				goombaArray.splice(j,1);
-				j--;
-			}
-			if(goombaArray.length == 0){
-				break;
-			}
-		}
+		LibObj.drawAndUpdateObject(goombaArray,context,goombaSpriteSet,marioArray,tubeJson,
+			highTubeJson,highestTubeJson,turtleArray,backgroundJson,oddBrickJson);	
+		LibObj.spliceObjectArray(goombaArray);
 
-		// for(let j = 0;j < badPlantArray.length;j += 1){
-		// 	badPlantArray[j].draw(context,badPlantSprite,marioArray[0]);
-		// 	badPlantArray[j].update(marioArray[0]);
-		// 	let badPlant = badPlantArray[j];
-		// 	if(badPlant.hitByFire){
-		// 		badPlantArray.splice(j,1);
-		// 		j--;
-		// 	}
-		// 	if(badPlantArray.length == 0){
-		// 		break;
-		// 	}
-		// }	
 	
 		// --------------end 怪物區---------------------
-
-
 		//--------------終點物件-------------------
+		LibObj.drawAndUpdateObject(poleArray,context,poleSprite,marioArray);
+		LibObj.drawAndUpdateObject(flagArray,context,flagSprite,marioArray,poleJson);
+		LibObj.drawAndUpdateObject(castleArray,context,castleSprite,marioArray);
 
-		for(let j = 0;j < poleArray.length;j += 1){
-			poleArray[j].draw(context,poleSprite,marioArray[0]);
-			poleArray[j].update(marioArray[0]);
-		}
-
-		for(let j = 0;j < flagArray.length;j += 1){
-			flagArray[j].draw(context,flagSprite,marioArray[0]);
-			flagArray[j].update(poleJson,marioArray[0]);
-		}	
-			
-		for(let j = 0;j < castleArray.length;j += 1){
-			castleArray[j].draw(context,castleSprite,marioArray[0]);
-		}	
 
 		//--------------end   終點物件-------------------
+		LibObj.drawAndUpdateObject(flowerArray,context,flowerSprite,marioArray);
+		LibObj.spliceObjectArray(flowerArray);
 
-		for(let j = 0;j < flowerArray.length;j += 1){
-			flowerArray[j].draw(context,flowerSprite,marioArray[0]);
-			flowerArray[j].update(marioArray[0]);
-			let flower = flowerArray[j];
-			if(flower.show == false){
-				flowerArray.splice(j,1);
-				j--;
-			}
-			if(flowerArray.length == 0){
-				break;
-			}  
-		}	
-
-		for(let j = 0;j < mushroomArray.length;j += 1){
-			mushroomArray[j].draw(context,mushroomSprite,marioArray[0]);
-			mushroomArray[j].update(marioArray[0],backgroundJson,oddBrickJson
-				,tubeJson,highTubeJson,highestTubeJson);
-			let mushroom = mushroomArray[j];
-			if(mushroom.show == false){
-				mushroomArray.splice(j,1);
-				j--;
-			}
-			if(mushroomArray.length == 0){
-				break;
-			} 
-		}	
-
+		LibObj.drawAndUpdateObject(mushroomArray,context,mushroomSprite,marioArray,
+			backgroundJson,oddBrickJson,tubeJson,highTubeJson,highestTubeJson);
+		LibObj.spliceObjectArray(mushroomArray);
 		//-----------------各種磚塊------------------
-
-		for(let j = 0;j < brickArray.length;j += 1){
-			brickArray[j].draw(context,brickSprite,marioArray[0]);
-			brickArray[j].update(marioArray[0]);
-			// let brick = brickArray[j];
-			// if(brick.show == false){
-			// 	brickArray.splice(j,1);
-			// 	j--;
-			// }
-			// if(brickArray.length == 0){
-			// 	break;
-			// } 
-		}	
+		LibObj.drawAndUpdateObject(brickArray,context,brickSprite,marioArray);
 
 		for(let j = 0;j < fragmentArray.length;j += 1){
 			fragmentArray[j].draw(context,fragmentSprite,marioArray[0]);
 			fragmentArray[j].update(backgroundJson,brickArray,fragmentArray);
-			// let fragment = fragmentArray[j];
-			// if(fragment.underground ){
-			// 	fragmentArray.splice(j,1);
-			// 	j--;
-			// }
-			// if(fragmentArray.length == 0){
-			// 	break;
-			// } 
 		}		
+		LibObj.drawAndUpdateObject(mushroomBrickArray,context,mushroomBrickSprite,marioArray,mushroomArray,mushroomBrickArray);
 
-		for(let j = 0;j < mushroomBrickArray.length;j += 1){
-			mushroomBrickArray[j].draw(context,mushroomBrickSprite,marioArray[0]);
-			mushroomBrickArray[j].update(marioArray[0],mushroomArray,mushroomBrickArray);
-		}	
-
-		for(let j = 0;j < flowerBrickArray.length;j += 1){
-			flowerBrickArray[j].draw(context,flowerBrickSprite,marioArray[0]);
-			flowerBrickArray[j].update(marioArray[0],flowerArray,flowerBrickArray);
-		}	
-
-		for(let j = 0;j < questionBrickArray.length;j += 1){
-			questionBrickArray[j].draw(context,questionBrickSprite,marioArray[0]);
-			questionBrickArray[j].update(marioArray[0],flycoinArray,questionBrickArray);
-		}	
-
+		LibObj.drawAndUpdateObject(flowerBrickArray,context,flowerBrickSprite,marioArray,flowerArray,flowerBrickArray);
+		LibObj.drawAndUpdateObject(questionBrickArray,context,questionBrickSprite,
+			marioArray,flycoinArray,questionBrickArray);
 		//-----------------end of 各種磚塊------------------
 
-
 		// ---------------障礙區-----------------
-
+		LibObj.drawAndUpdateObject(highTubeArray,context,highTubeSprite,marioArray);
+		LibObj.drawAndUpdateObject(oddBrickArray,context,oddBrickSprite,marioArray);
+		LibObj.drawAndUpdateObject(undergroundTubeArray,context,undergroundTubeSprite,marioArray);
+		LibObj.drawAndUpdateObject(undergroundBrickArray,context,undergroundBrickSprite,marioArray);
 		
-	
-		for(let j = 0;j < undergroundBrickArray.length;j += 1){
-			undergroundBrickArray[j].draw(context,undergroundBrickSprite,marioArray[0]);
-		}
-
-		for(let j = 0;j < highTubeArray.length;j += 1){
-			highTubeArray[j].draw(context,highTubeSprite,marioArray[0]);
-			highTubeArray[j].update(marioArray[0]);
-		}			
-		
-		for(let j = 0;j < oddBrickArray.length;j += 1){
-			oddBrickArray[j].draw(context,oddBrickSprite,marioArray[0]);
-			oddBrickArray[j].update(marioArray[0]);
-		}	
-			
-
 		marioArray[0].draw(context, marioSpriteSet,backgroundJson,fireballSprite,
 			goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
 		marioArray[0].update(backgroundJson,tubeJson,highestTubeJson,oddBrickJson,
 			poleJson,	castleJson,flagArray,undergroundTubeJson,undergroundBrickJson);
-			
 		
-		for(let j = 0;j < undergroundTubeArray.length;j += 1){
-			undergroundTubeArray[j].draw(context,undergroundTubeSprite,marioArray[0]);
-		}	
-
-		for(let j = 0;j < highestTubeArray.length;j += 1){
-			highestTubeArray[j].draw(context,highestTubeSprite,marioArray[0]);
-			highestTubeArray[j].update(marioArray[0]);
-		}	
-	
-		for(let j = 0;j < tubeArray.length;j += 1){
-			tubeArray[j].draw(context,tubeSprite,marioArray[0]);
-			tubeArray[j].update(marioArray[0]);
-		}	
-	
+		LibObj.drawAndUpdateObject(undergroundTubeArray,context,undergroundTubeSprite,marioArray);
+		LibObj.drawAndUpdateObject(tubeArray,context,tubeSprite,marioArray);
+		LibObj.drawAndUpdateObject(highestTubeArray,context,highestTubeSprite,marioArray);
 		// ---------------end of 障礙區-----------------
-
-	
-		// -----------------計分區--------------------------
-
-		let brickcoinPoint = questionBrickArray.filter(function (item) {
-			return item.isUseLess == true;
-		});
-		
-		let coinPoint = (31 - coinArray.length) * 100;
-
-		// context.font = "30px Courier New";
-		// context.fillText("Score:" + (brickcoinPoint.length*200 + coinPoint),10,50);
-
-		// -----------------end of 文字區-----------------
-		
 	};
 	// startGame();
 	document.querySelector("#startBtn").addEventListener("click",function (e){
 		startGame();
 		openBackground.style.display = "none";
-	});
-
-	// document.querySelector(".container").addEventListener("keypress", function (e) {
-	// 	var key = e.which || e.keyCode;
-	// 	if (key === 13) { 
-	// 		startGame();
-	// 	}
-	// });
-	
+	});	
 });
-
-
