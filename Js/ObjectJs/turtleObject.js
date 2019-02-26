@@ -42,7 +42,7 @@ class Turtle{
 		];
 	}
 	
-	update(backgroundJson,tubeJson,highTubeJson,highestTubeJson,marioArray,oddBrickJson){
+	update(marioArray,backgroundJson,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 		//	&& shape.pos.x < this.pos.x + this.width
 		//	&& shape.pos.y + shape.height > this.pos.y

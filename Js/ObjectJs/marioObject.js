@@ -513,6 +513,8 @@ class Mario{
 		
 			oddBrickJson.Pos[0].ranges.forEach(([x,y])=>{	
 				//----------小馬力歐-----------
+				//speed.y 因為有重力的因素導致 y 的位置都會多0.5，目前只有磚塊相關(包刮其他金幣、花朵)的障礙會需要這樣設定，
+				//-----------bug -this.speed.y 為了在磚塊頂端不能移動
 				if( this.pos.x + this.width == x
 					&& this.pos.y - this.speed.y + this.height  > y  
 					&& this.pos.y - this.speed.y + this.height / 2  < y + oddBrickJson.height)
@@ -544,6 +546,7 @@ class Mario{
 						&& this.pos.y  + this.height  < y  
 						&& keys.right ){
 					this.stopX = false;
+					//BUG 快速按的話有機會穿過一格磚塊
 				}
 
 				// ------end of 小馬力歐---------

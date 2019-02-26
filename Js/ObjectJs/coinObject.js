@@ -1,5 +1,6 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
 
+
 class Coin{
 	constructor(){
 		this.pos = new PositionAndSpeed(0,0);

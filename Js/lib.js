@@ -1,4 +1,6 @@
 let LibObj = {
+	drawAndUpdateObject:drawAndUpdateObject,
+	spliceObjectArray:spliceObjectArray,
 	smallMarioUnderBrick:smallMarioUnderBrick,
 	bigMarioUnderBrick:bigMarioUnderBrick,
 	smallLowerZoneDetect:smallLowerZoneDetect,
@@ -8,6 +10,31 @@ let LibObj = {
 	handleSmallJumpFromBorder:handleSmallJumpFromBorder,
 	handleBigJumpFromBorder:handleBigJumpFromBorder
 };
+
+function drawAndUpdateObject(objectArray,context,objectSprite,marioArray,...args) {
+	for(let j = 0;j < objectArray.length;j += 1){
+		objectArray[j].draw(context,objectSprite,marioArray[0]);
+		if(objectArray[j].update && !args){
+			objectArray[j].update(marioArray[0]);
+		}else if(objectArray[j].update && args){
+			objectArray[j].update(marioArray[0],...args);
+		}
+	}	
+}
+
+function spliceObjectArray(objectArray) {
+	for(let j = 0;j < objectArray.length;j += 1){
+		let flower = objectArray[j];
+		if(flower.show == false){
+			objectArray.splice(j,1);
+			j--;
+		}
+		if(objectArray.length == 0){
+			break;
+		}  
+	}	
+	
+}
 
 // 	碰撞公式:shape.pos.x + shape.width > this.pos.x 
 //	&& shape.pos.x < this.pos.x + this.width
