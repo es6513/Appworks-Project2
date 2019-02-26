@@ -1,34 +1,31 @@
-import {LibObj} from "../Js/lib.js";
-import {drawBackground,loadMarioImage,drawObjects} from "../Js/drawImage.js";
-import {loadJson} from "../Js/loadJson.js";
-import {Mario} from "../Js/ObjectJs/marioObject.js";
-import {Coin} from "../Js/ObjectJs/coinObject.js";
-import {Flycoin} from "../Js/ObjectJs/flycoinObject.js";
-import {Tube} from "../Js/ObjectJs/tubeObject.js";
-import {HighTube} from "../Js/ObjectJs/highTubeObject.js";
-import {HighestTube} from "../Js/ObjectJs/highestTubeObject.js";
-import {UndergroundTube} from "../Js/ObjectJs/undergroundTubeObject.js";
-import {UndergroundBrick} from "../Js/ObjectJs/undergroundBrickObject.js";
-import {OddBrick} from "../Js/ObjectJs/oddBrickObject.js";
-import {Turtle} from "../Js/ObjectJs/turtleObject.js";
-import {Goomba} from "../Js/ObjectJs/goombaObject.js";
+import {LibObj} from "../js/lib.js";
+import {drawBackground,loadMarioImage,drawObjects} from "../js/drawImage.js";
+import {loadJson} from "../js/loadJson.js";
+import {Mario} from "../js/ObjectJs/marioObject.js";
+import {Coin} from "../js/ObjectJs/coinObject.js";
+import {Flycoin} from "../js/ObjectJs/flycoinObject.js";
+import {Tube} from "../js/ObjectJs/tubeObject.js";
+import {HighTube} from "../js/ObjectJs/highTubeObject.js";
+import {HighestTube} from "../js/ObjectJs/highestTubeObject.js";
+import {UndergroundTube} from "../js/ObjectJs/undergroundTubeObject.js";
+import {UndergroundBrick} from "../js/ObjectJs/undergroundBrickObject.js";
+import {OddBrick} from "../js/ObjectJs/oddBrickObject.js";
+import {Turtle} from "../js/ObjectJs/turtleObject.js";
+import {Goomba} from "../js/ObjectJs/goombaObject.js";
 import {BadPlant} from "./ObjectJs/badPlantObject.js";
-import {Pole} from "../Js/ObjectJs/poleObject.js";
-import {Flag} from "../Js/ObjectJs/flagObject.js";
-import {Castle} from "../Js/ObjectJs/castleObject.js";
-import {Brick} from "../Js/ObjectJs/brickObject.js";
-import {Fragment} from "../Js/ObjectJs/fragmentObject.js";
-import {QuestionBrick} from "../Js/ObjectJs/questionBrickObject.js";
-import {MushroomBrick} from "../Js/ObjectJs/mushroomBrickObject.js";
-import {FlowerBrick} from "../Js/ObjectJs/flowerBrickObject.js";
-import {Flower} from "../Js/ObjectJs/flowerObject.js";
+import {Pole} from "../js/ObjectJs/poleObject.js";
+import {Flag} from "../js/ObjectJs/flagObject.js";
+import {Castle} from "../js/ObjectJs/castleObject.js";
+import {Brick} from "../js/ObjectJs/brickObject.js";
+import {Fragment} from "../js/ObjectJs/fragmentObject.js";
+import {QuestionBrick} from "../js/ObjectJs/questionBrickObject.js";
+import {MushroomBrick} from "../js/ObjectJs/mushroomBrickObject.js";
+import {FlowerBrick} from "../js/ObjectJs/flowerBrickObject.js";
+import {Flower} from "../js/ObjectJs/flowerObject.js";
 import {Mushroom} from "../Js/ObjectJs/mushroomObject.js";
-import {keys} from "../Js/keyEvent.js";
+import {keys} from "../js/keyEvent.js";
 import { Fireball } from "./ObjectJs/fireballObject.js";
-let snippet = new Array();
-let backToSmallSnippet = new Array();
-let backToBigSnippet = new Array();
-let firesnippet = new Array();
+
 
 // ----------------解析度偵測------------------------
 
@@ -123,8 +120,6 @@ export function createMarioArray(name) {
 			return marioArray;
 		});
 }
-
-//-------測試區---------
 
 Promise.all([ 
 	loadMarioImage("marioRedder"),
@@ -354,7 +349,6 @@ Promise.all([
 		myGameArea.start();
 	}
 
-
 	let myGameArea = {
 		canvas : document.createElement("canvas"),
 		start : function() {
@@ -384,62 +378,7 @@ Promise.all([
 	//--------------------遊戲控制流程-----------------------
 	function animate() {
 		// ------------密技區----------
-		if(keys.zbutton){
-			let temp = "z";
-			snippet.push(temp);
-		}
-
-		if(snippet.length === 18){
-			snippet = [];
-			if(!marioArray[0].isBigMario && !marioArray[0].isFireMario){
-				marioArray[0].changeToBig = true;
-				powerupSound.play();
-			}	
-			return;
-		}
-
-		if(keys.abutton){
-			let temp = "a";
-			firesnippet.push(temp);
-		}
-
-		if(firesnippet.length === 18){
-			firesnippet = [];
-			if(marioArray[0].isBigMario ){
-				marioArray[0].changeToFire = true;
-				powerupSound.play();
-			}	
-			return;
-		}
-
-		if(keys.qbutton){
-			let temp = "q";
-			backToSmallSnippet.push(temp);
-		}
-
-		if(backToSmallSnippet.length === 18){
-			backToSmallSnippet = [];
-			if(marioArray[0].isBigMario ){
-				marioArray[0].backToSmall = true;
-				powerdownSound.play();
-			}	
-			return;
-		}
-
-		if(keys.wbutton){
-			let temp = "w";
-			backToBigSnippet.push(temp);
-		}
-
-		if(backToBigSnippet.length === 18){
-			backToBigSnippet = [];
-			if(marioArray[0].isFireMario ){
-				marioArray[0].backToBig = true;
-				powerdownSound.play();
-			}	
-			return;
-		}		
-		// ------------end 密技區----------
+		LibObj.snippet(keys,marioArray,powerupSound,powerdownSound);
 
 		//-----------音樂播放---------------
 
@@ -477,7 +416,6 @@ Promise.all([
 
 		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
-
 		if(marioArray[0].pos.x < 450){
 			context.drawImage(backgroundSprite,0,0,context.canvas.width,2160,0,0,context.canvas.width,2160);
 		}else if(marioArray[0].pos.x >= 450 && 	marioArray[0].pos.x < 5000) {
@@ -486,7 +424,7 @@ Promise.all([
 			context.drawImage(backgroundSprite, 4550,0,context.canvas.width,2160,0,0,context.canvas.width,2160);
 		} // 最後一行用差值來做處理，讓馬力歐在最後一段距離的時候，只有人移動，畫面不捲
 
-		if(marioArray[0].isDie && 	marioArray[0].pos.y > 3600){
+		if(marioArray[0].isDie && marioArray[0].pos.y > 3600){
 			restart();
 		}		
 
@@ -497,22 +435,12 @@ Promise.all([
 		// --------------------怪物區---------------------
 		LibObj.drawAndUpdateObject(turtleArray,context,turtleSpriteSet,marioArray,backgroundJson,
 			tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
-		for(let j = 0;j < turtleArray.length;j += 1){
-	
-			let turtle = turtleArray[j];
-			if(turtle.isDie){
-				turtleArray.splice(j,1);
-				j--;
-			}
-			if(turtleArray.length == 0){
-				break;
-			}
-		}			
+		LibObj.spliceObjectArray(turtleArray);
+
 		LibObj.drawAndUpdateObject(goombaArray,context,goombaSpriteSet,marioArray,tubeJson,
 			highTubeJson,highestTubeJson,turtleArray,backgroundJson,oddBrickJson);	
 		LibObj.spliceObjectArray(goombaArray);
-
-	
+ 	
 		// --------------end 怪物區---------------------
 		//--------------終點物件-------------------
 		LibObj.drawAndUpdateObject(poleArray,context,poleSprite,marioArray);
@@ -529,13 +457,9 @@ Promise.all([
 		LibObj.spliceObjectArray(mushroomArray);
 		//-----------------各種磚塊------------------
 		LibObj.drawAndUpdateObject(brickArray,context,brickSprite,marioArray);
-
-		for(let j = 0;j < fragmentArray.length;j += 1){
-			fragmentArray[j].draw(context,fragmentSprite,marioArray[0]);
-			fragmentArray[j].update(backgroundJson,brickArray,fragmentArray);
-		}		
+		LibObj.drawAndUpdateObject(fragmentArray,context,fragmentSprite,marioArray,backgroundJson,brickArray,fragmentArray);
 		LibObj.drawAndUpdateObject(mushroomBrickArray,context,mushroomBrickSprite,marioArray,mushroomArray,mushroomBrickArray);
-
+	
 		LibObj.drawAndUpdateObject(flowerBrickArray,context,flowerBrickSprite,marioArray,flowerArray,flowerBrickArray);
 		LibObj.drawAndUpdateObject(questionBrickArray,context,questionBrickSprite,
 			marioArray,flycoinArray,questionBrickArray);

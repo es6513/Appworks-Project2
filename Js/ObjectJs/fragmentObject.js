@@ -13,7 +13,7 @@ class Fragment{
 		this.record = false;
 	}
 	
-	update(backgroundJson,brickArray,fragmentArray){
+	update(marioArray,backgroundJson,brickArray,fragmentArray){
 		backgroundJson.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{
 			if(this.pos.y >= y1 * backgroundJson.height){
 				this.underground = true;

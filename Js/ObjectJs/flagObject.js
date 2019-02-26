@@ -1,5 +1,4 @@
 import {PositionAndSpeed} from "../positionAndSpeed.js";
-import {keys} from "../keyEvent.js";
 
 class Flag{
 	constructor(){
