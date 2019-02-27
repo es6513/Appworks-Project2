@@ -1,4 +1,17 @@
+import {drawBackground,loadMarioImage,drawObjects} from "./drawImage.js";
+import {loadJson} from "./loadJson.js";
+import {keys} from "./keyEvent.js";
+import {sceneObjects} from "./objectLib.js"
+
 let LibObj = {
+	drawBackground:drawBackground,
+	loadMarioImage:loadMarioImage,
+	drawObjects:drawObjects,
+	loadJson:loadJson,
+	keys:keys,
+	createMarioArray:createMarioArray,
+	createObjectArray:createObjectArray,
+	createFragmentArray:createFragmentArray,
 	drawAndUpdateObject:drawAndUpdateObject,
 	spliceObjectArray:spliceObjectArray,
 	snippet:snippet,
@@ -17,6 +30,61 @@ let backToSmallSnippetArr = new Array();
 let backToBigSnippetArr = new Array();
 let fireSnippetArr = new Array();
 
+
+function createMarioArray(name) {
+	return fetch(`../marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(marioSprite=>{
+			let marioArray = [];
+			marioSprite.Pos[0].ranges.forEach(([x,y])=>{
+				let mario = new sceneObjects.Mario();
+				mario.pos.set(x,y);
+				mario.speed.set(4,2);
+				marioArray.push(mario);
+			});
+			return marioArray;
+		});
+}
+
+
+function createObjectArray(name,objectName) {
+	return fetch(`../marioJSON/${name}.json`)
+		.then(r =>r.json())
+		.then(Sprite=>{
+			let objectArray = [];
+			Sprite.Pos[0].ranges.forEach(([x,y])=>{
+				let object = new objectName();
+				object.pos.set(x,y);
+				objectArray.push(object);
+			});
+			return objectArray;
+		});
+}
+
+function createFragmentArray(){
+	return fetch(`../marioJSON/brick.json`)
+		.then(r =>r.json())
+		.then(Sprite=>{
+			let brickArray = Sprite.Pos[0].ranges;
+			let fragmentArray = [];
+			for(let i = 0;i < brickArray.length;i += 1){
+				let fragment1 = new sceneObjects.Fragment();
+				fragment1.pos.set(brickArray[i][0],brickArray[i][1]);
+				let fragment2 = new sceneObjects.Fragment();
+				fragment2.pos.set(brickArray[i][0] + 8,brickArray[i][1]);
+				let fragment3 = new sceneObjects.Fragment();
+				fragment3.pos.set(brickArray[i][0],brickArray[i][1] + 8);
+				let fragment4 = new sceneObjects.Fragment();
+				fragment4.pos.set(brickArray[i][0] + 8,brickArray[i][1] + 8);
+				fragmentArray.push(fragment1);
+				fragmentArray.push(fragment2);
+				fragmentArray.push(fragment3);
+				fragmentArray.push(fragment4);
+			}
+			return fragmentArray;
+		});
+}
+
 function drawAndUpdateObject(objectArray,context,objectSprite,marioArray,...args) {
 	for(let j = 0;j < objectArray.length;j += 1){
 		objectArray[j].draw(context,objectSprite,marioArray[0]);
@@ -27,6 +95,8 @@ function drawAndUpdateObject(objectArray,context,objectSprite,marioArray,...args
 		}
 	}	
 }
+
+
 
 function spliceObjectArray(objectArray) {
 	for(let j = 0;j < objectArray.length;j += 1){

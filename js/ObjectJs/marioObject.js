@@ -845,14 +845,13 @@ class Mario{
 
 	//每張圖片的切割大小存在 mario.json,其中 runRight-2 跟 runRight-3 並沒有從16的倍數切(因為圖片會有點卡住所以選了一些特殊的切割點) 
 
-	draw(context,marioSprite,backgroundJson,fireballSprite,goombaArray,turtleArray,
-		badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
+	draw(context,marioSprite,backgroundJson,fireballSprite,goombaArray,turtleArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
 		//呼叫 SpriteSet 的 draw 方法
 
 		// ----------將陣列中的火焰球清除---------
 		for(let j = 0;j < this.fireArray.length;j += 1){
 			this.fireArray[j].draw(context,fireballSprite,this);
-			this.fireArray[j].update(this,backgroundJson,goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
+			this.fireArray[j].update(this,backgroundJson,goombaArray,turtleArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
 			let fire = this.fireArray[j];
 			if(fire.show == false || fire.pos.y > 1080){
 				this.fireArray.splice(j,1);

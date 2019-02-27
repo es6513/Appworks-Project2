@@ -33,7 +33,7 @@ class Fireball{
 		];
 	}
 	
-	update(marioArray,backgroundJson,goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
+	update(marioArray,backgroundJson,goombaArray,turtleArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson){
 		this.faceDirection = marioArray.faceDirection;
 		// 	碰撞公式:shape.pos.x + shape.width > this.pos.x  左
 		//	&& shape.pos.x < this.pos.x + this.width 右
@@ -143,18 +143,6 @@ class Fireball{
 			}
 		}
 
-		for(let j = 0;j < badPlantArray.length;j += 1){
-			if(!this.isExplosion && this.pos.x + this.width > badPlantArray[j].pos.x
-				&& this.pos.x < badPlantArray[j].pos.x + badPlantArray[j].width
-				&& this.pos.y + this.height > badPlantArray[j].pos.y
-				&& this.pos.y < badPlantArray[j].pos.y + badPlantArray[j].height
-			){
-				badPlantArray[j].hitByFire = true;
-				this.dieSound();
-				this.isExplosion = true;
-				return;
-			}
-		}
 
 		//-------------end of 火球打死goomba-----------
 		backgroundJson.backgrounds[1].ranges.forEach(([x1,x2,y1,y2]) =>{

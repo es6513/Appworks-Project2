@@ -1,12 +1,10 @@
-import {createMarioArray} from "../Js/index.js";
-import {drawObjects,loadMarioImage} from "../Js/drawImage.js";
-import {loadJson} from "../Js/loadJson.js";
+import {LibObj} from "../js/lib.js"
 
 
 
 describe("loadJson", function () {
 	it("should return object json data", function () {
-		return loadJson("badPlant")
+		return LibObj.loadJson("badPlant")
 			.then(objectJson=>{
 				chai.expect(objectJson.frames.length).to.equal(2);
 				chai.expect(objectJson.Pos.length).to.equal(1);
@@ -16,7 +14,7 @@ describe("loadJson", function () {
 
 describe("drawObjects", function () {
 	it("should return object sprite", function () {
-		return drawObjects("badTurtle")
+		return LibObj.drawObjects("badTurtle")
 			.then(turtle=>{
 				chai.expect(turtle.height).to.equal(24);
 			});
@@ -25,7 +23,7 @@ describe("drawObjects", function () {
 
 describe("createMarioObjectArray", function () {
 	it("should return marioArray", function () {
-		return createMarioArray("marioRedder")
+		return LibObj.createMarioArray("marioRedder")
 			.then(mario=>{
 				chai.expect(mario.length).to.equal(1);
 				chai.expect(mario[0].width).to.equal(16);
