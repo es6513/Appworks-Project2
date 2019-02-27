@@ -1,40 +1,14 @@
 import {LibObj} from "../js/lib.js";
-import {drawBackground,loadMarioImage,drawObjects} from "../js/drawImage.js";
-import {loadJson} from "../js/loadJson.js";
-import {Mario} from "../js/ObjectJs/marioObject.js";
-import {Coin} from "../js/ObjectJs/coinObject.js";
-import {Flycoin} from "../js/ObjectJs/flycoinObject.js";
-import {Tube} from "../js/ObjectJs/tubeObject.js";
-import {HighTube} from "../js/ObjectJs/highTubeObject.js";
-import {HighestTube} from "../js/ObjectJs/highestTubeObject.js";
-import {UndergroundTube} from "../js/ObjectJs/undergroundTubeObject.js";
-import {UndergroundBrick} from "../js/ObjectJs/undergroundBrickObject.js";
-import {OddBrick} from "../js/ObjectJs/oddBrickObject.js";
-import {Turtle} from "../js/ObjectJs/turtleObject.js";
-import {Goomba} from "../js/ObjectJs/goombaObject.js";
-import {BadPlant} from "./ObjectJs/badPlantObject.js";
-import {Pole} from "../js/ObjectJs/poleObject.js";
-import {Flag} from "../js/ObjectJs/flagObject.js";
-import {Castle} from "../js/ObjectJs/castleObject.js";
-import {Brick} from "../js/ObjectJs/brickObject.js";
-import {Fragment} from "../js/ObjectJs/fragmentObject.js";
-import {QuestionBrick} from "../js/ObjectJs/questionBrickObject.js";
-import {MushroomBrick} from "../js/ObjectJs/mushroomBrickObject.js";
-import {FlowerBrick} from "../js/ObjectJs/flowerBrickObject.js";
-import {Flower} from "../js/ObjectJs/flowerObject.js";
-import {Mushroom} from "../Js/ObjectJs/mushroomObject.js";
-import {keys} from "../js/keyEvent.js";
-import { Fireball } from "./ObjectJs/fireballObject.js";
-
+import {sceneObjects} from "./objectLib.js"
 
 // ----------------解析度偵測------------------------
 
-let openBackground = document.querySelector("#openBackground");
-let smallresolution = document.querySelector("#smaller1366");
-let bigresolution = document.querySelector("#bigger1366");
-let marioDeath = document.querySelector("#marioDeath");
-let safariNotWorking = document.querySelector("#safariNotWorkingInfo");
-let screenWidth = screen.width;
+const openBackground = document.querySelector("#openBackground");
+const smallresolution = document.querySelector("#smaller1366");
+const bigresolution = document.querySelector("#bigger1366");
+const marioDeath = document.querySelector("#marioDeath");
+const safariNotWorking = document.querySelector("#safariNotWorkingInfo");
+const screenWidth = screen.width;
 
 // ---------------開頭畫面---------------
 if(screenWidth < 1024 && !is_safari){
@@ -46,13 +20,10 @@ if(screenWidth < 1024 && !is_safari){
 }else if(screenWidth > 1366){
 	bigresolution.style.display = "block";
 }
-// ---------------end 開頭畫面---------------
-
-// ------------end -解析度偵測-----------------------
 
 // ------------Sfari 偵測---------------------
 
-var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+const is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 if (is_safari) {
 	marioDeath.style.display = "block";
@@ -60,158 +31,96 @@ if (is_safari) {
 }
 
 // -------------------音效--------------------
-let backgroundMusic = new Audio("../music/TitleBGM.mp3");
-
-let undergroundMuscic = new Audio("../music/underworld.mp3");
-let powerupSound = new Audio("/music/maro-powerup-sound.wav");
-let powerdownSound = new Audio("/music/maro-powerdown-sound.wav");
-
-// -------------------end 音效--------------------
-
-export function createObjectArray(name,objectName) {
-	return fetch(`../marioJSON/${name}.json`)
-		.then(r =>r.json())
-		.then(Sprite=>{
-			let objectArray = [];
-			Sprite.Pos[0].ranges.forEach(([x,y])=>{
-				let object = new objectName();
-				object.pos.set(x,y);
-				objectArray.push(object);
-			});
-			return objectArray;
-		});
-}
-
-function createFragmentArray(){
-	return fetch(`../marioJSON/brick.json`)
-		.then(r =>r.json())
-		.then(Sprite=>{
-			let brickArray = Sprite.Pos[0].ranges;
-			let fragmentArray = [];
-			for(let i = 0;i < brickArray.length;i += 1){
-				let fragment1 = new Fragment();
-				fragment1.pos.set(brickArray[i][0],brickArray[i][1]);
-				let fragment2 = new Fragment();
-				fragment2.pos.set(brickArray[i][0] + 8,brickArray[i][1]);
-				let fragment3 = new Fragment();
-				fragment3.pos.set(brickArray[i][0],brickArray[i][1] + 8);
-				let fragment4 = new Fragment();
-				fragment4.pos.set(brickArray[i][0] + 8,brickArray[i][1] + 8);
-				fragmentArray.push(fragment1);
-				fragmentArray.push(fragment2);
-				fragmentArray.push(fragment3);
-				fragmentArray.push(fragment4);
-			}
-			return fragmentArray;
-		});
-}
-
-export function createMarioArray(name) {
-	return fetch(`../marioJSON/${name}.json`)
-		.then(r =>r.json())
-		.then(marioSprite=>{
-			let marioArray = [];
-			marioSprite.Pos[0].ranges.forEach(([x,y])=>{
-				let mario = new Mario();
-				mario.pos.set(x,y);
-				mario.speed.set(4,2);
-				marioArray.push(mario);
-			});
-			return marioArray;
-		});
-}
+const backgroundMusic = new Audio("../music/TitleBGM.mp3");
+const undergroundMuscic = new Audio("../music/underworld.mp3");
+const powerupSound = new Audio("/music/maro-powerup-sound.wav");
+const powerdownSound = new Audio("/music/maro-powerdown-sound.wav");
 
 Promise.all([ 
-	loadMarioImage("marioRedder"),
-	createMarioArray("marioRedder"),
-	loadJson("background"),
-	drawBackground("background"),
+	LibObj.loadMarioImage("marioRedder"),
+	LibObj.createMarioArray("marioRedder"),
+	LibObj.loadJson("background"),
+	LibObj.drawBackground("background"),
 
-	drawObjects("coin"),
-	createObjectArray("coin",Coin),
-	drawObjects("flycoin"),
-	createObjectArray("flycoin",Flycoin),
+	LibObj.drawObjects("coin"),
+	LibObj.createObjectArray("coin",sceneObjects.Coin),
+	LibObj.drawObjects("flycoin"),
+	LibObj.createObjectArray("flycoin",sceneObjects.Flycoin),
 
 	//------------Monster Object------------
-	drawObjects("badTurtle"),
-	createObjectArray("badTurtle",Turtle),
-	drawObjects("goomba"),
-	createObjectArray("goomba",Goomba),
-	drawObjects("badPlant"),
-	createObjectArray("badPlant",BadPlant),
+
+	LibObj.drawObjects("badTurtle"),
+	LibObj.createObjectArray("badTurtle",sceneObjects.Turtle),
+	LibObj.drawObjects("goomba"),
+	LibObj.createObjectArray("goomba",sceneObjects.Goomba),
 
 	// ------------tube object--------------
 
-	drawObjects("tube"),
-	createObjectArray("tube",Tube),
-	loadJson("tube"),
-	drawObjects("highTube"),
-	createObjectArray("highTube",HighTube),
-	loadJson("highTube"),
-	drawObjects("highestTube"),
-	createObjectArray("highestTube",HighestTube),
-	loadJson("highestTube"),
+	LibObj.drawObjects("tube"),
+	LibObj.createObjectArray("tube",sceneObjects.Tube),
+	LibObj.loadJson("tube"),
+	LibObj.drawObjects("highTube"),
+	LibObj.createObjectArray("highTube",sceneObjects.HighTube),
+	LibObj.loadJson("highTube"),
+	LibObj.drawObjects("highestTube"),
+	LibObj.createObjectArray("highestTube",sceneObjects.HighestTube),
+	LibObj.loadJson("highestTube"),
 
 	// ------------tube object--------------
 
-
-	drawObjects("undergroundTube"),
-	createObjectArray("undergroundTube",UndergroundTube),
-	loadJson("undergroundTube"),
-	drawObjects("undergroundBrick"),
-	createObjectArray("undergroundBrick",UndergroundBrick),
-	loadJson("undergroundBrick"),
-	drawObjects("oddBrick"),
-	createObjectArray("oddBrick",OddBrick),
-	loadJson("oddBrick"),
-
-	// ------------final object--------------
-	drawObjects("pole"),
-	createObjectArray("pole",Pole),
-	loadJson("pole"),
-	drawObjects("flag"),
-	createObjectArray("flag",Flag),
-	drawObjects("highCastle"),
-	createObjectArray("highCastle",Castle),
-	loadJson("highCastle"),
+	LibObj.drawObjects("undergroundTube"),
+	LibObj.createObjectArray("undergroundTube",sceneObjects.UndergroundTube),
+	LibObj.loadJson("undergroundTube"),
+	LibObj.drawObjects("undergroundBrick"),
+	LibObj.createObjectArray("undergroundBrick",sceneObjects.UndergroundBrick),
+	LibObj.loadJson("undergroundBrick"),
+	LibObj.drawObjects("oddBrick"),
+	LibObj.createObjectArray("oddBrick",sceneObjects.OddBrick),
+	LibObj.loadJson("oddBrick"),
 
 	// ------------final object--------------
-
+	LibObj.drawObjects("pole"),
+	LibObj.createObjectArray("pole",sceneObjects.Pole),
+	LibObj.loadJson("pole"),
+	LibObj.drawObjects("flag"),
+	LibObj.createObjectArray("flag",sceneObjects.Flag),
+	LibObj.drawObjects("highCastle"),
+	LibObj.createObjectArray("highCastle",sceneObjects.Castle),
+	LibObj.loadJson("highCastle"),
 
 	// ------------brick object--------------
 
-	drawObjects("brick"),
-	createObjectArray("brick",Brick),
-	loadJson("brick"),
-	drawObjects("fragment"),
-	createFragmentArray(),
-	loadJson("fragment"),
-	drawObjects("questionBrick"),
-	createObjectArray("questionBrick",QuestionBrick),
-	loadJson("questionBrick"),
-	drawObjects("mushroomBrick"),
-	createObjectArray("mushroomBrick",MushroomBrick),
-	loadJson("mushroomBrick"),
-	drawObjects("flowerBrick"),
-	createObjectArray("flowerBrick",FlowerBrick),  //這邊複製貼上的話，常常會忘記改函示名稱
-	loadJson("flowerBrick"),
+	LibObj.drawObjects("brick"),
+	LibObj.createObjectArray("brick",sceneObjects.Brick),
+	LibObj.loadJson("brick"),
+	LibObj.drawObjects("fragment"),
+	LibObj.createFragmentArray(),
+	LibObj.loadJson("fragment"),
+	LibObj.drawObjects("questionBrick"),
+	LibObj.createObjectArray("questionBrick",sceneObjects.QuestionBrick),
+	LibObj.loadJson("questionBrick"),
+	LibObj.drawObjects("mushroomBrick"),
+	LibObj.createObjectArray("mushroomBrick",sceneObjects.MushroomBrick),
+	LibObj.loadJson("mushroomBrick"),
+	LibObj.drawObjects("flowerBrick"),
+	LibObj.createObjectArray("flowerBrick",sceneObjects.FlowerBrick), 
+	LibObj.loadJson("flowerBrick"),
 
 	// ------------brick object--------------
 
-	drawObjects("fireballset"),
-	createObjectArray("fireballset",Fireball),
-	loadJson("fireballset"),
+	LibObj.drawObjects("fireballset"),
+	LibObj.createObjectArray("fireballset",sceneObjects.Fireball),
+	LibObj.loadJson("fireballset"),
 
 	// ------------powerup object--------------
 
-	drawObjects("mushroom"),
-	createObjectArray("mushroom",Mushroom),
-	loadJson("mushroom"),
-	drawObjects("flower"),
-	createObjectArray("flower",Flower),
-	loadJson("flower"),
+	LibObj.drawObjects("mushroom"),
+	LibObj.createObjectArray("mushroom",sceneObjects.Mushroom),
+	LibObj.loadJson("mushroom"),
+	LibObj.drawObjects("flower"),
+	LibObj.createObjectArray("flower",sceneObjects.Flower),
+	LibObj.loadJson("flower"),
 
-	// ------------powerup object--------------
 ]).then(([
 	marioSpriteSet,marioArray,
 	backgroundJson,
@@ -220,7 +129,6 @@ Promise.all([
 	flycoinSprite,flycoinArray,
 	turtleSpriteSet,turtleArray,
 	goombaSpriteSet,goombaArray,
-	badPlantSprite,badPlantArray,
 
 	// ------------tube object--------------
 
@@ -256,15 +164,12 @@ Promise.all([
 	mushroomSprite,mushroomArray,mushroomJson,
 	flowerSprite,flowerArray,flowerJson])=>{
 
-	
 	//--------------------遊戲控制流程-----------------------
-
 	function startGame() {
 		marioArray = [];
 		coinArray = [];
 		flycoinArray = [];  //  這邊常常忘記清空。
 		turtleArray = [];
-		badPlantArray = [];
 		flagArray = [];
 		tubeArray = [];
 		highTubeArray = [];
@@ -286,34 +191,33 @@ Promise.all([
 		mushroomArray = [];
 		flowerArray = [];
 		Promise.all([
-			createMarioArray("marioRedder"),
-			createObjectArray("coin",Coin),
-			createObjectArray("flycoin",Flycoin),
-			createObjectArray("badTurtle",Turtle),
-			createObjectArray("goomba",Goomba),
-			createObjectArray("badPlant",BadPlant),
-			createObjectArray("tube",Tube),
-			createObjectArray("highTube",HighTube),
-			createObjectArray("highestTube",HighestTube),
-			createObjectArray("undergroundTube",UndergroundTube),
-			createObjectArray("undergroundBrick",UndergroundBrick),
-			createObjectArray("oddBrick",OddBrick),
+			LibObj.createMarioArray("marioRedder"),
+			LibObj.createObjectArray("coin",sceneObjects.Coin),
+			LibObj.createObjectArray("flycoin",sceneObjects.Flycoin),
+			LibObj.createObjectArray("badTurtle",sceneObjects.Turtle),
+			LibObj.createObjectArray("goomba",sceneObjects.Goomba),
+			LibObj.createObjectArray("tube",sceneObjects.Tube),
+			LibObj.createObjectArray("highTube",sceneObjects.HighTube),
+			LibObj.createObjectArray("highestTube",sceneObjects.HighestTube),
+			LibObj.createObjectArray("undergroundTube",sceneObjects.UndergroundTube),
+			LibObj.createObjectArray("undergroundBrick",sceneObjects.UndergroundBrick),
+			LibObj.createObjectArray("oddBrick",sceneObjects.OddBrick),
 		
-			createObjectArray("pole",Pole),
-			createObjectArray("flag",Flag),
-			createObjectArray("highCastle",Castle),
-			createObjectArray("brick",Brick),
-			createFragmentArray(),
-			createObjectArray("questionBrick",QuestionBrick),
-			createObjectArray("mushroomBrick",MushroomBrick),	
-			createObjectArray("flowerBrick",FlowerBrick),
-			createObjectArray("fireballset",Fireball),
-			createObjectArray("mushroom",Mushroom),
-			createObjectArray("flower",Flower),
+			LibObj.createObjectArray("pole",sceneObjects.Pole),
+			LibObj.createObjectArray("flag",sceneObjects.Flag),
+			LibObj.createObjectArray("highCastle",sceneObjects.Castle),
+			LibObj.createObjectArray("brick",sceneObjects.Brick),
+			LibObj.createFragmentArray(),
+			LibObj.createObjectArray("questionBrick",sceneObjects.QuestionBrick),
+			LibObj.createObjectArray("mushroomBrick",sceneObjects.MushroomBrick),	
+			LibObj.createObjectArray("flowerBrick",sceneObjects.FlowerBrick),
+			LibObj.createObjectArray("fireballset",sceneObjects.Fireball),
+			LibObj.createObjectArray("mushroom",sceneObjects.Mushroom),
+			LibObj.createObjectArray("flower",sceneObjects.Flower),
 		]).then(([
 			mario,
 			coin,flycoin,
-			turtle,goomba,badPlant,
+			turtle,goomba,
 			tube,	highTube,	highestTube,
 			undergroundTube,	undergroundBrick,
 			oddBrick,
@@ -326,7 +230,6 @@ Promise.all([
 			flycoinArray = flycoin;
 			coinArray = coin;
 			turtleArray = turtle;
-			badPlantArray = badPlant;
 			tubeArray = tube;
 			highTubeArray = highTube;
 			highestTubeArray = highestTube;
@@ -349,7 +252,7 @@ Promise.all([
 		myGameArea.start();
 	}
 
-	let myGameArea = {
+	const myGameArea = {
 		canvas : document.createElement("canvas"),
 		start : function() {
 			this.canvas.width = 8000;
@@ -377,9 +280,6 @@ Promise.all([
 	}  
 	//--------------------遊戲控制流程-----------------------
 	function animate() {
-		// ------------密技區----------
-		LibObj.snippet(keys,marioArray,powerupSound,powerdownSound);
-
 		//-----------音樂播放---------------
 
 		backgroundMusic.play();
@@ -400,7 +300,7 @@ Promise.all([
 
 		//---------- 進入下水道 canvas 畫布調整位置-----------
 
-		let canvas = document.querySelector("canvas");
+		const canvas = document.querySelector("canvas");
 
 		if(marioArray[0].underGround){
 			canvas.style.position  = "absolute";
@@ -412,7 +312,7 @@ Promise.all([
 		}
 		//---------- end of 進入下水道 canvas 畫布調整位置-----------
 
-		let context = myGameArea.context;
+		const context = myGameArea.context;
 
 		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
@@ -428,34 +328,33 @@ Promise.all([
 			restart();
 		}		
 
+		LibObj.snippet(LibObj.keys,marioArray,powerupSound,powerdownSound);
 		LibObj.drawAndUpdateObject(coinArray,context,coinSpriteSet,marioArray);
 		LibObj.spliceObjectArray(coinArray);
 		LibObj.drawAndUpdateObject(flycoinArray,context,flycoinSprite,marioArray,questionBrickJson);
 
-		// --------------------怪物區---------------------
+		// --------------------monsters---------------------
 		LibObj.drawAndUpdateObject(turtleArray,context,turtleSpriteSet,marioArray,backgroundJson,
 			tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
 		LibObj.spliceObjectArray(turtleArray);
 
 		LibObj.drawAndUpdateObject(goombaArray,context,goombaSpriteSet,marioArray,tubeJson,
 			highTubeJson,highestTubeJson,turtleArray,backgroundJson,oddBrickJson);	
-		LibObj.spliceObjectArray(goombaArray);
- 	
-		// --------------end 怪物區---------------------
-		//--------------終點物件-------------------
+		LibObj.spliceObjectArray(goombaArray); 	
+
+		//--------------final obj-------------------
 		LibObj.drawAndUpdateObject(poleArray,context,poleSprite,marioArray);
 		LibObj.drawAndUpdateObject(flagArray,context,flagSprite,marioArray,poleJson);
 		LibObj.drawAndUpdateObject(castleArray,context,castleSprite,marioArray);
 
 
-		//--------------end   終點物件-------------------
 		LibObj.drawAndUpdateObject(flowerArray,context,flowerSprite,marioArray);
 		LibObj.spliceObjectArray(flowerArray);
 
 		LibObj.drawAndUpdateObject(mushroomArray,context,mushroomSprite,marioArray,
 			backgroundJson,oddBrickJson,tubeJson,highTubeJson,highestTubeJson);
 		LibObj.spliceObjectArray(mushroomArray);
-		//-----------------各種磚塊------------------
+		//-----------------bricks------------------
 		LibObj.drawAndUpdateObject(brickArray,context,brickSprite,marioArray);
 		LibObj.drawAndUpdateObject(fragmentArray,context,fragmentSprite,marioArray,backgroundJson,brickArray,fragmentArray);
 		LibObj.drawAndUpdateObject(mushroomBrickArray,context,mushroomBrickSprite,marioArray,mushroomArray,mushroomBrickArray);
@@ -463,25 +362,22 @@ Promise.all([
 		LibObj.drawAndUpdateObject(flowerBrickArray,context,flowerBrickSprite,marioArray,flowerArray,flowerBrickArray);
 		LibObj.drawAndUpdateObject(questionBrickArray,context,questionBrickSprite,
 			marioArray,flycoinArray,questionBrickArray);
-		//-----------------end of 各種磚塊------------------
 
-		// ---------------障礙區-----------------
+
+		// ---------------obstacles-----------------
 		LibObj.drawAndUpdateObject(highTubeArray,context,highTubeSprite,marioArray);
 		LibObj.drawAndUpdateObject(oddBrickArray,context,oddBrickSprite,marioArray);
 		LibObj.drawAndUpdateObject(undergroundTubeArray,context,undergroundTubeSprite,marioArray);
 		LibObj.drawAndUpdateObject(undergroundBrickArray,context,undergroundBrickSprite,marioArray);
-		
 		marioArray[0].draw(context, marioSpriteSet,backgroundJson,fireballSprite,
-			goombaArray,turtleArray,badPlantArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
+			goombaArray,turtleArray,tubeJson,highTubeJson,highestTubeJson,oddBrickJson);
 		marioArray[0].update(backgroundJson,tubeJson,highestTubeJson,oddBrickJson,
 			poleJson,	castleJson,flagArray,undergroundTubeJson,undergroundBrickJson);
 		
 		LibObj.drawAndUpdateObject(undergroundTubeArray,context,undergroundTubeSprite,marioArray);
 		LibObj.drawAndUpdateObject(tubeArray,context,tubeSprite,marioArray);
 		LibObj.drawAndUpdateObject(highestTubeArray,context,highestTubeSprite,marioArray);
-		// ---------------end of 障礙區-----------------
 	};
-	// startGame();
 	document.querySelector("#startBtn").addEventListener("click",function (e){
 		startGame();
 		openBackground.style.display = "none";
