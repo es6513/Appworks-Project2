@@ -8,12 +8,13 @@ const smallresolution = document.querySelector("#smaller1366");
 const bigresolution = document.querySelector("#bigger1366");
 const marioDeath = document.querySelector("#marioDeath");
 const safariNotWorking = document.querySelector("#safariNotWorkingInfo");
+const notWorkingInfo = document.querySelector("#notWorkingInfoDetail");
 const screenWidth = screen.width;
 
 // ---------------開頭畫面---------------
 if(screenWidth < 1024 && !is_safari){
 	openBackground.style.display = "none";
-	notWorkingInfoDetail.style.display = "flex";
+	notWorkingInfo.style.display = "flex";
 	marioDeath.style.display = "block";
 }else if(screenWidth >= 1024 && screenWidth <= 1366){
 	smallresolution.style.display = "block";
@@ -35,6 +36,13 @@ const backgroundMusic = new Audio("../music/TitleBGM.mp3");
 const undergroundMuscic = new Audio("../music/underworld.mp3");
 const powerupSound = new Audio("/music/maro-powerup-sound.wav");
 const powerdownSound = new Audio("/music/maro-powerdown-sound.wav");
+
+//Global Loading
+
+let gloabLoading = false;
+const loadingDom = document.querySelector("#globalLoading");
+
+console.log(loadingDom)
 
 Promise.all([ 
 	LibObj.loadMarioImage("marioRedder"),
@@ -163,7 +171,8 @@ Promise.all([
 	fireballSprite,fireballArray,fireballJson,
 	mushroomSprite,mushroomArray,mushroomJson,
 	flowerSprite,flowerArray,flowerJson])=>{
-
+	loadingDom.style.display="none";
+	openBackground.style.display = "flex";
 	//--------------------遊戲控制流程-----------------------
 	function startGame() {
 		marioArray = [];
