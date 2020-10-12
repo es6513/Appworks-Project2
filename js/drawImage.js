@@ -1,5 +1,5 @@
-import {Sprites} from "../Js/SpriteSet.js";
-import {loadSky, loadGround,loadClouds,loadDecorations,loadunderGround,loadunderSky,loadunderBricks } from "../Js/loadSprite.js";
+import {Sprites} from "../js/SpriteSet.js";
+import {loadSky, loadGround,loadClouds,loadDecorations,loadunderGround,loadunderSky,loadunderBricks } from "../js/loadSprite.js";
 
 // 用來畫不會動背景的部分
 function  drawbackgroundJson(background,context,sprites) {

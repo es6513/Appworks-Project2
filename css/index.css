@@ -90,6 +90,10 @@
   cursor: pointer;
 }
 
+#startBtn div:first-child{
+  margin-bottom: 12px;
+}
+
 #startBtn:hover{
   color:#8CC63E ;
   border:solid 5px #8CC63E;;

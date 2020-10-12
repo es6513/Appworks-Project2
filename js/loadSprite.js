@@ -1,5 +1,5 @@
-import {loadImage} from "../Js/drawImage.js";
-import {Sprites} from "../Js/SpriteSet.js";
+import {loadImage} from "../js/drawImage.js";
+import {Sprites} from "../js/SpriteSet.js";
 
 
 function loadMario() {
