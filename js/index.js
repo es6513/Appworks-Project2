@@ -39,10 +39,8 @@ const powerdownSound = new Audio("/music/maro-powerdown-sound.wav");
 
 //Global Loading
 
-let gloabLoading = false;
 const loadingDom = document.querySelector("#globalLoading");
 
-console.log(loadingDom)
 
 Promise.all([ 
 	LibObj.loadMarioImage("marioRedder"),
